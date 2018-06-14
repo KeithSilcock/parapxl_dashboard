@@ -2,10 +2,11 @@
 
 # dependencies
 /node_modules
+/src
 
 # credentials
-C:\Users\Keith\Desktop\LFZ\parapxl\client\src\config\firebase.js
-C:\Users\Keith\Desktop\LFZ\parapxl\client\src\config
+config
+!config/*.template
 
 # testing
 /coverage
