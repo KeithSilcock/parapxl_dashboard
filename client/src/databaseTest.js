@@ -8,7 +8,8 @@ class DatabaseTest extends React.Component {
     this.state = {
       locations: [],
       views: [],
-      displays: []
+      displays: [],
+      currentDisplay: {}
     };
 
     this.getAllLocations();
@@ -42,28 +43,35 @@ class DatabaseTest extends React.Component {
     });
   }
 
-  getDisplayedData(displays) {
-    const path = `/displays`;
-    const testDispRef = db.ref("path");
-
-    const displayTypes = [];
+  getDisplayTypes(displays) {
+    const displayArray = [];
 
     for (const display_id in displays) {
-      displayTypes.push(displays[display_id].type);
-      debugger;
+      displayArray.push(displays[display_id]);
     }
+
+    this.setState({
+      ...this.state,
+      displays: displayArray
+    });
+  }
+
+  getDisplayData(display_id) {
+    const path = `/displays/${display_id}`;
+    const testDispRef = db.ref(path);
+
+    testDispRef.on("value", snapshot => {
+      const currentDisplay = snapshot.val();
+      this.setState({
+        ...this.state,
+        currentDisplay
+      });
+    });
   }
 
   render() {
-    // testDispRef.on("value", snapshot => {
-    //   console.log(snapshot.val());
-    // });
+    const { locations, views, displays, currentDisplay } = this.state;
 
-    //
-
-    //get the name of the location you want to view
-    //
-    const { locations, views } = this.state;
     const listOfLocations = locations.map((item, index) => {
       return (
         <li key={index} onClick={this.getAvailableBoards.bind(this, item)}>
@@ -77,24 +85,53 @@ class DatabaseTest extends React.Component {
       const displays = views[item].displays;
 
       return (
-        <li key={index} onClick={this.getDisplayedData.bind(this, displays)}>
-          {item} x
+        <li key={index} onClick={this.getDisplayTypes.bind(this, displays)}>
+          {item}
         </li>
       );
     });
 
-    const listOfDisplays = null;
+    const listOfDisplayTypes = displays.map((item, index) => {
+      return (
+        <li
+          key={index}
+          onClick={this.getDisplayData.bind(this, item.display_id)}
+        >
+          {item.type}
+        </li>
+      );
+    });
+
+    function formatCurrentData() {
+      const { content, subtitle, title } = currentDisplay;
+
+      if (currentDisplay.content)
+        return (
+          <ul>
+            <li>
+              <h5>Title: {title}</h5>
+            </li>
+            <li>
+              <h6> Subtitle: {subtitle}</h6>
+            </li>
+            <li>Content: {content}</li>
+          </ul>
+        );
+    }
 
     return (
       <div>
         <h1>Locations:</h1>
         <ul>{listOfLocations}</ul>
 
-        <h1>Boards Avaiable</h1>
+        <h2>Boards Avaiable</h2>
         <ul>{listOfBoards}</ul>
 
-        <h1>Displays</h1>
-        <ul>{listOfDisplays}</ul>
+        <h3>Displays</h3>
+        <ul>{listOfDisplayTypes}</ul>
+
+        <h4>Display Data</h4>
+        {formatCurrentData()}
       </div>
     );
   }
