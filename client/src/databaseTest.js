@@ -15,6 +15,7 @@ class DatabaseTest extends React.Component {
       console.log(snapshot.val());
     });
 
+    //get the name of the location you want to view
     testLocListRef.on("value", snapshot => {
       console.log(snapshot.val());
     });

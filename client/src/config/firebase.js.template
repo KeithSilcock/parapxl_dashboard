@@ -1,3 +1,0 @@
-export default {
-    firebase:{ <FIREBASE CONFIG OBJECT> },
-}

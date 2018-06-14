@@ -3,12 +3,16 @@
 # dependencies
 /node_modules
 
+# credentials
+C:\Users\Keith\Desktop\LFZ\parapxl\client\src\config\firebase.js
+C:\Users\Keith\Desktop\LFZ\parapxl\client\src\config
+
 # testing
 /coverage
 
 # production
 /build
-
+ 
 # misc
 .DS_Store
 .env.local
@@ -19,7 +23,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# credentials
-src/config
-!/src/config/*.template
