@@ -22,4 +22,4 @@ yarn-error.log*
 
 # credentials
 !/src/config/*.template
-/config
+src/config
