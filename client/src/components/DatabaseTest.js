@@ -6,16 +6,21 @@ import Boards from "./Boards";
 import Displays from "./Displays";
 import DataDisplayAdmin from "./DataDisplayAdmin";
 
+import "../assets/style.css";
+
 class DatabaseTest extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       locations: [],
-      views: [],
+      currentLocation: "",
+      boards: [],
+      currentBoard: "",
       displays: [],
-      currentDisplayData: {},
-      currentDisplay_id: ""
+      currentDisplayType: "",
+      currentDisplay_id: "",
+      currentDisplayData: {}
     };
   }
 
@@ -28,8 +33,9 @@ class DatabaseTest extends React.Component {
   componentWillUnmount() {
     this.setState({
       locations: [],
-      views: [],
+      boards: [],
       displays: [],
+      currentDisplayType: "",
       currentDisplayData: {},
       currentDisplay_id: ""
     });
@@ -43,10 +49,13 @@ class DatabaseTest extends React.Component {
       this.setState({
         ...this.state,
         locations: listOfLocations,
-        views: [],
+        currentLocation: "",
+        boards: [],
+        currentBoard: "",
         displays: [],
-        currentDisplayData: {},
-        currentDisplay_id: ""
+        currentDisplayType: "",
+        currentDisplay_id: "",
+        currentDisplayData: {}
       });
     });
   }
@@ -55,35 +64,41 @@ class DatabaseTest extends React.Component {
     const path = `/boards/${location}`;
     const stuff = this.state;
     db.ref(path).on("value", snapshot => {
-      const listOfViews = snapshot.val();
+      const listOfBoards = snapshot.val();
 
       this.setState({
         ...this.state,
-        views: listOfViews,
+        currentLocation: location,
+        boards: listOfBoards,
+        currentBoard: "",
         displays: [],
-        currentDisplayData: {},
-        currentDisplay_id: ""
+        currentDisplayType: "",
+        currentDisplay_id: "",
+        currentDisplayData: {}
       });
     });
   }
 
-  getDisplayTypes(displays) {
+  getDisplayTypes(displays, clickedBoard) {
     this.setState({
       ...this.state,
+      currentBoard: clickedBoard,
       displays: displays,
-      currentDisplayData: {},
-      currentDisplay_id: ""
+      currentDisplayType: "",
+      currentDisplay_id: "",
+      currentDisplayData: {}
     });
   }
 
-  getDisplayData(display_id) {
-    const path = `/displays/${display_id}`;
+  getDisplayData(displayType, display_id) {
+    const path = `/displays/${displayType}/${display_id}`;
     db.ref(path).on("value", snapshot => {
       const currentDisplayData = snapshot.val();
 
       this.setState({
         ...this.state,
         currentDisplayData,
+        currentDisplayType: displayType,
         currentDisplay_id: display_id
       });
     });
@@ -101,11 +116,21 @@ class DatabaseTest extends React.Component {
     });
   }
 
+  selectNewTemplate(templateType) {
+    console.log("here");
+    this.state;
+    debugger;
+  }
+
   updateDisplays(e) {
     e.preventDefault();
-    const { currentDisplay_id, currentDisplayData } = this.state;
+    const {
+      currentDisplayType,
+      currentDisplayData,
+      currentDisplay_id
+    } = this.state;
 
-    const path = `/displays/${currentDisplay_id}/`;
+    const path = `/displays/${currentDisplayType}/${currentDisplay_id}/`;
     db.ref(path).set({ ...currentDisplayData });
   }
 
@@ -115,26 +140,51 @@ class DatabaseTest extends React.Component {
   }
 
   render() {
-    const { locations, views, displays, currentDisplayData } = this.state;
+    const { toggleModal } = this.props;
+    const {
+      locations,
+      boards,
+      displays,
+      currentLocation,
+      currentBoard,
+      currentDisplayType,
+      currentDisplay_id,
+      currentDisplayData
+    } = this.state;
+
+    const currentData = {
+      currentLocation,
+      currentBoard,
+      currentDisplayType,
+      currentDisplay_id,
+      currentDisplayData
+    };
 
     return (
       <div>
         <Locations
           locations={locations}
+          currentData={currentData}
           getAvailableBoards={this.getAvailableBoards.bind(this)}
         />
 
         <Boards
-          views={views}
+          boards={boards}
+          currentData={currentData}
           getDisplayTypes={this.getDisplayTypes.bind(this)}
         />
 
         <Displays
           displays={displays}
+          currentData={currentData}
+          toggleModal={toggleModal}
+          selectNewTemplate={this.selectNewTemplate.bind(this)}
           getDisplayData={this.getDisplayData.bind(this)}
         />
 
         <DataDisplayAdmin
+          currentData={currentData}
+          currentDisplay_id={currentDisplay_id}
           currentDisplayData={currentDisplayData}
           onDisplayDataChange={this.onDisplayDataChange.bind(this)}
           updateDisplays={this.updateDisplays.bind(this)}

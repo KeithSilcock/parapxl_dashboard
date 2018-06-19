@@ -7,14 +7,29 @@ import BoringRoute2 from "./anotherBoringComponent";
 import Nav from "./Nav";
 import Locations from "./Locations";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
+import NewDisplayModal from "./NewDisplayModal";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      openModal: false,
+      modalData: {},
       buttonState: false
     };
+
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  toggleModal(dataToDisplay) {
+    const { openModal } = this.state;
+
+    this.setState({
+      ...this.state,
+      openModal: !openModal,
+      modalData: dataToDisplay
+    });
   }
 
   clickButton() {
@@ -27,14 +42,31 @@ class App extends Component {
   }
 
   render() {
-    const { buttonState } = this.state;
+    const { buttonState, openModal, modalData } = this.state;
     const buttonText = buttonState ? "true" : "false";
     const path = buttonState ? "/test" : "/test2";
 
+    const modal = openModal ? (
+      <Route
+        exact
+        path="/admin"
+        render={props => (
+          <NewDisplayModal
+            toggleModal={this.toggleModal}
+            modalData={modalData}
+          />
+        )}
+      />
+    ) : null;
+
     return (
       <div className="App">
+        {modal}
         <Route exact path="/admin" component={Nav} />
-        <Route path="/admin" component={DatabaseTest} />
+        <Route
+          path="/admin"
+          render={props => <DatabaseTest toggleModal={this.toggleModal} />}
+        />
         <Route path={path} component={BoringRoute} />
         <Route path="/test2" component={BoringRoute2} />
         <Route path="/display/*" component={DataDisplayNewTab} />

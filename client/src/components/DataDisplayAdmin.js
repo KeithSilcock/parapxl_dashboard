@@ -22,7 +22,7 @@ class DataDisplayAdmin extends React.Component {
     return (
       <div>
         <h4>Display Data: {currentDisplayData["type"] || null}</h4>
-        <form onSubmit={updateDisplays}>
+        <form onSubmit={e => updateDisplays(e)}>
           <ul>{displayItems}</ul>
           <button>Update Displays</button>
         </form>
