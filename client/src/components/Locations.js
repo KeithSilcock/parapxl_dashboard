@@ -1,65 +1,28 @@
 import React from "react";
 import db from "../firebase";
+import AddNewDBItem from "./AddNewDBItem";
 
 class Locations extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      openInput: false,
-      newLocation: ""
-    };
-  }
-
-  toggleNewLocation() {
-    const { openInput } = this.state;
-    this.setState({
-      openInput: !openInput
-    });
-  }
-
-  handleInput(event) {
-    const { name, value } = event.currentTarget;
-
-    this.setState({
-      ...this.state,
-      [name]: value
-    });
-  }
-  createNewLocation(e) {
+  createNewLocation(e, newLocationName) {
     e.preventDefault();
 
-    const { newLocation } = this.state;
-
-    const newLocData = {
-      [newLocation]: {
-        views: {
-          data: null
-        }
-      }
-    };
-
-    db.ref("locations/").set(newLocData);
+    db.ref(`boards/${newLocationName}`).set(true);
+    db.ref(`location_list/${newLocationName}`).set(true);
   }
 
   render() {
-    const { openInput, newLocation } = this.state;
-    const { locations, getAvailableBoards } = this.props;
-
-    const addLocForm = openInput ? (
-      <form onSubmit={this.createNewLocation.bind(this)}>
-        <input
-          type="text"
-          name="newLocation"
-          onChange={this.handleInput.bind(this)}
-          value={newLocation}
-        />
-      </form>
-    ) : null;
+    const { locations, getAvailableBoards, currentData } = this.props;
 
     const listOfLocations = locations.map((item, index) => {
+      const selectedClassName =
+        currentData.currentLocation === item ? "selectedItem" : "";
+
       return (
-        <li key={index} onClick={getAvailableBoards.bind(null, item)}>
+        <li
+          key={index}
+          className={selectedClassName}
+          onClick={getAvailableBoards.bind(null, item)}
+        >
           {item}
         </li>
       );
@@ -68,10 +31,10 @@ class Locations extends React.Component {
     return (
       <div>
         <h1>Locations:</h1>
-        <button onClick={this.toggleNewLocation.bind(this)}>
-          New Location
-        </button>
-        {addLocForm}
+        <AddNewDBItem
+          addNewItem={this.createNewLocation.bind(this)}
+          newText={"Location"}
+        />
         <ul>{listOfLocations}</ul>
       </div>
     );
