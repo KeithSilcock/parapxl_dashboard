@@ -6,6 +6,8 @@ class Displays extends React.Component {
   //add new display option that opens a list of options and values to add
   // **** or allow them to create new
 
+  //TODO Break these up into smaller components
+
   constructor(props) {
     super(props);
 
@@ -22,23 +24,29 @@ class Displays extends React.Component {
     const { currentData, selectNewTemplate } = this.props;
 
     const displayPath = `/displays/${templateType}`;
-    const newTemplateRef = db.ref(displayPath).push({ ...templateContents });
-    const post_id = newTemplateRef.key;
+    const newTemplateRef = db
+      .ref(displayPath)
+      .push({ ...templateContents }, e => {
+        const post_id = newTemplateRef.key;
 
-    //add data to coresponding board
-    const boardPath = `/boards/${currentData.currentLocation}/${
-      currentData.currentBoard
-    }/`;
+        //add data to coresponding board
+        const boardPath = `/boards/${currentData.currentLocation}/${
+          currentData.currentBoard
+        }/`;
 
-    const dataToSet = {
-      display_id: post_id,
-      type: templateType
-    };
-    db.ref(boardPath).push(dataToSet);
-    selectNewTemplate(templateType);
+        const dataToSet = {
+          display_id: post_id,
+          type: templateType,
+          name: templateType
+        };
+        db.ref(boardPath).push(dataToSet, () => {
+          selectNewTemplate(currentData.currentBoard, templateType, post_id);
+        });
+      });
   }
 
   formatDisplaysTemplates(data) {
+    const { toggleModal } = this.props;
     const renderObjects = Object.keys(data).map((displayType, index) => {
       const displayTemplate = data[displayType];
 
@@ -50,14 +58,15 @@ class Displays extends React.Component {
         );
       });
 
+      const selectedTemplateClass = index === 0 ? "selected-template" : "";
+
       return (
         <div
-          className="display-template"
-          onClick={this.addCurrentTemplateToBoard.bind(
-            this,
-            displayType,
-            displayTemplate
-          )}
+          className={`display-template ${selectedTemplateClass}`}
+          onClick={e => {
+            this.addCurrentTemplateToBoard(displayType, displayTemplate);
+            toggleModal();
+          }}
           key={index}
         >
           <h4>{displayType}</h4>
@@ -102,7 +111,9 @@ class Displays extends React.Component {
     const { displays, getDisplayData, currentData } = this.props;
     const listOfDisplayTypes = Object.keys(displays).map((dbKey, index) => {
       const selectedClassName =
-        currentData.displayType === displays[dbKey].type ? "selectedItem" : "";
+        currentData.currentDisplay_id === displays[dbKey].display_id
+          ? "selectedItem"
+          : "";
       return (
         <li
           key={index}
@@ -113,7 +124,7 @@ class Displays extends React.Component {
             displays[dbKey].display_id
           )}
         >
-          {displays[dbKey].type}
+          {displays[dbKey].name}
         </li>
       );
     });

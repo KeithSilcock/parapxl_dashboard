@@ -18,13 +18,15 @@ class DatabaseTest extends React.Component {
       boards: [],
       currentBoard: "",
       displays: [],
-      currentDisplayType: "",
       currentDisplay_id: "",
       currentDisplayData: {}
     };
   }
 
-  //make sure to clear appropriate state components when changing location/boards/displays
+  // TODO
+  // make sure to clear appropriate state components when changing location/boards/displays
+  // double click to edit anything
+  // remove currentDisplayType from state
 
   componentWillMount() {
     this.getAllLocations();
@@ -62,7 +64,6 @@ class DatabaseTest extends React.Component {
 
   getAvailableBoards(location) {
     const path = `/boards/${location}`;
-    const stuff = this.state;
     db.ref(path).on("value", snapshot => {
       const listOfBoards = snapshot.val();
 
@@ -79,14 +80,20 @@ class DatabaseTest extends React.Component {
     });
   }
 
-  getDisplayTypes(displays, clickedBoard) {
-    this.setState({
-      ...this.state,
-      currentBoard: clickedBoard,
-      displays: displays,
-      currentDisplayType: "",
-      currentDisplay_id: "",
-      currentDisplayData: {}
+  getDisplayTypes(clickedBoard) {
+    const { currentLocation } = this.state;
+    const path = `/boards/${currentLocation}/${clickedBoard}`;
+    db.ref(path).on("value", snapshot => {
+      const listOfDisplays = snapshot.val();
+
+      this.setState({
+        ...this.state,
+        currentBoard: clickedBoard,
+        displays: listOfDisplays,
+        currentDisplayType: "",
+        currentDisplay_id: "",
+        currentDisplayData: {}
+      });
     });
   }
 
@@ -116,10 +123,9 @@ class DatabaseTest extends React.Component {
     });
   }
 
-  selectNewTemplate(templateType) {
-    console.log("here");
-    this.state;
-    debugger;
+  selectNewTemplate(currentBoard, templateType, display_id) {
+    this.getDisplayTypes(currentBoard);
+    this.getDisplayData(templateType, display_id);
   }
 
   updateDisplays(e) {
