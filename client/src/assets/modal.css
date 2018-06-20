@@ -73,6 +73,9 @@
 .display-template ul {
   padding: 0;
 }
+.selected-template {
+  width: 90%;
+}
 .display-item {
   list-style: none;
   padding: 0;
