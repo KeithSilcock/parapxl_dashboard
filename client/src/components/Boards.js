@@ -15,13 +15,11 @@ class Boards extends React.Component {
     const listOfBoards = Object.keys(boards).map((item, index) => {
       const selectedClassName =
         currentData.currentBoard === item ? "selectedItem" : "";
-      const displays = boards[item];
-
       return (
         <li
           key={index}
           className={selectedClassName}
-          onClick={getDisplayTypes.bind(null, displays, item)}
+          onClick={getDisplayTypes.bind(null, item)}
         >
           {item}
         </li>
