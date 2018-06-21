@@ -1,0 +1,16 @@
+.add-new-item-container {
+  position: relative;
+}
+.add-new-item-button {
+  border-radius: 2px;
+
+  background-color: rgb(0, 193, 241);
+  color: white;
+  font-size: 0.9em;
+  font-weight: bold;
+  border: none;
+  min-height: 30px;
+}
+.add-new-item-form-container {
+  position: absolute;
+}

@@ -1,0 +1,30 @@
+/* Text Board */
+.text-board.container {
+  width: 100%;
+  height: 100%;
+}
+.text-board.title {
+}
+.text-board.subtitle {
+}
+.text-board.text-box {
+}
+
+/* Escape Room */
+.escape-room {
+  margin: 0;
+}
+.escape-room.container {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  font-size: 80%;
+  color: white;
+}
+.escape-room.title {
+}
+.escape-room.subtitle {
+}
+.escape-room.video-box {
+}
