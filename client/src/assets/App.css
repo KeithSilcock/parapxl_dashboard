@@ -1,28 +1,22 @@
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(233, 233, 233);
+}
+
 .App {
-  text-align: center;
+  width: 98vw;
+  height: 100vh;
+  padding-left: 1vw;
+
+  font-family: "Karla", sans-serif;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.nav-bar-container {
+  height: 10%;
+  padding-right: 5%;
 }
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.landing-page-container {
+  height: 75%;
 }

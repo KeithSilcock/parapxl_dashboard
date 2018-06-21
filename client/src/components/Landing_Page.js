@@ -6,7 +6,7 @@ import Boards from "./Boards";
 import Displays from "./Displays";
 import DataDisplayAdmin from "./DataDisplayAdmin";
 
-import "../assets/style.css";
+import "../assets/landing_page.css";
 
 class DatabaseTest extends React.Component {
   constructor(props) {
@@ -167,35 +167,31 @@ class DatabaseTest extends React.Component {
     };
 
     return (
-      <div>
+      <div className="landing-page-container">
         <Locations
           locations={locations}
           currentData={currentData}
           getAvailableBoards={this.getAvailableBoards.bind(this)}
         />
-
         <Boards
           boards={boards}
           currentData={currentData}
           getDisplayTypes={this.getDisplayTypes.bind(this)}
         />
-
-        <Displays
+        {/* <Displays
           displays={displays}
           currentData={currentData}
           toggleModal={toggleModal}
           selectNewTemplate={this.selectNewTemplate.bind(this)}
           getDisplayData={this.getDisplayData.bind(this)}
         />
-
         <DataDisplayAdmin
           currentData={currentData}
           currentDisplay_id={currentDisplay_id}
           currentDisplayData={currentDisplayData}
           onDisplayDataChange={this.onDisplayDataChange.bind(this)}
           updateDisplays={this.updateDisplays.bind(this)}
-        />
-
+        /> */}
         <button onClick={this.openNewWindow.bind(this)}>
           Open this display in New Window
         </button>
