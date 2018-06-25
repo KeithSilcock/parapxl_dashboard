@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import "../assets/App.css";
-import DatabaseTest from "./DatabaseTest";
+import LandingPage from "./Landing_Page";
 import BoringRoute from "./boringComponent";
 import BoringRoute2 from "./anotherBoringComponent";
 import Nav from "./Nav";
-import Locations from "./Locations";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
 import NewDisplayModal from "./NewDisplayModal";
 
@@ -61,11 +60,17 @@ class App extends Component {
 
     return (
       <div className="App">
+        <link
+          href="https://fonts.googleapis.com/css?family=Karla"
+          rel="stylesheet"
+        />
         {modal}
         <Route exact path="/admin" component={Nav} />
         <Route
           path="/admin"
-          render={props => <DatabaseTest toggleModal={this.toggleModal} />}
+          render={props => (
+            <LandingPage {...props} toggleModal={this.toggleModal} />
+          )}
         />
         <Route path={path} component={BoringRoute} />
         <Route path="/test2" component={BoringRoute2} />

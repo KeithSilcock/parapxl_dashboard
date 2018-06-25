@@ -1,0 +1,28 @@
+.add-new-board-container {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  flex-flow: column-reverse;
+}
+.add-new-board-button {
+  align-self: center;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+
+  background-color: rgb(0, 193, 241);
+  color: white;
+  font-size: 1.8em;
+  font-weight: bold;
+  border: none;
+  min-height: 30px;
+}
+.add-new-board-form-container {
+  position: relative;
+}
+.add-new-board-form-container input {
+  width: 90%;
+  margin: 5%;
+}

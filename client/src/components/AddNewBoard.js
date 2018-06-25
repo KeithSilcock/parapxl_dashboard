@@ -1,6 +1,7 @@
 import React from "react";
+import "../assets/addNewBoard.css";
 
-class AddNewDBItem extends React.Component {
+class AddNewBoard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +29,7 @@ class AddNewDBItem extends React.Component {
   }
   render() {
     const { openInput, newDataName } = this.state;
-    const { addNewItem, newText } = this.props;
+    const { addNewItem } = this.props;
 
     const openForm = openInput ? (
       <form
@@ -38,6 +39,7 @@ class AddNewDBItem extends React.Component {
         }}
       >
         <input
+          autoFocus
           type="text"
           name="newDataName"
           onChange={this.handleInputChange.bind(this)}
@@ -47,12 +49,17 @@ class AddNewDBItem extends React.Component {
     ) : null;
 
     return (
-      <div>
-        <button onClick={this.toggleInputOpen.bind(this)}>New {newText}</button>
-        {openForm}
+      <div className="add-new-board-container">
+        <button
+          className="add-new-board-button"
+          onClick={this.toggleInputOpen.bind(this)}
+        >
+          +
+        </button>
+        <div className="add-new-board-form-container">{openForm}</div>
       </div>
     );
   }
 }
 
-export default AddNewDBItem;
+export default AddNewBoard;

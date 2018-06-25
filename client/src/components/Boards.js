@@ -1,9 +1,13 @@
 import React from "react";
 import db from "../firebase";
-import AddNewDBItem from "./AddNewDBItem";
+import AddNewBoard from "./AddNewBoard";
+import BoardDisplay from "./BoardDisplay";
+import { capitalizeFirstLetters } from "../helpers";
+
+import "../assets/boards.css";
 
 class Boards extends React.Component {
-  createNewLocation(e, newBoardName) {
+  createNewBoard(e, newBoardName) {
     e.preventDefault();
     const { currentData } = this.props;
 
@@ -12,32 +16,53 @@ class Boards extends React.Component {
 
   render() {
     const { boards, getDisplayTypes, currentData } = this.props;
+
     const listOfBoards = Object.keys(boards).map((item, index) => {
       const selectedClassName =
-        currentData.currentBoard === item ? "selectedItem" : "";
+        currentData.currentBoard === item ? "selectedBoard" : "";
+
       return (
         <li
           key={index}
-          className={selectedClassName}
+          className={`${selectedClassName} board-item`}
           onClick={getDisplayTypes.bind(null, item)}
         >
-          {item}
+          <div className={`board-type ${item}`}>
+            <span>{capitalizeFirstLetters(item, true)}</span>
+          </div>
+          <div className="board-type-preview">
+            <BoardDisplay thisBoard={boards[item]} />
+          </div>
         </li>
       );
     });
 
     const displayAddNewBoard = currentData.currentLocation ? (
-      <AddNewDBItem
-        addNewItem={this.createNewLocation.bind(this)}
+      <AddNewBoard
+        addNewItem={this.createNewBoard.bind(this)}
         newText={"Board"}
       />
     ) : null;
+    const displayAddNewBoardText = currentData.currentLocation ? (
+      <li className="board-item">
+        <div className="board-type new-display">
+          <span>Create New Board</span>
+        </div>
+        <div className="board-type-preview">
+          <div className="display-preview">{displayAddNewBoard}</div>
+        </div>
+      </li>
+    ) : null;
 
     return (
-      <div>
-        <h2>Boards Avaiable</h2>
-        {displayAddNewBoard}
-        <ul>{listOfBoards}</ul>
+      <div className="boards-container">
+        <div className="boards-content">
+          <ul className="boards-list">
+            {listOfBoards}
+            {displayAddNewBoardText}
+          </ul>
+        </div>
+        {/* <div className="boards-footer">{displayAddNewBoard}</div> */}
       </div>
     );
   }

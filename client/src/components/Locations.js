@@ -1,6 +1,7 @@
 import React from "react";
 import db from "../firebase";
-import AddNewDBItem from "./AddNewDBItem";
+import AddNewLocation from "./AddNewLocation";
+import "../assets/locations.css";
 
 class Locations extends React.Component {
   createNewLocation(e, newLocationName) {
@@ -15,12 +16,12 @@ class Locations extends React.Component {
 
     const listOfLocations = locations.map((item, index) => {
       const selectedClassName =
-        currentData.currentLocation === item ? "selectedItem" : "";
+        currentData.currentLocation === item ? "selectedLocation" : "";
 
       return (
         <li
           key={index}
-          className={selectedClassName}
+          className={`${selectedClassName} location-item`}
           onClick={getAvailableBoards.bind(null, item)}
         >
           {item}
@@ -29,13 +30,19 @@ class Locations extends React.Component {
     });
 
     return (
-      <div>
-        <h1>Locations:</h1>
-        <AddNewDBItem
-          addNewItem={this.createNewLocation.bind(this)}
-          newText={"Location"}
-        />
-        <ul>{listOfLocations}</ul>
+      <div className="locations-container">
+        <div className="locations-header">
+          <h3>Locations:</h3>
+        </div>
+        <ul className="locations-list">
+          {listOfLocations}
+          <li>
+            <AddNewLocation
+              addNewItem={this.createNewLocation.bind(this)}
+              newText={"Location"}
+            />
+          </li>
+        </ul>
       </div>
     );
   }
