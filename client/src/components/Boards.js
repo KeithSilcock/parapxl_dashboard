@@ -19,7 +19,7 @@ class Boards extends React.Component {
 
     const listOfBoards = Object.keys(boards).map((item, index) => {
       const selectedClassName =
-        currentData.currentBoard === item ? "selectedItem" : "";
+        currentData.currentBoard === item ? "selectedBoard" : "";
 
       return (
         <li
@@ -31,11 +31,7 @@ class Boards extends React.Component {
             <span>{capitalizeFirstLetters(item, true)}</span>
           </div>
           <div className="board-type-preview">
-            <BoardDisplay
-              currentData={currentData}
-              currentBoard={item}
-              thisBoard={boards[item]}
-            />
+            <BoardDisplay thisBoard={boards[item]} />
           </div>
         </li>
       );

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactPlayer from "react-player";
 
 export default props => {
   const { displayData } = props;
@@ -15,12 +16,9 @@ export default props => {
       <img src="" alt=""/>
       </div> */}
       <div className="escape-room video-box">
-        <iframe
-          width="200"
-          height="250"
-          src={`${displayData.video}`}
-          frameborder="0"
-        />
+        <div className="escape-room video">
+          <ReactPlayer width="100" height="100" url={displayData.video} />
+        </div>
       </div>
     </div>
   );
