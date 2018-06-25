@@ -2,6 +2,7 @@
   display: flex;
   justify-content: flex-start;
   flex-flow: column;
+  background-color: rgb(233, 233, 233);
 
   /* border: 1px solid black; */
 }
