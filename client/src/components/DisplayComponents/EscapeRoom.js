@@ -9,7 +9,7 @@ export default props => {
   };
 
   return (
-    <div className="escape-room container" style={bkgImgStyle}>
+    <div className="board-preview escape-room container" style={bkgImgStyle}>
       <h2 className="escape-room title">{displayData.title}</h2>
       <h4 className="escape-room subtitle">{displayData.subtitle}</h4>
       {/* <div className="escape-room image">

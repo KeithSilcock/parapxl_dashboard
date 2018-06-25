@@ -11,18 +11,24 @@ class Locations extends React.Component {
     db.ref(`location_list/${newLocationName}`).set(true);
   }
 
+  moveToBoardsRoute(location) {
+    this.props.history.push(`/admin/${location}`);
+  }
+
   render() {
-    const { locations, getAvailableBoards, currentData } = this.props;
+    const { locations } = this.props;
+    const location = this.props.location.pathname.replace("/admin/", "");
 
     const listOfLocations = locations.map((item, index) => {
-      const selectedClassName =
-        currentData.currentLocation === item ? "selectedLocation" : "";
+      const selectedClassName = location === item ? "selectedLocation" : "";
 
       return (
         <li
           key={index}
           className={`${selectedClassName} location-item`}
-          onClick={getAvailableBoards.bind(null, item)}
+          onClick={e => {
+            this.moveToBoardsRoute(item);
+          }}
         >
           {item}
         </li>

@@ -1,0 +1,30 @@
+.board-slide-up-start {
+  position: relative;
+  z-index: -1 !important;
+  animation: slideUp 1s normal linear;
+}
+.board-slide-up-end {
+  position: relative;
+  z-index: -1;
+  top: -75%;
+}
+
+@keyframes slideUp {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -75%;
+  }
+}
+
+.board-slide-down-start {
+  position: relative;
+  z-index: -1 !important;
+  animation: slideUp 1s reverse linear;
+}
+.board-slide-down-end {
+  position: relative;
+  z-index: initial;
+  top: 0%;
+}
