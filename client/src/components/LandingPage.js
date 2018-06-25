@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 import db from "../firebase";
 import Locations from "./Locations";
 import Boards from "./Boards";
+import EditDisplays from "./EditDisplays";
 import Displays from "./Displays";
 import DataDisplayAdmin from "./DataDisplayAdmin";
 
@@ -18,6 +19,7 @@ class DatabaseTest extends React.Component {
       boards: [],
       currentBoard: "",
       displays: [],
+      currentDisplayType: "",
       currentDisplay_id: "",
       currentDisplayData: {}
     };
@@ -53,24 +55,6 @@ class DatabaseTest extends React.Component {
         locations: listOfLocations,
         currentLocation: "",
         boards: [],
-        currentBoard: "",
-        displays: [],
-        currentDisplayType: "",
-        currentDisplay_id: "",
-        currentDisplayData: {}
-      });
-    });
-  }
-
-  getAvailableBoards(location) {
-    const path = `/boards/${location}`;
-    db.ref(path).on("value", snapshot => {
-      const listOfBoards = snapshot.val();
-
-      this.setState({
-        ...this.state,
-        currentLocation: location,
-        boards: listOfBoards,
         currentBoard: "",
         displays: [],
         currentDisplayType: "",
@@ -168,15 +152,30 @@ class DatabaseTest extends React.Component {
 
     return (
       <div className="landing-page-container">
-        <Locations
-          locations={locations}
-          currentData={currentData}
-          getAvailableBoards={this.getAvailableBoards.bind(this)}
+        <Route
+          path="/admin"
+          render={props => (
+            <Locations
+              {...props}
+              locations={locations}
+              currentData={currentData}
+            />
+          )}
         />
-        <Boards
-          boards={boards}
-          currentData={currentData}
-          getDisplayTypes={this.getDisplayTypes.bind(this)}
+        <Route
+          path={`/admin/:location`}
+          render={props => (
+            <Boards
+              {...props}
+              boards={boards}
+              currentData={currentData}
+              getDisplayTypes={this.getDisplayTypes.bind(this)}
+            />
+          )}
+        />
+        <Route
+          path={`/admin/:location/:board`}
+          render={props => <EditDisplays {...props} />}
         />
         {/* <Displays
           displays={displays}
