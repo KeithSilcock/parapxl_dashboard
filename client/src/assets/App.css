@@ -1,4 +1,6 @@
 body {
+  font-family: sans-serif;
+  padding: 0;
   margin: 0;
   width: 100vw;
   height: 100vh;
@@ -6,9 +8,9 @@ body {
 }
 
 .App {
-  width: 98vw;
+  width: 94vw;
   height: 100vh;
-  padding-left: 1vw;
+  padding-left: 3vw;
 
   font-family: "Karla", sans-serif;
 }
@@ -18,5 +20,5 @@ body {
   padding-right: 5%;
 }
 .landing-page-container {
-  height: 75%;
+  height: 80%;
 }

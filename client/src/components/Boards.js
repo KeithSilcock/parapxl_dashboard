@@ -4,6 +4,7 @@ import AddNewBoard from "./AddNewBoard";
 import BoardDisplay from "./BoardDisplay";
 import { capitalizeFirstLetters } from "../helpers";
 
+import "../assets/animations/openEditPage.css";
 import "../assets/boards.css";
 
 class Boards extends React.Component {
@@ -12,9 +13,8 @@ class Boards extends React.Component {
 
     this.state = {
       currentLocation: "",
-      availableBoards: {},
-      boardsAreTransitioning: { up: false, down: false },
-      boardsAreHidden: false
+      clickedBoard: "",
+      availableBoards: {}
     };
   }
 
@@ -26,7 +26,7 @@ class Boards extends React.Component {
   }
   componentWillMount() {
     const { location } = this.props.match.params;
-    const { boardsAreHidden } = this.state;
+    const { timedAnimation, boardsAreHidden } = this.props;
     const path = `/boards/${location}`;
     db.ref(path).on("value", snapshot => {
       const listOfBoards = snapshot.val();
@@ -37,7 +37,7 @@ class Boards extends React.Component {
         availableBoards: listOfBoards
       });
     });
-    this.timedAnimation(!boardsAreHidden);
+    timedAnimation(!boardsAreHidden);
   }
   componentWillReceiveProps(newProps) {
     const { currentLocation } = this.state;
@@ -56,49 +56,40 @@ class Boards extends React.Component {
     }
   }
 
-  openEditPage(e, board) {
-    const { boardsAreHidden } = this.state;
-
-    this.timedAnimation(boardsAreHidden);
-  }
-
-  timedAnimation(slidingDown) {
+  boardSelected(clickedBoard) {
     this.setState({
       ...this.state,
-      boardsAreTransitioning: { up: !slidingDown, down: slidingDown }
+      clickedBoard
     });
+  }
 
-    const {
-      boardsAreTransitioning: { up, down }
-    } = this.state;
+  openEditPage(e, board) {
+    const { currentLocation } = this.state;
+    this.props.history.push(`/admin/${currentLocation}/${board}`);
+  }
 
-    setTimeout(() => {
-      this.setState({
-        ...this.state,
-        boardsAreHidden: !slidingDown,
-        boardsAreTransitioning: { up: false, down: false }
-      });
-    }, 1000);
+  openNewWindow(board_id) {
+    window.open(`http://localhost:3000/display/${board_id}`);
   }
 
   render() {
-    const { getDisplayTypes, currentData } = this.props;
     const {
-      availableBoards,
+      currentData,
       boardsAreHidden,
-      boardsAreTransitioning
-    } = this.state;
+      boardsAreTransitioning,
+      timedAnimation
+    } = this.props;
+    const { availableBoards, clickedBoard } = this.state;
     const { location } = this.props.match.params;
 
     const listOfBoards = Object.keys(availableBoards).map((item, index) => {
-      const selectedClassName =
-        currentData.currentBoard === item ? "selectedBoard" : "";
+      const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
 
       return (
         <li
           key={index}
           className={`${selectedClassName} board-item`}
-          onClick={getDisplayTypes.bind(null, item)}
+          onClick={e => this.boardSelected(item)}
         >
           <div className={`board-type ${item}`}>
             <span>{capitalizeFirstLetters(item, true)}</span>
@@ -106,23 +97,42 @@ class Boards extends React.Component {
           <div className="board-type-preview">
             <BoardDisplay thisBoard={availableBoards[item]} />
           </div>
-          <div className="board-type button">
-            <button onClick={e => this.openEditPage(e, item)}>Edit</button>
+          <div className="board-type buttons">
+            <div className="board-type open-button">
+              <button
+                onClick={e =>
+                  this.openNewWindow(
+                    availableBoards[item].current_display.display_id
+                  )
+                }
+              >
+                Open in New Window
+              </button>
+            </div>
+            <div className="board-type edit-button">
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  timedAnimation(boardsAreHidden);
+                  this.openEditPage(e, item);
+                }}
+              >
+                Edit
+              </button>
+            </div>
           </div>
         </li>
       );
     });
 
-    const animationClassUpStart = boardsAreTransitioning.up
-      ? "board-slide-up-start"
-      : "";
-    const animationClassDownStart = boardsAreTransitioning.down
-      ? "board-slide-down-start"
-      : "";
-
-    const animationClassUpEnd = boardsAreHidden
-      ? "board-slide-up-end"
-      : "board-slide-down-end";
+    if (boardsAreTransitioning) {
+      var animationClassUpStart = boardsAreTransitioning.up
+        ? "board-slide-up-start"
+        : "";
+      var animationClassDownStart = boardsAreTransitioning.down
+        ? "board-slide-down-start"
+        : "";
+    }
 
     const displayAddNewBoard = location ? (
       <AddNewBoard
@@ -141,20 +151,25 @@ class Boards extends React.Component {
       </li>
     ) : null;
 
-    return (
-      <div
-        className={`boards-container ${animationClassUpStart ||
-          animationClassDownStart} ${animationClassUpEnd}`}
-      >
-        <div className="boards-content">
-          <ul className="boards-list">
-            {listOfBoards}
-            {displayAddNewBoardText}
-          </ul>
+    const animationClassUpEnd =
+      !boardsAreHidden ||
+      boardsAreTransitioning.down ||
+      boardsAreTransitioning.up ? (
+        <div
+          className={`boards-container ${animationClassUpStart ||
+            animationClassDownStart}`}
+        >
+          <div className="boards-content">
+            <ul className="boards-list">
+              {listOfBoards}
+              {displayAddNewBoardText}
+            </ul>
+          </div>
+          {/* <div className="boards-footer">{displayAddNewBoard}</div> */}
         </div>
-        {/* <div className="boards-footer">{displayAddNewBoard}</div> */}
-      </div>
-    );
+      ) : null;
+
+    return animationClassUpEnd;
   }
 }
 

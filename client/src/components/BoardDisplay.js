@@ -13,14 +13,39 @@ class BoardDisplay extends React.Component {
       displayData: {}
     };
   }
-
   componentWillMount() {
     const { thisBoard } = this.props;
-
-    const path = `/displays/${thisBoard.current_display.display_id}`;
+    try {
+      var path = `/displays/${thisBoard.current_display.display_id}`;
+    } catch (err) {
+      if (err.constructor === TypeError) {
+        path = `/displays/${thisBoard.display_id}`;
+      } else {
+        throw err;
+      }
+    }
     db.ref(path).on("value", snapshot => {
       const displayData = snapshot.val();
+      this.setState({
+        ...this.state,
+        displayData
+      });
+    });
+  }
 
+  componentWillReceiveProps() {
+    const { thisBoard } = this.props;
+    try {
+      var path = `/displays/${thisBoard.current_display.display_id}`;
+    } catch (err) {
+      if (err.constructor === TypeError) {
+        path = `/displays/${thisBoard.display_id}`;
+      } else {
+        throw err;
+      }
+    }
+    db.ref(path).on("value", snapshot => {
+      const displayData = snapshot.val();
       this.setState({
         ...this.state,
         displayData
@@ -31,8 +56,13 @@ class BoardDisplay extends React.Component {
   render() {
     const { displayData } = this.state;
     const { thisBoard } = this.props;
+
+    const display = thisBoard.current_display
+      ? thisBoard.current_display.type
+      : thisBoard.type;
+
     var toRender = null;
-    switch (thisBoard.current_display.type) {
+    switch (display) {
       case "escape-room":
         toRender = <EscapeRoom displayData={displayData} />;
         break;
