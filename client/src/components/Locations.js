@@ -16,11 +16,14 @@ class Locations extends React.Component {
   }
 
   render() {
-    const { locations } = this.props;
-    const location = this.props.location.pathname.replace("/admin/", "");
-
+    const { locations, timedAnimation, boardsAreHidden } = this.props;
+    const location = this.props.location.pathname
+      .replace("/admin/", "")
+      .split("/")[0];
     const listOfLocations = locations.map((item, index) => {
-      const selectedClassName = location === item ? "selectedLocation" : "";
+      if (location) {
+        var selectedClassName = location === item ? "selectedLocation" : "";
+      }
 
       return (
         <li
@@ -28,6 +31,9 @@ class Locations extends React.Component {
           className={`${selectedClassName} location-item`}
           onClick={e => {
             this.moveToBoardsRoute(item);
+            if (boardsAreHidden) {
+              timedAnimation(boardsAreHidden);
+            }
           }}
         >
           {item}

@@ -2,6 +2,7 @@
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  background-color: rgb(233, 233, 233);
 }
 .nav-bar-container h2 {
   margin: 0;
