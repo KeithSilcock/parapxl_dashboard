@@ -21,7 +21,10 @@ class DatabaseTest extends React.Component {
       displays: [],
       currentDisplayType: "",
       currentDisplay_id: "",
-      currentDisplayData: {}
+      currentDisplayData: {},
+
+      boardsAreTransitioning: { up: false, down: false },
+      boardsAreHidden: false
     };
   }
 
@@ -57,23 +60,6 @@ class DatabaseTest extends React.Component {
         boards: [],
         currentBoard: "",
         displays: [],
-        currentDisplayType: "",
-        currentDisplay_id: "",
-        currentDisplayData: {}
-      });
-    });
-  }
-
-  getDisplayTypes(clickedBoard) {
-    const { currentLocation } = this.state;
-    const path = `/boards/${currentLocation}/${clickedBoard}`;
-    db.ref(path).on("value", snapshot => {
-      const listOfDisplays = snapshot.val();
-
-      this.setState({
-        ...this.state,
-        currentBoard: clickedBoard,
-        displays: listOfDisplays,
         currentDisplayType: "",
         currentDisplay_id: "",
         currentDisplayData: {}
@@ -124,9 +110,20 @@ class DatabaseTest extends React.Component {
     db.ref(path).set({ ...currentDisplayData });
   }
 
-  openNewWindow(e) {
-    const { currentDisplay_id } = this.state;
-    window.open(`http://localhost:3000/display/${currentDisplay_id}`);
+  timedAnimation(slidingDown) {
+    this.setState({
+      ...this.state,
+      boardsAreHidden: slidingDown,
+      boardsAreTransitioning: { up: !slidingDown, down: slidingDown }
+    });
+
+    setTimeout(() => {
+      this.setState({
+        ...this.state,
+        boardsAreHidden: !slidingDown,
+        boardsAreTransitioning: { up: false, down: false }
+      });
+    }, 990);
   }
 
   render() {
@@ -139,7 +136,10 @@ class DatabaseTest extends React.Component {
       currentBoard,
       currentDisplayType,
       currentDisplay_id,
-      currentDisplayData
+      currentDisplayData,
+
+      boardsAreHidden,
+      boardsAreTransitioning
     } = this.state;
 
     const currentData = {
@@ -158,6 +158,8 @@ class DatabaseTest extends React.Component {
             <Locations
               {...props}
               locations={locations}
+              timedAnimation={this.timedAnimation.bind(this)}
+              boardsAreHidden={boardsAreHidden}
               currentData={currentData}
             />
           )}
@@ -167,15 +169,25 @@ class DatabaseTest extends React.Component {
           render={props => (
             <Boards
               {...props}
-              boards={boards}
               currentData={currentData}
-              getDisplayTypes={this.getDisplayTypes.bind(this)}
+              timedAnimation={this.timedAnimation.bind(this)}
+              boardsAreHidden={boardsAreHidden}
+              boardsAreTransitioning={boardsAreTransitioning}
             />
           )}
         />
         <Route
           path={`/admin/:location/:board`}
-          render={props => <EditDisplays {...props} />}
+          render={props => (
+            <EditDisplays
+              {...props}
+              boards={boards}
+              currentData={currentData}
+              timedAnimation={this.timedAnimation.bind(this)}
+              boardsAreHidden={boardsAreHidden}
+              boardsAreTransitioning={boardsAreTransitioning}
+            />
+          )}
         />
         {/* <Displays
           displays={displays}
@@ -191,9 +203,6 @@ class DatabaseTest extends React.Component {
           onDisplayDataChange={this.onDisplayDataChange.bind(this)}
           updateDisplays={this.updateDisplays.bind(this)}
         /> */}
-        <button onClick={this.openNewWindow.bind(this)}>
-          Open this display in New Window
-        </button>
       </div>
     );
   }

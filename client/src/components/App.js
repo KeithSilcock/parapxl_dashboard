@@ -65,7 +65,7 @@ class App extends Component {
           rel="stylesheet"
         />
         {modal}
-        <Route exact path="/admin" component={Nav} />
+        <Route path="/admin" component={Nav} />
         <Route
           path="/admin"
           render={props => (
@@ -73,7 +73,6 @@ class App extends Component {
           )}
         />
         <Route path="/display/*" component={DataDisplayNewTab} />
-        <button onClick={this.clickButton.bind(this)}>{buttonText}</button>
       </div>
     );
   }
