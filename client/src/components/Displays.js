@@ -3,9 +3,6 @@ import db from "../firebase";
 import NewDisplayModal from "./NewDisplayModal";
 
 class Displays extends React.Component {
-  //add new display option that opens a list of options and values to add
-  // **** or allow them to create new
-
   //TODO Break these up into smaller components
 
   constructor(props) {

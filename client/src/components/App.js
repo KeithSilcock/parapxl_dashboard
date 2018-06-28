@@ -42,13 +42,10 @@ class App extends Component {
 
   render() {
     const { buttonState, openModal, modalData } = this.state;
-    const buttonText = buttonState ? "true" : "false";
-    const path = buttonState ? "/test" : "/test2";
 
     const modal = openModal ? (
       <Route
-        exact
-        path="/admin"
+        path="/admin/*"
         render={props => (
           <NewDisplayModal
             toggleModal={this.toggleModal}

@@ -1,5 +1,9 @@
 import React from "react";
 import db from "../firebase";
+import TextBoard from "./DisplayComponents/TextBoard";
+import EscapeRoom from "./DisplayComponents/EscapeRoom";
+
+import "../assets/newTabDisplay.css";
 
 class DataDisplayNewTab extends React.Component {
   constructor(props) {
@@ -17,6 +21,7 @@ class DataDisplayNewTab extends React.Component {
 
     testDispRef.on("value", snapshot => {
       const currentDisplayData = snapshot.val();
+
       this.setState({
         ...this.state,
         currentDisplayData
@@ -27,20 +32,19 @@ class DataDisplayNewTab extends React.Component {
   render() {
     const { currentDisplayData } = this.state;
 
-    const currentDisplayKeys = Object.keys(currentDisplayData);
-    const displayItems = currentDisplayKeys.map((key, index) => {
-      return (
-        <li key={index}>
-          {key}: {currentDisplayData[key]}
-        </li>
-      );
-    });
-    return (
-      <div>
-        <h4>Display Data: {currentDisplayData["type"] || null}</h4>
-        <ul>{displayItems}</ul>
-      </div>
-    );
+    var toRender = null;
+    switch (currentDisplayData.type) {
+      case "escape-room":
+        toRender = <EscapeRoom displayData={currentDisplayData} />;
+        break;
+      case "text-board":
+        toRender = <TextBoard displayData={currentDisplayData} />;
+        break;
+      default:
+        toRender = null;
+        break;
+    }
+    return <div className="new-tab">{toRender}</div>;
   }
 }
 

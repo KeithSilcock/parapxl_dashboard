@@ -15,6 +15,7 @@ class BoardDisplay extends React.Component {
   }
   componentWillMount() {
     const { thisBoard } = this.props;
+
     try {
       var path = `/displays/${thisBoard.current_display.display_id}`;
     } catch (err) {
@@ -26,6 +27,7 @@ class BoardDisplay extends React.Component {
     }
     db.ref(path).on("value", snapshot => {
       const displayData = snapshot.val();
+
       this.setState({
         ...this.state,
         displayData

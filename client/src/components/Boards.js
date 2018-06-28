@@ -101,9 +101,12 @@ class Boards extends React.Component {
             <div className="board-type open-button">
               <button
                 onClick={e =>
-                  this.openNewWindow(
-                    availableBoards[item].current_display.display_id
-                  )
+                  setTimeout(() => {
+                    this.openNewWindow(
+                      availableBoards[item].current_display.display_id
+                    ),
+                      300;
+                  })
                 }
               >
                 Open in New Window
@@ -112,9 +115,11 @@ class Boards extends React.Component {
             <div className="board-type edit-button">
               <button
                 onClick={e => {
-                  e.stopPropagation();
-                  timedAnimation(boardsAreHidden);
-                  this.openEditPage(e, item);
+                  // e.stopPropagation();
+                  setTimeout(() => {
+                    timedAnimation(boardsAreHidden);
+                    this.openEditPage(e, item);
+                  }, 300);
                 }}
               >
                 Edit
