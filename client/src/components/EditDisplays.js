@@ -2,6 +2,8 @@ import React from "react";
 import db from "../firebase";
 import BoardDisplay from "./BoardDisplay";
 import { capitalizeFirstLetters } from "../helpers";
+import EditDataDisplayed from "./EditDataDisplayed";
+import AllDisplays from "./AllDisplaysModal";
 
 import "../assets/edit.css";
 
@@ -62,9 +64,15 @@ class EditDisplays extends React.Component {
     timedAnimation(closing);
   }
 
+  showAllDisplays() {
+    const { toggleModal } = this.props;
+
+    toggleModal(<AllDisplays toggleModal={toggleModal} />);
+  }
+
   render() {
     const { availableDisplays, clickedDisplay, currentDisplay } = this.state;
-    const { boardsAreHidden, boardsAreTransitioning } = this.props;
+    const { boardsAreHidden, boardsAreTransitioning, toggleModal } = this.props;
     const renderAvailableDisplays = Object.keys(availableDisplays).map(
       (item, index) => {
         const display = availableDisplays[item];
@@ -99,9 +107,6 @@ class EditDisplays extends React.Component {
         );
       }
     );
-    const selectedClassName = clickedDisplay.display_id
-      ? "selectedDisplay"
-      : "";
 
     //aniamation
     if (boardsAreTransitioning) {
@@ -122,8 +127,16 @@ class EditDisplays extends React.Component {
             animationClassDownStart}`}
         >
           <div className="edit-header">
+            <div className="spacer" />
+            <h3>
+              Available Displays for the "{capitalizeFirstLetters(
+                this.props.match.params.board
+              )}"
+            </h3>
             <div className="edit-close">
-              <button>More Options</button>
+              <button onClick={this.showAllDisplays.bind(this)}>
+                More Options
+              </button>
               <div
                 className="x"
                 onClick={e => this.closeAnimation(boardsAreHidden)}
@@ -132,35 +145,17 @@ class EditDisplays extends React.Component {
               </div>
               <div className="spacer" />
             </div>
-            <h3>
-              Available Displays for the "{capitalizeFirstLetters(
-                this.props.match.params.board
-              )}"
-            </h3>
           </div>
 
           <div className="edit-content">
             <ul className="edit-list">{renderAvailableDisplays}</ul>
-            <div className="edit-text">
-              <p>
-                Select any available display. Once you've found the display
-                you'd like to display, press "Change Current Display". If you'd
-                like to add a new board, press the "+" button below to create a
-                new Display from the templates
-              </p>
-              <div className="buttons">
-                <button
-                  className={`update ${selectedClassName}`}
-                  onClick={e => {
-                    this.updateCurrentDisplay();
-                    this.closeAnimation(boardsAreHidden);
-                  }}
-                >
-                  Change Current Display
-                </button>
-                <button className="new">+</button>
-              </div>
-            </div>
+            <EditDataDisplayed
+              currentDisplay={currentDisplay}
+              clickedDisplay={clickedDisplay}
+              boardsAreHidden={boardsAreHidden}
+              closeAnimation={this.closeAnimation.bind(this)}
+              updateCurrentDisplay={this.updateCurrentDisplay.bind(this)}
+            />
           </div>
           {/* <div className="boards-footer">{displayAddNewBoard}</div> */}
         </div>
