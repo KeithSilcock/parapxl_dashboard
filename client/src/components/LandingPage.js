@@ -5,7 +5,6 @@ import Locations from "./Locations";
 import Boards from "./Boards";
 import EditDisplays from "./EditDisplays";
 import Displays from "./Displays";
-import DataDisplayAdmin from "./DataDisplayAdmin";
 
 import "../assets/landing_page.css";
 
@@ -81,33 +80,9 @@ class DatabaseTest extends React.Component {
     });
   }
 
-  onDisplayDataChange(event) {
-    const { currentDisplayData } = this.state;
-    const { name, value } = event.currentTarget;
-
-    const newData = { ...currentDisplayData, [name]: value };
-
-    this.setState({
-      ...this.state,
-      currentDisplayData: newData
-    });
-  }
-
   selectNewTemplate(currentBoard, templateType, display_id) {
     this.getDisplayTypes(currentBoard);
     this.getDisplayData(templateType, display_id);
-  }
-
-  updateDisplays(e) {
-    e.preventDefault();
-    const {
-      currentDisplayType,
-      currentDisplayData,
-      currentDisplay_id
-    } = this.state;
-
-    const path = `/displays/${currentDisplayType}/${currentDisplay_id}/`;
-    db.ref(path).set({ ...currentDisplayData });
   }
 
   timedAnimation(slidingDown) {
@@ -186,6 +161,7 @@ class DatabaseTest extends React.Component {
               timedAnimation={this.timedAnimation.bind(this)}
               boardsAreHidden={boardsAreHidden}
               boardsAreTransitioning={boardsAreTransitioning}
+              toggleModal={toggleModal}
             />
           )}
         />
