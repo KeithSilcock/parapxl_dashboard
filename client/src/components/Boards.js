@@ -147,7 +147,7 @@ class Boards extends React.Component {
     ) : null;
     const displayAddNewBoardText = location ? (
       <li className="board-item">
-        <div className="board-type new-display">
+        <div className="board-type new-board-display">
           <span>Create New Board</span>
         </div>
         <div className="board-type-preview new-board">

@@ -75,6 +75,7 @@ class BoardDisplay extends React.Component {
         toRender = null;
         break;
     }
+
     return <div className="display-preview">{toRender}</div>;
   }
 }

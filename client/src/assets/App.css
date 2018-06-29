@@ -8,9 +8,10 @@ body {
 }
 
 .App {
-  width: 94vw;
+
+  width: 100vw;
   height: 100vh;
-  padding-left: 3vw;
+
 
   font-family: "Karla", sans-serif;
 }
@@ -18,7 +19,13 @@ body {
 .nav-bar-container {
   height: 10%;
   padding-right: 5%;
+  width: 90%;
+  margin: auto;
 }
 .landing-page-container {
   height: 80%;
+
+  width: 90%;
+  margin: auto;
+
 }

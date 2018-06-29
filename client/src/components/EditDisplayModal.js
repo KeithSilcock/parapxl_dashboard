@@ -1,40 +1,25 @@
 import React from "react";
 import db from "../firebase";
 
-class EditDataDisplayed extends React.Component {
+class EditDisplayModal extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentData: {}
+      currentData: {},
+      currentDisplay_id: ""
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { clickedDisplay, currentDisplay } = nextProps;
+    const { currentSelection } = nextProps;
 
-    if (Object.keys(clickedDisplay).length) {
-      var path = `/displays/${clickedDisplay.display_id}`;
-      db.ref(path).on("value", snapshot => {
-        const currentData = snapshot.val();
-
-        this.setState({
-          ...this.state,
-          currentData
-        });
-      });
-    } else {
-      var path = `/displays/${currentDisplay.display_id}`;
-      db.ref(path).on("value", snapshot => {
-        const currentData = snapshot.val();
-
-        this.setState({
-          ...this.state,
-          currentData
-        });
-      });
-    }
+    this.setState({
+      ...this.state,
+      currentData: currentSelection.displayData,
+      currentDisplay_id: currentSelection.display_id
+    });
   }
 
   onDisplayDataChange(event) {
@@ -51,32 +36,25 @@ class EditDataDisplayed extends React.Component {
 
   updateDisplays(e) {
     e.preventDefault();
-    const { currentData } = this.state;
-    const { currentDisplay } = this.props;
+    const { currentData, currentDisplay_id } = this.state;
 
-    const path = `/displays/${currentDisplay.display_id}/`;
+    const path = `/displays/${currentDisplay_id}/`;
     db.ref(path).set({ ...currentData });
   }
 
   render() {
     const { currentData } = this.state;
-    const {
-      updateCurrentDisplay,
-      currentDisplay,
-      closeAnimation,
-      boardsAreHidden,
-      clickedDisplay
-    } = this.props;
+    // const { currentSelection } = this.props;
 
     if (currentData) {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
         const value = currentData[dataKey];
-
         var inputCont = null;
         switch (dataKey) {
           case "type":
             break;
-
+          case "display_id":
+            break;
           case "content":
             inputCont = (
               <li className="edit-data item">
@@ -92,7 +70,6 @@ class EditDataDisplayed extends React.Component {
               </li>
             );
             break;
-
           default:
             inputCont = (
               <li className="edit-data item">
@@ -121,12 +98,6 @@ class EditDataDisplayed extends React.Component {
       </form>
     ) : null;
 
-    const selectedClassName =
-      clickedDisplay.display_id !== currentDisplay.display_id &&
-      clickedDisplay.display_id
-        ? "selectedDisplay"
-        : "";
-
     return (
       <div className="edit-data container">
         <div className="edit-data data">
@@ -140,18 +111,6 @@ class EditDataDisplayed extends React.Component {
         </div>
 
         <div className="buttons">
-          <button
-            className={`update ${selectedClassName}`}
-            onClick={e => {
-              updateCurrentDisplay();
-
-              if (typeof boardsAreHidden !== "undefined")
-                closeAnimation(boardsAreHidden);
-
-            }}
-          >
-            Change Current Display
-          </button>
           <button className="new">+</button>
         </div>
       </div>
@@ -159,4 +118,4 @@ class EditDataDisplayed extends React.Component {
   }
 }
 
-export default EditDataDisplayed;
+export default EditDisplayModal;
