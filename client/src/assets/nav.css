@@ -2,6 +2,7 @@
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  background-color: rgb(233, 233, 233);
 }
 .nav-bar-container h2 {
   margin: 0;
@@ -23,6 +24,7 @@
   min-height: 30px;
   min-width: 60px;
 
+  border-radius: 10px;
   background-color: rgb(204, 204, 204);
   border: none;
 }

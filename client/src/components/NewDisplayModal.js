@@ -6,6 +6,7 @@ class NewDisplayModal extends React.Component {
     function stopPropigation(e) {
       e.stopPropagation();
     }
+
     const { toggleModal, modalData } = this.props;
     return (
       <div className={"display-modal modal-background"} onClick={toggleModal}>

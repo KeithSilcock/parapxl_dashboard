@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import "../assets/App.css";
-import LandingPage from "./Landing_Page";
-import BoringRoute from "./boringComponent";
-import BoringRoute2 from "./anotherBoringComponent";
+import LandingPage from "./LandingPage";
 import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
 import NewDisplayModal from "./NewDisplayModal";
+
+//TODO Finish adding animation for "EditDisplays"
 
 class App extends Component {
   constructor(props) {
@@ -42,13 +42,10 @@ class App extends Component {
 
   render() {
     const { buttonState, openModal, modalData } = this.state;
-    const buttonText = buttonState ? "true" : "false";
-    const path = buttonState ? "/test" : "/test2";
 
     const modal = openModal ? (
       <Route
-        exact
-        path="/admin"
+        path="/admin/*"
         render={props => (
           <NewDisplayModal
             toggleModal={this.toggleModal}
@@ -65,17 +62,14 @@ class App extends Component {
           rel="stylesheet"
         />
         {modal}
-        <Route exact path="/admin" component={Nav} />
+        <Route path="/admin" component={Nav} />
         <Route
           path="/admin"
           render={props => (
             <LandingPage {...props} toggleModal={this.toggleModal} />
           )}
         />
-        <Route path={path} component={BoringRoute} />
-        <Route path="/test2" component={BoringRoute2} />
         <Route path="/display/*" component={DataDisplayNewTab} />
-        <button onClick={this.clickButton.bind(this)}>{buttonText}</button>
       </div>
     );
   }

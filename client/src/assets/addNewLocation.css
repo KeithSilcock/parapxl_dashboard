@@ -2,7 +2,7 @@
   position: relative;
 }
 .add-new-item-button {
-  border-radius: 2px;
+  border-radius: 10px 10px 0 0;
 
   background-color: rgb(0, 193, 241);
   color: white;
@@ -10,6 +10,7 @@
   font-weight: bold;
   border: none;
   min-height: 30px;
+  cursor: pointer;
 }
 .add-new-item-form-container {
   position: absolute;
