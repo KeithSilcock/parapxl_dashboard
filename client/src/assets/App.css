@@ -8,8 +8,10 @@ body {
 }
 
 .App {
+
   width: 100vw;
   height: 100vh;
+
 
   font-family: "Karla", sans-serif;
 }
@@ -22,6 +24,8 @@ body {
 }
 .landing-page-container {
   height: 80%;
+
   width: 90%;
   margin: auto;
+
 }

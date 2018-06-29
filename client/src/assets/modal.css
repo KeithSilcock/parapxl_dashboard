@@ -10,10 +10,12 @@
 }
 .modal-frame {
   position: relative;
+
   width: 90%;
   height: 90%;
   left: 5%;
   top: 5%;
+
   z-index: 5;
 
   border: 5px solid rgb(207, 207, 207);
@@ -92,6 +94,7 @@
   padding: 0;
 } */
 
+
 .new-display {
   padding: 3%;
   box-sizing: border-box;
@@ -116,3 +119,4 @@
   align-self: flex-end;
   border: none;
 }
+

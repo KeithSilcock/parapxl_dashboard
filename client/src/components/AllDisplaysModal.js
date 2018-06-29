@@ -1,17 +1,21 @@
 import React from "react";
 import db from "../firebase";
 import BoardDisplay from "./BoardDisplay";
+
 import EditDisplayModal from "./EditDisplayModal";
 
 import "../assets/allDisplayModal.css";
+
 
 class AllDisplays extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+
       displays: {},
       currentSelection: {}
+
     };
   }
   componentDidMount() {
@@ -23,6 +27,7 @@ class AllDisplays extends React.Component {
       });
     });
   }
+
   selectItem(displayData, display_id) {
     this.setState({
       ...this.state,
@@ -59,6 +64,7 @@ class AllDisplays extends React.Component {
               thisBoard={{ display_id: displayHash, type: newDisplay.type }}
             />
           </div>
+
         </div>
       );
     });
@@ -68,12 +74,15 @@ class AllDisplays extends React.Component {
         <div className="modal-header">
           <div className="empty" />
           <div className="modal-header-text">
+
             <h2>All Displays</h2>
+
           </div>
           <div className="modal-button">
             <button>+</button>
           </div>
         </div>
+
         <div className="modal-content">
           <div className="modal-left"> {renderObjects}</div>
           <EditDisplayModal
@@ -81,6 +90,7 @@ class AllDisplays extends React.Component {
             // updateCurrentDisplay={this.updateCurrentDisplay.bind(this)}
           />
         </div>
+
       </div>
     );
   }

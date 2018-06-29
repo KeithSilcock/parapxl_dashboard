@@ -144,8 +144,10 @@ class EditDataDisplayed extends React.Component {
             className={`update ${selectedClassName}`}
             onClick={e => {
               updateCurrentDisplay();
+
               if (typeof boardsAreHidden !== "undefined")
                 closeAnimation(boardsAreHidden);
+
             }}
           >
             Change Current Display
