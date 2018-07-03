@@ -16,7 +16,12 @@ class NewDisplayModal extends React.Component {
     var data = null;
     switch (this.props.match.params.new_type) {
       case "display":
-        data = <AllDisplays {...this.props} />;
+        data = (
+          <AllDisplays
+            {...this.props}
+            closeModal={this.closeModal.bind(this)}
+          />
+        );
         break;
 
       default:

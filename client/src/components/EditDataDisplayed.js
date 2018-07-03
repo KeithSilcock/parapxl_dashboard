@@ -58,6 +58,16 @@ class EditDataDisplayed extends React.Component {
     db.ref(path).set({ ...currentData });
   }
 
+  removeDisplayFromBoard(e) {
+    e.preventDefault();
+    const { clickedDisplay } = this.props;
+    const { location, board } = this.props.match.params;
+    const path = `/boards/${location}/${board}/available_displays/${
+      clickedDisplay.availableDisplay_id
+    }`;
+    db.ref(path).remove();
+  }
+
   render() {
     const { currentData } = this.state;
     const {
@@ -114,16 +124,33 @@ class EditDataDisplayed extends React.Component {
       var displayItems = null;
     }
 
+    const removeButtonClass =
+      clickedDisplay.availableDisplay_id !==
+        currentDisplay.availableDisplay_id && clickedDisplay.availableDisplay_id
+        ? "remove"
+        : "";
+
     const update_data_form = currentData ? (
       <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
         <ul className="edit-data edit-list">{displayItems}</ul>
-        <button className="edit-data form-button">Update Displays</button>
+        <button className="edit-data form-button">Update Data</button>
+        <button
+          type="button"
+          className={`edit-data form-button update ${removeButtonClass}`}
+          onClick={e => {
+            if (removeButtonClass) {
+              this.removeDisplayFromBoard(e);
+            }
+          }}
+        >
+          Remove
+        </button>
       </form>
     ) : null;
 
     const selectedClassName =
-      clickedDisplay.display_id !== currentDisplay.display_id &&
-      clickedDisplay.display_id
+      clickedDisplay.availableDisplay_id !==
+        currentDisplay.availableDisplay_id && clickedDisplay.availableDisplay_id
         ? "selectedDisplay"
         : "";
 
@@ -143,11 +170,12 @@ class EditDataDisplayed extends React.Component {
           <button
             className={`update ${selectedClassName}`}
             onClick={e => {
-              updateCurrentDisplay();
+              if (selectedClassName) {
+                updateCurrentDisplay();
 
-              if (typeof boardsAreHidden !== "undefined")
-                closeAnimation(boardsAreHidden);
-
+                if (typeof boardsAreHidden !== "undefined")
+                  closeAnimation(boardsAreHidden);
+              }
             }}
           >
             Change Current Display
