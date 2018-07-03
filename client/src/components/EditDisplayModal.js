@@ -34,6 +34,18 @@ class EditDisplayModal extends React.Component {
     });
   }
 
+  addDisplayToAvailable(e) {
+    const { currentData, currentDisplay_id } = this.state;
+    const { location, board } = this.props.match.params;
+    const dataToSend = {
+      display_id: currentDisplay_id,
+      name: currentData.name,
+      type: currentData.type
+    };
+    const path = `/boards/${location}/${board}/available_displays`;
+    db.ref(path).push(dataToSend);
+  }
+
   updateDisplays(e) {
     e.preventDefault();
     const { currentData, currentDisplay_id } = this.state;
@@ -94,7 +106,12 @@ class EditDisplayModal extends React.Component {
     const update_data_form = currentData ? (
       <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
         <ul className="edit-data edit-list">{displayItems}</ul>
-        <button className="edit-data form-button">Update Displays</button>
+        <button
+          className="edit-data form-button"
+          onClick={e => this.addDisplayToAvailable(e)}
+        >
+          Update Displays
+        </button>
       </form>
     ) : null;
 
@@ -102,9 +119,12 @@ class EditDisplayModal extends React.Component {
       <div className="edit-data container">
         <div className="edit-data data">
           <p className="edit-text">
-            Select any available display. Once you've found the display you'd
-            like to show, press the "Change Current Display". If you'd like to
-            add a new board, press the "+" button below to create a new Display
+            Select any available displays. You may recognize some from different
+            locations. Please be aware, editing them will edit any of their live
+            versions. Once you've found the display you'd like to show, press
+            the "Change Current Display" to add that to your list of available
+            options. If you'd like to create a new display, press the "Create
+            New Display" button in the top right corner to create a new Display
             from the templates
           </p>
           {update_data_form}

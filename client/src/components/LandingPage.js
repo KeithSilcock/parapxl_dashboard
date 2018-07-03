@@ -102,7 +102,6 @@ class DatabaseTest extends React.Component {
   }
 
   render() {
-    const { toggleModal } = this.props;
     const {
       locations,
       boards,
@@ -161,7 +160,6 @@ class DatabaseTest extends React.Component {
               timedAnimation={this.timedAnimation.bind(this)}
               boardsAreHidden={boardsAreHidden}
               boardsAreTransitioning={boardsAreTransitioning}
-              toggleModal={toggleModal}
             />
           )}
         />
