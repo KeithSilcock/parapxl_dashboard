@@ -1,20 +1,39 @@
 import React from "react";
 import "../assets/modal.css";
+import AllDisplays from "./AllDisplaysModal";
 
 class NewDisplayModal extends React.Component {
+  closeModal() {
+    const { location, board } = this.props.match.params;
+    this.props.history.push(`/admin/${location}/${board}`);
+  }
+
   render() {
     function stopPropigation(e) {
       e.stopPropagation();
     }
 
-    const { toggleModal, modalData } = this.props;
+    var data = null;
+    switch (this.props.match.params.new_type) {
+      case "display":
+        data = <AllDisplays {...this.props} />;
+        break;
+
+      default:
+        data = null;
+        break;
+    }
+
     return (
-      <div className={"display-modal modal-background"} onClick={toggleModal}>
+      <div
+        className={"display-modal modal-background"}
+        onClick={this.closeModal.bind(this)}
+      >
         <div
           className="display-modal modal-frame"
           onClick={e => stopPropigation(e)}
         >
-          {modalData}
+          {data}
         </div>
       </div>
     );

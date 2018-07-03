@@ -65,14 +65,12 @@ class EditDisplays extends React.Component {
   }
 
   showAllDisplays() {
-    const { toggleModal } = this.props;
-
-    toggleModal(<AllDisplays toggleModal={toggleModal} />);
+    this.props.history.push(this.props.location.pathname + "/add-new/display");
   }
 
   render() {
     const { availableDisplays, clickedDisplay, currentDisplay } = this.state;
-    const { boardsAreHidden, boardsAreTransitioning, toggleModal } = this.props;
+    const { boardsAreHidden, boardsAreTransitioning } = this.props;
     const renderAvailableDisplays = Object.keys(availableDisplays).map(
       (item, index) => {
         const display = availableDisplays[item];
