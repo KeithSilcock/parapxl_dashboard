@@ -1,11 +1,10 @@
 import React from "react";
-import db from "../firebase";
-import BoardDisplay from "./BoardDisplay";
-import { capitalizeFirstLetters } from "../helpers";
+import db from "../../firebase";
+import BoardDisplay from "../board_components/BoardDisplay";
+import { capitalizeFirstLetters } from "../../helpers";
 import EditDataDisplayed from "./EditDataDisplayed";
-import AllDisplays from "./AllDisplaysModal";
 
-import "../assets/edit.css";
+import "../../assets/edit.css";
 
 class EditDisplays extends React.Component {
   constructor(props) {
@@ -37,9 +36,13 @@ class EditDisplays extends React.Component {
     });
   }
 
-  clickedDisplay(clickedDisplay) {
+  clickedDisplay(clickedDisplay, availableDisplay_id) {
+    const newData = {
+      ...clickedDisplay,
+      availableDisplay_id
+    };
     this.setState({
-      clickedDisplay
+      clickedDisplay: newData
     });
   }
 
@@ -65,14 +68,12 @@ class EditDisplays extends React.Component {
   }
 
   showAllDisplays() {
-    const { toggleModal } = this.props;
-
-    toggleModal(<AllDisplays toggleModal={toggleModal} />);
+    this.props.history.push(this.props.location.pathname + "/add-new/display");
   }
 
   render() {
     const { availableDisplays, clickedDisplay, currentDisplay } = this.state;
-    const { boardsAreHidden, boardsAreTransitioning, toggleModal } = this.props;
+    const { boardsAreHidden, boardsAreTransitioning } = this.props;
     const renderAvailableDisplays = Object.keys(availableDisplays).map(
       (item, index) => {
         const display = availableDisplays[item];
@@ -93,7 +94,7 @@ class EditDisplays extends React.Component {
           <li
             key={index}
             className={`${selectedClassName} display-item`}
-            onClick={e => this.clickedDisplay(display)}
+            onClick={e => this.clickedDisplay(display, item)}
           >
             <div className="edit-item-content">
               <div className={`display-type ${item}`}>
@@ -150,9 +151,9 @@ class EditDisplays extends React.Component {
           <div className="edit-content">
             <ul className="edit-list">{renderAvailableDisplays}</ul>
             <EditDataDisplayed
+              {...this.props}
               currentDisplay={currentDisplay}
               clickedDisplay={clickedDisplay}
-              boardsAreHidden={boardsAreHidden}
               closeAnimation={this.closeAnimation.bind(this)}
               updateCurrentDisplay={this.updateCurrentDisplay.bind(this)}
             />

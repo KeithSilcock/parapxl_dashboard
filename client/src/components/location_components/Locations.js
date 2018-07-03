@@ -1,7 +1,7 @@
 import React from "react";
-import db from "../firebase";
+import db from "../../firebase";
 import AddNewLocation from "./AddNewLocation";
-import "../assets/locations.css";
+import "../../assets/locations.css";
 
 class Locations extends React.Component {
   createNewLocation(e, newLocationName) {
@@ -12,13 +12,13 @@ class Locations extends React.Component {
   }
 
   moveToBoardsRoute(location) {
-    this.props.history.push(`/admin/${location}`);
+    this.props.history.push(`/admin/home/${location}`);
   }
 
   render() {
     const { locations, timedAnimation, boardsAreHidden } = this.props;
     const location = this.props.location.pathname
-      .replace("/admin/", "")
+      .replace("/admin/home/", "")
       .split("/")[0];
     const listOfLocations = locations.map((item, index) => {
       if (location) {

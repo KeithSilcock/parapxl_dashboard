@@ -1,10 +1,9 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import db from "../firebase";
-import Locations from "./Locations";
-import Boards from "./Boards";
-import EditDisplays from "./EditDisplays";
-import Displays from "./Displays";
+import Locations from "./location_components/Locations";
+import Boards from "./board_components/Boards";
+import EditDisplays from "./display_components/EditDisplays";
 
 import "../assets/landing_page.css";
 
@@ -102,7 +101,6 @@ class DatabaseTest extends React.Component {
   }
 
   render() {
-    const { toggleModal } = this.props;
     const {
       locations,
       boards,
@@ -128,7 +126,7 @@ class DatabaseTest extends React.Component {
     return (
       <div className="landing-page-container">
         <Route
-          path="/admin"
+          path="/admin/home"
           render={props => (
             <Locations
               {...props}
@@ -140,7 +138,7 @@ class DatabaseTest extends React.Component {
           )}
         />
         <Route
-          path={`/admin/:location`}
+          path={`/admin/home/:location`}
           render={props => (
             <Boards
               {...props}
@@ -152,7 +150,7 @@ class DatabaseTest extends React.Component {
           )}
         />
         <Route
-          path={`/admin/:location/:board`}
+          path={`/admin/home/:location/:board`}
           render={props => (
             <EditDisplays
               {...props}
@@ -161,7 +159,6 @@ class DatabaseTest extends React.Component {
               timedAnimation={this.timedAnimation.bind(this)}
               boardsAreHidden={boardsAreHidden}
               boardsAreTransitioning={boardsAreTransitioning}
-              toggleModal={toggleModal}
             />
           )}
         />

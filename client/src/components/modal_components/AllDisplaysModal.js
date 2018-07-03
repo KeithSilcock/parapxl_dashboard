@@ -1,21 +1,18 @@
 import React from "react";
-import db from "../firebase";
-import BoardDisplay from "./BoardDisplay";
+import db from "../../firebase";
+import BoardDisplay from "../board_components/BoardDisplay";
 
 import EditDisplayModal from "./EditDisplayModal";
 
-import "../assets/allDisplayModal.css";
-
+import "../../assets/allDisplayModal.css";
 
 class AllDisplays extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-
       displays: {},
       currentSelection: {}
-
     };
   }
   componentDidMount() {
@@ -35,10 +32,12 @@ class AllDisplays extends React.Component {
     });
   }
 
-  addDisplayToBoard() {}
+  createNewDisplay(e) {
+    const { location, board } = this.props.match.params;
+    this.props.history.push(`/admin/${location}/${board}/create-new/display`);
+  }
 
   render() {
-    const { toggleModal } = this.props;
     const { displays, currentSelection } = this.state;
 
     const renderObjects = Object.keys(displays).map((displayHash, index) => {
@@ -54,7 +53,6 @@ class AllDisplays extends React.Component {
           onClick={e => {
             this.selectItem(newDisplay, displayHash);
             // this.addCurrentTemplateToBoard(displayType, displayTemplate);
-            // toggleModal();
           }}
           key={index}
         >
@@ -64,7 +62,6 @@ class AllDisplays extends React.Component {
               thisBoard={{ display_id: displayHash, type: newDisplay.type }}
             />
           </div>
-
         </div>
       );
     });
@@ -74,23 +71,23 @@ class AllDisplays extends React.Component {
         <div className="modal-header">
           <div className="empty" />
           <div className="modal-header-text">
-
             <h2>All Displays</h2>
-
           </div>
-          <div className="modal-button">
-            <button>+</button>
+          <div className="modal-button ">
+            <button onClick={e => this.createNewDisplay(e)}>
+              Create New Display
+            </button>
           </div>
         </div>
 
         <div className="modal-content">
           <div className="modal-left"> {renderObjects}</div>
           <EditDisplayModal
+            {...this.props}
             currentSelection={currentSelection}
             // updateCurrentDisplay={this.updateCurrentDisplay.bind(this)}
           />
         </div>
-
       </div>
     );
   }

@@ -1,40 +1,25 @@
 import React from "react";
-import db from "../firebase";
+import db from "../../firebase";
 
-class EditDataDisplayed extends React.Component {
+class EditDisplayModal extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentData: {}
+      currentData: {},
+      currentDisplay_id: ""
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { clickedDisplay, currentDisplay } = nextProps;
+    const { currentSelection } = nextProps;
 
-    if (Object.keys(clickedDisplay).length) {
-      var path = `/displays/${clickedDisplay.display_id}`;
-      db.ref(path).on("value", snapshot => {
-        const currentData = snapshot.val();
-
-        this.setState({
-          ...this.state,
-          currentData
-        });
-      });
-    } else {
-      var path = `/displays/${currentDisplay.display_id}`;
-      db.ref(path).on("value", snapshot => {
-        const currentData = snapshot.val();
-
-        this.setState({
-          ...this.state,
-          currentData
-        });
-      });
-    }
+    this.setState({
+      ...this.state,
+      currentData: currentSelection.displayData,
+      currentDisplay_id: currentSelection.display_id
+    });
   }
 
   onDisplayDataChange(event) {
@@ -49,41 +34,47 @@ class EditDataDisplayed extends React.Component {
     });
   }
 
+  addDisplayToAvailable(e) {
+    const { currentData, currentDisplay_id } = this.state;
+    const { location, board } = this.props.match.params;
+    const dataToSend = {
+      display_id: currentDisplay_id,
+      name: currentData.name,
+      type: currentData.type
+    };
+    const path = `/boards/${location}/${board}/available_displays`;
+    db.ref(path).push(dataToSend);
+  }
+
   updateDisplays(e) {
     e.preventDefault();
-    const { currentData } = this.state;
-    const { currentDisplay } = this.props;
+    const { currentData, currentDisplay_id } = this.state;
 
-    const path = `/displays/${currentDisplay.display_id}/`;
+    const path = `/displays/${currentDisplay_id}/`;
     db.ref(path).set({ ...currentData });
   }
 
   render() {
     const { currentData } = this.state;
-    const {
-      updateCurrentDisplay,
-      currentDisplay,
-      closeAnimation,
-      boardsAreHidden,
-      clickedDisplay
-    } = this.props;
+    const { closeModal } = this.props;
+    const { board } = this.props.match.params;
+    // const { currentSelection } = this.props;
 
     if (currentData) {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
         const value = currentData[dataKey];
-
         var inputCont = null;
         switch (dataKey) {
           case "type":
             break;
-
+          case "display_id":
+            break;
           case "content":
             inputCont = (
-              <li className="edit-data item">
+              <li key={index} className="edit-data item">
                 <p>{dataKey}:</p>
                 <textarea
                   rows="7"
-                  key={index}
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
@@ -92,13 +83,11 @@ class EditDataDisplayed extends React.Component {
               </li>
             );
             break;
-
           default:
             inputCont = (
-              <li className="edit-data item">
+              <li key={index} className="edit-data item">
                 <p>{dataKey}:</p>
                 <input
-                  key={index}
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
@@ -117,46 +106,35 @@ class EditDataDisplayed extends React.Component {
     const update_data_form = currentData ? (
       <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
         <ul className="edit-data edit-list">{displayItems}</ul>
-        <button className="edit-data form-button">Update Displays</button>
+        <button
+          className="edit-data form-button"
+          onClick={e => {
+            this.addDisplayToAvailable(e);
+            closeModal();
+          }}
+        >
+          Add Display to {board}
+        </button>
       </form>
     ) : null;
-
-    const selectedClassName =
-      clickedDisplay.display_id !== currentDisplay.display_id &&
-      clickedDisplay.display_id
-        ? "selectedDisplay"
-        : "";
 
     return (
       <div className="edit-data container">
         <div className="edit-data data">
           <p className="edit-text">
-            Select any available display. Once you've found the display you'd
-            like to show, press the "Change Current Display". If you'd like to
-            add a new board, press the "+" button below to create a new Display
+            Select any available displays. You may recognize some from different
+            locations. Please be aware, editing them will edit any of their live
+            versions. Once you've found the display you'd like to show, press
+            the "Change Current Display" to add that to your list of available
+            options. If you'd like to create a new display, press the "Create
+            New Display" button in the top right corner to create a new Display
             from the templates
           </p>
           {update_data_form}
-        </div>
-
-        <div className="buttons">
-          <button
-            className={`update ${selectedClassName}`}
-            onClick={e => {
-              updateCurrentDisplay();
-
-              if (typeof boardsAreHidden !== "undefined")
-                closeAnimation(boardsAreHidden);
-
-            }}
-          >
-            Change Current Display
-          </button>
-          <button className="new">+</button>
         </div>
       </div>
     );
   }
 }
 
-export default EditDataDisplayed;
+export default EditDisplayModal;

@@ -4,7 +4,8 @@ import "../assets/App.css";
 import LandingPage from "./LandingPage";
 import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
-import NewDisplayModal from "./NewDisplayModal";
+import NewDisplayModal from "./modal_components/NewDisplayModal";
+import TemplatePage from "./template_components/TemplatePage";
 
 //TODO Finish adding animation for "EditDisplays"
 
@@ -13,22 +14,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      openModal: false,
-      modalData: {},
       buttonState: false
     };
-
-    this.toggleModal = this.toggleModal.bind(this);
-  }
-
-  toggleModal(dataToDisplay) {
-    const { openModal } = this.state;
-
-    this.setState({
-      ...this.state,
-      openModal: !openModal,
-      modalData: dataToDisplay
-    });
   }
 
   clickButton() {
@@ -43,17 +30,9 @@ class App extends Component {
   render() {
     const { buttonState, openModal, modalData } = this.state;
 
-    const modal = openModal ? (
-      <Route
-        path="/admin/*"
-        render={props => (
-          <NewDisplayModal
-            toggleModal={this.toggleModal}
-            modalData={modalData}
-          />
-        )}
-      />
-    ) : null;
+    // const modal = openModal ? (
+
+    // ) : null;
 
     return (
       <div className="App">
@@ -61,13 +40,19 @@ class App extends Component {
           href="https://fonts.googleapis.com/css?family=Karla"
           rel="stylesheet"
         />
-        {modal}
+        <Route
+          path="/admin/home/:location/:board/add-new/:new_type"
+          render={props => <NewDisplayModal {...props} />}
+        />
         <Route path="/admin" component={Nav} />
         <Route
-          path="/admin"
-          render={props => (
-            <LandingPage {...props} toggleModal={this.toggleModal} />
-          )}
+          path="/admin/home"
+          render={props => <LandingPage {...props} />}
+        />
+        <Route
+          exact
+          path={`/admin/:location/:board/create-new/:new_type`}
+          render={props => <TemplatePage {...props} />}
         />
         <Route path="/display/*" component={DataDisplayNewTab} />
       </div>
