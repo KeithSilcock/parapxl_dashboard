@@ -1,11 +1,10 @@
 import React from "react";
-import db from "../firebase";
-import BoardDisplay from "./BoardDisplay";
-import { capitalizeFirstLetters } from "../helpers";
+import db from "../../firebase";
+import BoardDisplay from "../board_components/BoardDisplay";
+import { capitalizeFirstLetters } from "../../helpers";
 import EditDataDisplayed from "./EditDataDisplayed";
-import AllDisplays from "./AllDisplaysModal";
 
-import "../assets/edit.css";
+import "../../assets/edit.css";
 
 class EditDisplays extends React.Component {
   constructor(props) {
@@ -20,10 +19,6 @@ class EditDisplays extends React.Component {
 
   componentWillReceiveProps() {
     this.getDisplays();
-  }
-
-  componentWillUnmount() {
-    db.goOffline();
   }
 
   getDisplays() {

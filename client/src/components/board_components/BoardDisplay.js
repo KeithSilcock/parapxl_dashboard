@@ -1,9 +1,9 @@
 import React from "react";
-import db from "../firebase";
-import TextBoard from "./DisplayComponents/TextBoard";
-import EscapeRoom from "./DisplayComponents/EscapeRoom";
+import db from "../../firebase";
+import TextBoard from "../DisplayComponents/TextBoard";
+import EscapeRoom from "../DisplayComponents/EscapeRoom";
 
-import "../assets/displayComponents.css";
+import "../../assets/displayComponents.css";
 
 class BoardDisplay extends React.Component {
   constructor(props) {
