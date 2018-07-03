@@ -5,6 +5,7 @@ import LandingPage from "./LandingPage";
 import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
 import NewDisplayModal from "./NewDisplayModal";
+import AddDisplayFromTemplate from "./AddDisplayFromTemplate";
 
 //TODO Finish adding animation for "EditDisplays"
 
@@ -40,11 +41,19 @@ class App extends Component {
           rel="stylesheet"
         />
         <Route
-          path="/admin/:location/:board/add-new/:new_type"
+          path="/admin/home/:location/:board/add-new/:new_type"
           render={props => <NewDisplayModal {...props} />}
         />
         <Route path="/admin" component={Nav} />
-        <Route path="/admin" render={props => <LandingPage {...props} />} />
+        <Route
+          path="/admin/home"
+          render={props => <LandingPage {...props} />}
+        />
+        <Route
+          exact
+          path={`/admin/create-new/:new_type`}
+          render={props => <AddDisplayFromTemplate {...props} />}
+        />
         <Route path="/display/*" component={DataDisplayNewTab} />
       </div>
     );

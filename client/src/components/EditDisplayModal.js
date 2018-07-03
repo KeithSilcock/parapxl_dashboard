@@ -134,10 +134,6 @@ class EditDisplayModal extends React.Component {
           </p>
           {update_data_form}
         </div>
-
-        <div className="buttons">
-          <button className="new">+</button>
-        </div>
       </div>
     );
   }

@@ -22,6 +22,10 @@ class EditDisplays extends React.Component {
     this.getDisplays();
   }
 
+  componentWillUnmount() {
+    db.goOffline();
+  }
+
   getDisplays() {
     const { location, board } = this.props.match.params;
 

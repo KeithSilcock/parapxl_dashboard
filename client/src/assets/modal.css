@@ -35,7 +35,7 @@
   height: 10%;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 .modal-content {
   width: 100%;
@@ -46,7 +46,7 @@
   justify-content: space-around;
   align-items: flex-start;
 
-  padding: 2% 1%;
+  padding: 0 1%;
 }
 .modal-header .empty {
   width: 10%;
@@ -66,15 +66,13 @@
   align-self: center;
 }
 .modal-button button {
-  position: relative;
-  cursor: pointer;
-
-  border-radius: 50%;
-  border: none;
+  border-radius: 5px;
+  background-color: rgb(0, 193, 241);
   color: white;
-  background-color: green;
-  height: 40px;
-  width: 40px;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-height: 30px;
+  cursor: pointer;
 }
 .display-template {
   height: 47.5%;

@@ -4,7 +4,6 @@ import db from "../firebase";
 import Locations from "./Locations";
 import Boards from "./Boards";
 import EditDisplays from "./EditDisplays";
-import Displays from "./Displays";
 
 import "../assets/landing_page.css";
 
@@ -127,7 +126,7 @@ class DatabaseTest extends React.Component {
     return (
       <div className="landing-page-container">
         <Route
-          path="/admin"
+          path="/admin/home"
           render={props => (
             <Locations
               {...props}
@@ -139,7 +138,7 @@ class DatabaseTest extends React.Component {
           )}
         />
         <Route
-          path={`/admin/:location`}
+          path={`/admin/home/:location`}
           render={props => (
             <Boards
               {...props}
@@ -151,7 +150,7 @@ class DatabaseTest extends React.Component {
           )}
         />
         <Route
-          path={`/admin/:location/:board`}
+          path={`/admin/home/:location/:board`}
           render={props => (
             <EditDisplays
               {...props}

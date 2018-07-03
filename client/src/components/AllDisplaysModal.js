@@ -32,7 +32,10 @@ class AllDisplays extends React.Component {
     });
   }
 
-  createNewDisplay(e) {}
+  createNewDisplay(e) {
+    const { location, board } = this.props.match.params;
+    this.props.history.push(`/admin/create-new/display`);
+  }
 
   render() {
     const { displays, currentSelection } = this.state;
@@ -70,7 +73,7 @@ class AllDisplays extends React.Component {
           <div className="modal-header-text">
             <h2>All Displays</h2>
           </div>
-          <div className="modal-button">
+          <div className="modal-button ">
             <button onClick={e => this.createNewDisplay(e)}>
               Create New Display
             </button>

@@ -5,7 +5,7 @@ import AllDisplays from "./AllDisplaysModal";
 class NewDisplayModal extends React.Component {
   closeModal() {
     const { location, board } = this.props.match.params;
-    this.props.history.push(`/admin/${location}/${board}`);
+    this.props.history.push(`/admin/home/${location}/${board}`);
   }
 
   render() {
