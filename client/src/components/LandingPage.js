@@ -1,9 +1,9 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import db from "../firebase";
-import Locations from "./Locations";
-import Boards from "./Boards";
-import EditDisplays from "./EditDisplays";
+import Locations from "./location_components/Locations";
+import Boards from "./board_components/Boards";
+import EditDisplays from "./display_components/EditDisplays";
 
 import "../assets/landing_page.css";
 

@@ -1,10 +1,10 @@
 import React from "react";
-import db from "../firebase";
-import BoardDisplay from "./BoardDisplay";
+import db from "../../firebase";
+import BoardDisplay from "../board_components/BoardDisplay";
 
 import EditDisplayModal from "./EditDisplayModal";
 
-import "../assets/allDisplayModal.css";
+import "../../assets/allDisplayModal.css";
 
 class AllDisplays extends React.Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class AllDisplays extends React.Component {
 
   createNewDisplay(e) {
     const { location, board } = this.props.match.params;
-    this.props.history.push(`/admin/create-new/display`);
+    this.props.history.push(`/admin/${location}/${board}/create-new/display`);
   }
 
   render() {

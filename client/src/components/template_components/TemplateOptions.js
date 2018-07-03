@@ -32,7 +32,7 @@ export default props => {
       <input
         onClick={e => e.preventDefault()}
         type="checkbox"
-        checked
+        defaultChecked
         className="template-display background_img"
       />
       <span> Has Background Image</span>

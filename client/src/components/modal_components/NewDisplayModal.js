@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/modal.css";
+import "../../assets/modal.css";
 import AllDisplays from "./AllDisplaysModal";
 
 class NewDisplayModal extends React.Component {

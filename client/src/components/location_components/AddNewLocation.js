@@ -1,7 +1,7 @@
 import React from "react";
-import "../assets/addNewBoard.css";
+import "../../assets/addNewLocation.css";
 
-class AddNewBoard extends React.Component {
+class AddNewDBItem extends React.Component {
   constructor(props) {
     super(props);
 
@@ -29,7 +29,7 @@ class AddNewBoard extends React.Component {
   }
   render() {
     const { openInput, newDataName } = this.state;
-    const { addNewItem } = this.props;
+    const { addNewItem, newText } = this.props;
 
     const openForm = openInput ? (
       <form
@@ -49,17 +49,17 @@ class AddNewBoard extends React.Component {
     ) : null;
 
     return (
-      <div className="add-new-board-container">
+      <div className="add-new-item-container">
         <button
-          className="add-new-board-button"
+          className="add-new-item-button"
           onClick={this.toggleInputOpen.bind(this)}
         >
-          +
+          Add a New {newText}
         </button>
-        <div className="add-new-board-form-container">{openForm}</div>
+        <div className="add-new-item-form-container">{openForm}</div>
       </div>
     );
   }
 }
 
-export default AddNewBoard;
+export default AddNewDBItem;

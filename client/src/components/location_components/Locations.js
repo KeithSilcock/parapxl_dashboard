@@ -1,7 +1,7 @@
 import React from "react";
-import db from "../firebase";
+import db from "../../firebase";
 import AddNewLocation from "./AddNewLocation";
-import "../assets/locations.css";
+import "../../assets/locations.css";
 
 class Locations extends React.Component {
   createNewLocation(e, newLocationName) {

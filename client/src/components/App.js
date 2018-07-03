@@ -4,8 +4,8 @@ import "../assets/App.css";
 import LandingPage from "./LandingPage";
 import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
-import NewDisplayModal from "./NewDisplayModal";
-import AddDisplayFromTemplate from "./AddDisplayFromTemplate";
+import NewDisplayModal from "./modal_components/NewDisplayModal";
+import TemplatePage from "./template_components/TemplatePage";
 
 //TODO Finish adding animation for "EditDisplays"
 
@@ -51,8 +51,8 @@ class App extends Component {
         />
         <Route
           exact
-          path={`/admin/create-new/:new_type`}
-          render={props => <AddDisplayFromTemplate {...props} />}
+          path={`/admin/:location/:board/create-new/:new_type`}
+          render={props => <TemplatePage {...props} />}
         />
         <Route path="/display/*" component={DataDisplayNewTab} />
       </div>

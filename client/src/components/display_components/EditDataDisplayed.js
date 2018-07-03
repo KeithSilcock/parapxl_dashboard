@@ -1,5 +1,5 @@
 import React from "react";
-import db from "../firebase";
+import db from "../../firebase";
 
 class EditDataDisplayed extends React.Component {
   constructor(props) {
@@ -89,11 +89,10 @@ class EditDataDisplayed extends React.Component {
 
           case "content":
             inputCont = (
-              <li className="edit-data item">
+              <li key={index} className="edit-data item">
                 <p>{dataKey}:</p>
                 <textarea
                   rows="7"
-                  key={index}
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
@@ -105,10 +104,9 @@ class EditDataDisplayed extends React.Component {
 
           default:
             inputCont = (
-              <li className="edit-data item">
+              <li key={index} className="edit-data item">
                 <p>{dataKey}:</p>
                 <input
-                  key={index}
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}

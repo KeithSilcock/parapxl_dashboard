@@ -1,11 +1,11 @@
 import React from "react";
-import db from "../firebase";
+import db from "../../firebase";
 import AddNewBoard from "./AddNewBoard";
 import BoardDisplay from "./BoardDisplay";
-import { capitalizeFirstLetters } from "../helpers";
+import { capitalizeFirstLetters } from "../../helpers";
 
-import "../assets/animations/openEditPage.css";
-import "../assets/boards.css";
+import "../../assets/animations/openEditBoard.css";
+import "../../assets/boards.css";
 
 class Boards extends React.Component {
   constructor(props) {
@@ -54,9 +54,6 @@ class Boards extends React.Component {
         });
       });
     }
-  }
-  componentWillUnmount() {
-    db.goOffline();
   }
 
   boardSelected(clickedBoard) {
