@@ -55,6 +55,9 @@ class Boards extends React.Component {
       });
     }
   }
+  componentWillUnmount() {
+    db.goOffline();
+  }
 
   boardSelected(clickedBoard) {
     this.setState({
@@ -65,10 +68,12 @@ class Boards extends React.Component {
 
   openEditPage(e, board) {
     const { currentLocation } = this.state;
-    this.props.history.push(`/admin/${currentLocation}/${board}`);
+    this.props.history.push(`/admin/home/${currentLocation}/${board}`);
   }
 
   openNewWindow(board_id) {
+    this.props;
+    debugger;
     window.open(`http://localhost:3000/display/${board_id}`);
   }
 
@@ -82,53 +87,57 @@ class Boards extends React.Component {
     const { availableBoards, clickedBoard } = this.state;
     const { location } = this.props.match.params;
 
-    const listOfBoards = Object.keys(availableBoards).map((item, index) => {
-      const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
+    if (availableBoards) {
+      var listOfBoards = Object.keys(availableBoards).map((item, index) => {
+        const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
 
-      return (
-        <li
-          key={index}
-          className={`${selectedClassName} board-item`}
-          onClick={e => this.boardSelected(item)}
-        >
-          <div className={`board-type ${item}`}>
-            <span>{capitalizeFirstLetters(item, true)}</span>
-          </div>
-          <div className="board-type-preview">
-            <BoardDisplay thisBoard={availableBoards[item]} />
-          </div>
-          <div className="board-type buttons">
-            <div className="board-type open-button">
-              <button
-                onClick={e =>
-                  setTimeout(() => {
-                    this.openNewWindow(
-                      availableBoards[item].current_display.display_id
-                    ),
-                      300;
-                  })
-                }
-              >
-                Open in New Window
-              </button>
+        return (
+          <li
+            key={index}
+            className={`${selectedClassName} board-item`}
+            onClick={e => this.boardSelected(item)}
+          >
+            <div className={`board-type ${item}`}>
+              <span>{capitalizeFirstLetters(item, true)}</span>
             </div>
-            <div className="board-type edit-button">
-              <button
-                onClick={e => {
-                  // e.stopPropagation();
-                  setTimeout(() => {
-                    timedAnimation(boardsAreHidden);
-                    this.openEditPage(e, item);
-                  }, 300);
-                }}
-              >
-                Edit
-              </button>
+            <div className="board-type-preview">
+              <BoardDisplay thisBoard={availableBoards[item]} />
             </div>
-          </div>
-        </li>
-      );
-    });
+            <div className="board-type buttons">
+              <div className="board-type open-button">
+                <button
+                  onClick={e =>
+                    setTimeout(() => {
+                      this.openNewWindow(
+                        availableBoards[item].current_display.display_id
+                      ),
+                        300;
+                    })
+                  }
+                >
+                  Open in New Window
+                </button>
+              </div>
+              <div className="board-type edit-button">
+                <button
+                  onClick={e => {
+                    // e.stopPropagation();
+                    setTimeout(() => {
+                      timedAnimation(boardsAreHidden);
+                      this.openEditPage(e, item);
+                    }, 300);
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          </li>
+        );
+      });
+    } else {
+      var listOfBoards = null;
+    }
 
     if (boardsAreTransitioning) {
       var animationClassUpStart = boardsAreTransitioning.up

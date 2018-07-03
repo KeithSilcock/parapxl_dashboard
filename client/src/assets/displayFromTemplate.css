@@ -1,0 +1,45 @@
+.add-from-template {
+}
+.add-from-template.container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+.add-from-template.header {
+}
+.add-from-template.list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+.add-from-template.item {
+  max-width: 30%;
+  text-align: center;
+}
+.template-display {
+  margin: 0;
+}
+.template-display.container {
+  border: 1px solid black;
+}
+.template-display.top {
+  text-align: center;
+}
+.template-display.title {
+  margin-bottom: 5%;
+}
+.template-display.subtitle {
+  margin-bottom: 5%;
+}
+
+.template-display.content {
+  margin-bottom: 5%;
+}
+.template-display.image {
+  max-width: 100%;
+}
