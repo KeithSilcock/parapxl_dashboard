@@ -56,6 +56,8 @@ class EditDisplayModal extends React.Component {
 
   render() {
     const { currentData } = this.state;
+    const { closeModal } = this.props;
+    const { board } = this.props.match.params;
     // const { currentSelection } = this.props;
 
     if (currentData) {
@@ -108,9 +110,12 @@ class EditDisplayModal extends React.Component {
         <ul className="edit-data edit-list">{displayItems}</ul>
         <button
           className="edit-data form-button"
-          onClick={e => this.addDisplayToAvailable(e)}
+          onClick={e => {
+            this.addDisplayToAvailable(e);
+            closeModal();
+          }}
         >
-          Update Displays
+          Add Display to {board}
         </button>
       </form>
     ) : null;

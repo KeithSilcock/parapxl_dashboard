@@ -37,9 +37,13 @@ class EditDisplays extends React.Component {
     });
   }
 
-  clickedDisplay(clickedDisplay) {
+  clickedDisplay(clickedDisplay, availableDisplay_id) {
+    const newData = {
+      ...clickedDisplay,
+      availableDisplay_id
+    };
     this.setState({
-      clickedDisplay
+      clickedDisplay: newData
     });
   }
 
@@ -91,7 +95,7 @@ class EditDisplays extends React.Component {
           <li
             key={index}
             className={`${selectedClassName} display-item`}
-            onClick={e => this.clickedDisplay(display)}
+            onClick={e => this.clickedDisplay(display, item)}
           >
             <div className="edit-item-content">
               <div className={`display-type ${item}`}>
@@ -148,9 +152,9 @@ class EditDisplays extends React.Component {
           <div className="edit-content">
             <ul className="edit-list">{renderAvailableDisplays}</ul>
             <EditDataDisplayed
+              {...this.props}
               currentDisplay={currentDisplay}
               clickedDisplay={clickedDisplay}
-              boardsAreHidden={boardsAreHidden}
               closeAnimation={this.closeAnimation.bind(this)}
               updateCurrentDisplay={this.updateCurrentDisplay.bind(this)}
             />
