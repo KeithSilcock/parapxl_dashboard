@@ -24,7 +24,7 @@ class EditDataDisplayed extends React.Component {
           currentData
         });
       });
-    } else {
+    } else if (currentDisplay) {
       var path = `/displays/${currentDisplay.display_id}`;
       db.ref(path).on("value", snapshot => {
         const currentData = snapshot.val();
@@ -75,7 +75,8 @@ class EditDataDisplayed extends React.Component {
       currentDisplay,
       closeAnimation,
       boardsAreHidden,
-      clickedDisplay
+      clickedDisplay,
+      displaysAvailable
     } = this.props;
 
     if (currentData) {
@@ -122,16 +123,27 @@ class EditDataDisplayed extends React.Component {
       var displayItems = null;
     }
 
-    const removeButtonClass =
-      clickedDisplay.availableDisplay_id !==
-        currentDisplay.availableDisplay_id && clickedDisplay.availableDisplay_id
-        ? "remove"
-        : "";
+    if (Object.keys(clickedDisplay).length) {
+      var removeButtonClass =
+        clickedDisplay.availableDisplay_id !==
+          currentDisplay.availableDisplay_id &&
+        clickedDisplay.availableDisplay_id
+          ? "remove"
+          : "";
 
-    const update_data_form = currentData ? (
-      <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
-        <ul className="edit-data edit-list">{displayItems}</ul>
-        <button className="edit-data form-button">Update Data</button>
+      var selectedClassName =
+        clickedDisplay.availableDisplay_id !==
+          currentDisplay.availableDisplay_id &&
+        clickedDisplay.availableDisplay_id
+          ? "selectedDisplay"
+          : "";
+    }
+
+    const buttonsDisplay = displaysAvailable ? (
+      <div className="edit-data button-box">
+        <button type="submit" className="edit-data form-button">
+          Update Data
+        </button>
         <button
           type="button"
           className={`edit-data form-button update ${removeButtonClass}`}
@@ -143,14 +155,15 @@ class EditDataDisplayed extends React.Component {
         >
           Remove
         </button>
-      </form>
+      </div>
     ) : null;
 
-    const selectedClassName =
-      clickedDisplay.availableDisplay_id !==
-        currentDisplay.availableDisplay_id && clickedDisplay.availableDisplay_id
-        ? "selectedDisplay"
-        : "";
+    const update_data_form = currentData ? (
+      <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
+        <ul className="edit-data edit-list">{displayItems}</ul>
+        {buttonsDisplay}
+      </form>
+    ) : null;
 
     return (
       <div className="edit-data container">

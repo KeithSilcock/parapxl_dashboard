@@ -1,7 +1,6 @@
 import React from "react";
 import db from "../firebase";
-import TextBoard from "./DisplayComponents/TextBoard";
-import EscapeRoom from "./DisplayComponents/EscapeRoom";
+import RenderDisplayComponent from "./RenderDisplayComponent";
 
 import "../assets/newTabDisplay.css";
 
@@ -32,19 +31,11 @@ class DataDisplayNewTab extends React.Component {
   render() {
     const { currentDisplayData } = this.state;
 
-    var toRender = null;
-    switch (currentDisplayData.type) {
-      case "escape-room":
-        toRender = <EscapeRoom displayData={currentDisplayData} />;
-        break;
-      case "text-board":
-        toRender = <TextBoard displayData={currentDisplayData} />;
-        break;
-      default:
-        toRender = null;
-        break;
-    }
-    return <div className="new-tab">{toRender}</div>;
+    return (
+      <div className="new-tab">
+        <RenderDisplayComponent currentDisplayData={currentDisplayData} />
+      </div>
+    );
   }
 }
 

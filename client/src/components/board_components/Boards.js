@@ -21,11 +21,20 @@ class Boards extends React.Component {
   createNewBoard(e, newBoardName) {
     e.preventDefault();
     const { location } = this.props.match.params;
+    const { boardsAreHidden, timedAnimation } = this.props;
 
-    db.ref(`boards/${location}/${newBoardName}`).set(true);
+    db.ref(`boards/${location}/${newBoardName}`).set(true, snapshot => {
+      debugger;
+      timedAnimation(
+        boardsAreHidden,
+        true,
+        `/admin/home/${location}/${newBoardName}`
+      );
+      // this.props.history.push(`/admin/home/${location}/${newBoardName}`);
+    });
   }
   componentWillMount() {
-    const { location } = this.props.match.params;
+    const { location, board } = this.props.match.params;
     const { timedAnimation, boardsAreHidden } = this.props;
     const path = `/boards/${location}`;
     db.ref(path).on("value", snapshot => {
@@ -37,11 +46,15 @@ class Boards extends React.Component {
         availableBoards: listOfBoards
       });
     });
-    timedAnimation(!boardsAreHidden);
+    if (board) {
+      timedAnimation(boardsAreHidden, true);
+    } else {
+      timedAnimation(!boardsAreHidden);
+    }
   }
   componentWillReceiveProps(newProps) {
     const { currentLocation } = this.state;
-    const { location } = newProps.match.params;
+    const { location, board } = newProps.match.params;
     if (currentLocation !== location) {
       const path = `/boards/${location}`;
       db.ref(path).on("value", snapshot => {
@@ -87,50 +100,55 @@ class Boards extends React.Component {
     if (availableBoards) {
       var listOfBoards = Object.keys(availableBoards).map((item, index) => {
         const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
+        debugger;
 
-        return (
-          <li
-            key={index}
-            className={`${selectedClassName} board-item`}
-            onClick={e => this.boardSelected(item)}
-          >
-            <div className={`board-type ${item}`}>
-              <span>{capitalizeFirstLetters(item, true)}</span>
-            </div>
-            <div className="board-type-preview">
-              <BoardDisplay thisBoard={availableBoards[item]} />
-            </div>
-            <div className="board-type buttons">
-              <div className="board-type open-button">
-                <button
-                  onClick={e =>
-                    setTimeout(() => {
-                      this.openNewWindow(
-                        availableBoards[item].current_display.display_id
-                      ),
-                        300;
-                    })
-                  }
-                >
-                  Open in New Window
-                </button>
+        if (typeof availableBoards[item] === "object") {
+          return (
+            <li
+              key={index}
+              className={`${selectedClassName} board-item`}
+              onClick={e => this.boardSelected(item)}
+            >
+              <div className={`board-type ${item}`}>
+                <span>{capitalizeFirstLetters(item, true)}</span>
               </div>
-              <div className="board-type edit-button">
-                <button
-                  onClick={e => {
-                    // e.stopPropagation();
-                    setTimeout(() => {
-                      timedAnimation(boardsAreHidden);
-                      this.openEditPage(e, item);
-                    }, 300);
-                  }}
-                >
-                  Edit
-                </button>
+              <div className="board-type-preview">
+                <BoardDisplay thisBoard={availableBoards[item]} />
               </div>
-            </div>
-          </li>
-        );
+              <div className="board-type buttons">
+                <div className="board-type open-button">
+                  <button
+                    onClick={e =>
+                      setTimeout(() => {
+                        this.openNewWindow(
+                          availableBoards[item].current_display.display_id
+                        ),
+                          300;
+                      })
+                    }
+                  >
+                    Open in New Window
+                  </button>
+                </div>
+                <div className="board-type edit-button">
+                  <button
+                    onClick={e => {
+                      // e.stopPropagation();
+                      setTimeout(() => {
+                        timedAnimation(boardsAreHidden);
+                        this.openEditPage(e, item);
+                      }, 300);
+                    }}
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+            </li>
+          );
+        } else {
+          return null;
+        }
       });
     } else {
       var listOfBoards = null;

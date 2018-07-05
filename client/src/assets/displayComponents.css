@@ -51,6 +51,9 @@
 .escape-room.subtitle {
   text-shadow: 2px 2px rgb(0, 0, 0);
 }
+.escape-room.text-box {
+  text-shadow: 2px 2px rgb(0, 0, 0);
+}
 .escape-room.video-box {
   display: flex;
   justify-content: center;

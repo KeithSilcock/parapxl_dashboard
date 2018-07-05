@@ -42,8 +42,13 @@ class EditDisplayModal extends React.Component {
       name: currentData.name,
       type: currentData.type
     };
-    const path = `/boards/${location}/${board}/available_displays`;
-    db.ref(path).push(dataToSend);
+
+    //update available boards and current board
+    const available_path = `/boards/${location}/${board}/available_displays`;
+    db.ref(available_path).push(dataToSend, snapshot1 => {
+      const currentDisplay_path = `/boards/${location}/${board}/current_display`;
+      db.ref(currentDisplay_path).push(dataToSend, snapshot2 => {});
+    });
   }
 
   updateDisplays(e) {
@@ -113,7 +118,7 @@ class EditDisplayModal extends React.Component {
             closeModal();
           }}
         >
-          Add Display to {board}
+          Add Display to "{board}"
         </button>
       </form>
     ) : null;

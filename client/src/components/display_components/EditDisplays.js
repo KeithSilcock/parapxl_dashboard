@@ -16,7 +16,6 @@ class EditDisplays extends React.Component {
       currentDisplay: {}
     };
   }
-
   componentWillReceiveProps() {
     this.getDisplays();
   }
@@ -28,6 +27,17 @@ class EditDisplays extends React.Component {
     db.ref(path).on("value", snapshot => {
       const availableDisplays = snapshot.val().available_displays;
       const currentDisplay = snapshot.val().current_display;
+
+      //find key of availableDisplays and assign it to currentDisplay object.
+      if (availableDisplays)
+        for (let keyIndex in availableDisplays) {
+          if (
+            availableDisplays[keyIndex].display_id === currentDisplay.display_id
+          ) {
+            currentDisplay["availableDisplayKey"] = keyIndex;
+            break;
+          }
+        }
 
       this.setState({
         availableDisplays,
@@ -44,6 +54,10 @@ class EditDisplays extends React.Component {
     this.setState({
       clickedDisplay: newData
     });
+    const { location, board } = this.props.match.params;
+    this.props.history.push(
+      `/admin/home/${location}/${board}/${availableDisplay_id}`
+    );
   }
 
   updateCurrentDisplay() {
@@ -63,51 +77,81 @@ class EditDisplays extends React.Component {
     this.setState({
       clickedDisplay: {}
     });
-
-    timedAnimation(closing);
+    timedAnimation(
+      closing,
+      false,
+      `/admin/home/${this.props.match.params.location}`
+    );
   }
 
   showAllDisplays() {
-    this.props.history.push(this.props.location.pathname + "/add-new/display");
+    const { location, board } = this.props.match.params;
+    this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
   }
 
   render() {
     const { availableDisplays, clickedDisplay, currentDisplay } = this.state;
     const { boardsAreHidden, boardsAreTransitioning } = this.props;
-    const renderAvailableDisplays = Object.keys(availableDisplays).map(
-      (item, index) => {
-        const display = availableDisplays[item];
+    const { board, selected } = this.props.match.params;
+    var displaysAvailable = true;
 
-        if (!clickedDisplay.display_id) {
-          var selectedClassName =
-            currentDisplay.display_id === availableDisplays[item].display_id
-              ? "selectedDisplay"
-              : "";
-        } else {
-          var selectedClassName =
-            clickedDisplay.display_id === availableDisplays[item].display_id
-              ? "selectedDisplay"
-              : "";
+    if (availableDisplays) {
+      displaysAvailable = true;
+      var renderAvailableDisplays = Object.keys(availableDisplays).map(
+        (item, index) => {
+          const display = availableDisplays[item];
+
+          if (!selected) {
+            var selectedClassName =
+              currentDisplay.availableDisplayKey === item
+                ? "selectedDisplay"
+                : "";
+          } else {
+            var selectedClassName = selected === item ? "selectedDisplay" : "";
+          }
+
+          return (
+            <li
+              key={index}
+              className={`${selectedClassName} display-item`}
+              onClick={e => this.clickedDisplay(display, item)}
+            >
+              <div className="edit-item-content">
+                <div className={`display-type ${item}`}>
+                  <span>{capitalizeFirstLetters(display.name, true)}</span>
+                </div>
+                <div className="display-type-preview">
+                  <BoardDisplay thisBoard={display} />
+                </div>
+              </div>
+            </li>
+          );
         }
+      );
+    } else {
+      displaysAvailable = false;
+      var renderAvailableDisplays = (
+        <li className="display-item edit-item displays-unavailable">
+          <p>
+            There are no available displays for the "{`${board}`}" board. Please
+            select "Add Displays" under this message to add some displays to
+            your board
+          </p>
+          <div className="edit-item add-displays-box">
+            <button
+              className="edit-item add-displays"
+              onClick={this.showAllDisplays.bind(this)}
+            >
+              Add Displays
+            </button>
+          </div>
+        </li>
+      );
+    }
 
-        return (
-          <li
-            key={index}
-            className={`${selectedClassName} display-item`}
-            onClick={e => this.clickedDisplay(display, item)}
-          >
-            <div className="edit-item-content">
-              <div className={`display-type ${item}`}>
-                <span>{capitalizeFirstLetters(display.name, true)}</span>
-              </div>
-              <div className="display-type-preview">
-                <BoardDisplay thisBoard={display} />
-              </div>
-            </div>
-          </li>
-        );
-      }
-    );
+    const listDisplayStyle = displaysAvailable
+      ? {}
+      : { justifyContent: "center" };
 
     //aniamation
     if (boardsAreTransitioning) {
@@ -149,9 +193,12 @@ class EditDisplays extends React.Component {
           </div>
 
           <div className="edit-content">
-            <ul className="edit-list">{renderAvailableDisplays}</ul>
+            <ul className={`edit-list`} style={listDisplayStyle}>
+              {renderAvailableDisplays}
+            </ul>
             <EditDataDisplayed
               {...this.props}
+              displaysAvailable={displaysAvailable}
               currentDisplay={currentDisplay}
               clickedDisplay={clickedDisplay}
               closeAnimation={this.closeAnimation.bind(this)}

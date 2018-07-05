@@ -13,6 +13,9 @@ export default props => {
       <div className="escape-room text-content">
         <h2 className="escape-room title">{displayData.title}</h2>
         <h4 className="escape-room subtitle">{displayData.subtitle}</h4>
+        <div className="escape-room text-box">
+          <span>{displayData.content}</span>
+        </div>
         {/* <div className="escape-room image">
       <img src="" alt=""/>
       </div> */}

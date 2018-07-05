@@ -54,7 +54,7 @@ class AddNewBoard extends React.Component {
           className="add-new-board-button"
           onClick={this.toggleInputOpen.bind(this)}
         >
-          +
+          Create New Board
         </button>
         <div className="add-new-board-form-container">{openForm}</div>
       </div>
