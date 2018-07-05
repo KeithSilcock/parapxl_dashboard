@@ -4,7 +4,15 @@ export function capitalizeFirstLetters(text, everyWord = false) {
     const newString = [];
     for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
       const word = words[wordIndex];
-      let newWord = `${word[0].toUpperCase()}${word.slice(1)}`;
+      try {
+        var newWord = `${word[0].toUpperCase()}${word.slice(1)}`;
+      } catch (e) {
+        if (e instanceof TypeError) {
+          var newWord = "";
+        } else {
+          throw e;
+        }
+      }
 
       newString.push(newWord);
     }

@@ -71,6 +71,7 @@ class TemplatePage extends React.Component {
     return (
       <div className={`create-new-display-box`}>
         <DisplayTemplates
+          {...this.props}
           aCLS={animationClassLeftStart}
           aCRS={animationClassRightStart}
           positionEnd={positionEnd}
@@ -78,6 +79,7 @@ class TemplatePage extends React.Component {
           callBackData={this.getSelectedTemplate.bind(this)}
         />
         <EditTemplate
+          {...this.props}
           aCLS={animationClassLeftStart}
           aCRS={animationClassRightStart}
           positionEnd={positionEnd}

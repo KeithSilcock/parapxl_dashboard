@@ -46,7 +46,7 @@ class App extends Component {
         />
         <Route path="/admin" component={Nav} />
         <Route
-          path="/admin/home"
+          path="/admin/home/:location?/:board?"
           render={props => <LandingPage {...props} />}
         />
         <Route

@@ -18,7 +18,8 @@
   justify-content: space-around;
   align-items: center;
 }
-.add-from-template.header {
+.add-from-template.header h1 {
+  margin: 0;
 }
 .add-from-template.content {
   overflow-y: auto;
@@ -44,7 +45,7 @@
 .add-from-template.footer {
   margin-bottom: 3%;
 }
-.add-from-template.footer button {
+.add-from-template.footer .add-button {
   border-radius: 5px;
   background-color: rgb(160, 160, 160);
   color: black;
@@ -53,10 +54,19 @@
   min-height: 45px;
   cursor: pointer;
 }
-.add-from-template.footer .click-allowed {
+.add-from-template.footer .add-button.click-allowed {
   border-radius: 5px;
   background-color: rgb(0, 193, 241);
   color: white;
+}
+.add-from-template.footer .cancel {
+  border-radius: 5px;
+  background-color: rgb(255, 53, 53);
+  color: white;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-height: 45px;
+  cursor: pointer;
 }
 
 /* Templates */
@@ -93,17 +103,69 @@
 
 /* EDIT template */
 .template-edit {
+  margin: 0;
 }
 .template-edit.container {
   width: 100%;
+  height: 96%;
   position: absolute;
   left: 100%;
+
+  display: flex;
+  flex-flow: row;
+  justify-content: space-evenly;
+}
+.template-edit.list-box {
+  width: 30%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  padding: 0 2% 2% 2%;
+  border-radius: 10px;
+  border: 2px solid rgb(207, 207, 207);
+  box-sizing: border-box;
 }
 .template-edit.list {
-  margin: 0;
+  height: 100%;
+  width: 100%;
   padding: 0;
-  list-style: none;
+  overflow-y: auto;
 }
 .template-edit.item {
   display: flex;
+  flex-flow: column;
+}
+.template-edit.item p {
+  margin: 7.5% 0 0 0;
+}
+button.create-template {
+  border-radius: 5px;
+  background-color: rgb(0, 193, 241);
+  color: white;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-height: 30px;
+  cursor: pointer;
+}
+button.template-edit.cancel {
+  border-radius: 5px;
+  background-color: rgb(255, 53, 53);
+  color: white;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-height: 30px;
+  cursor: pointer;
+}
+
+.template-edit.live-display {
+  width: 65%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  padding: 2%;
+  border-radius: 10px;
+  border: 2px solid rgb(207, 207, 207);
+  box-sizing: border-box;
 }
