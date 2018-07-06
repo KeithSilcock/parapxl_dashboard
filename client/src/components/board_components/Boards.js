@@ -24,7 +24,6 @@ class Boards extends React.Component {
     const { boardsAreHidden, timedAnimation } = this.props;
 
     db.ref(`boards/${location}/${newBoardName}`).set(true, snapshot => {
-      debugger;
       timedAnimation(
         boardsAreHidden,
         true,
@@ -100,55 +99,53 @@ class Boards extends React.Component {
     if (availableBoards) {
       var listOfBoards = Object.keys(availableBoards).map((item, index) => {
         const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
-        debugger;
 
-        if (typeof availableBoards[item] === "object") {
-          return (
-            <li
-              key={index}
-              className={`${selectedClassName} board-item`}
-              onClick={e => this.boardSelected(item)}
-            >
-              <div className={`board-type ${item}`}>
-                <span>{capitalizeFirstLetters(item, true)}</span>
+        const renderBoardDisplay =
+          typeof availableBoards[item] === "object" ? (
+            <BoardDisplay thisBoard={availableBoards[item]} />
+          ) : null;
+
+        return (
+          <li
+            key={index}
+            className={`${selectedClassName} board-item`}
+            onClick={e => this.boardSelected(item)}
+          >
+            <div className={`board-type ${item}`}>
+              <span>{capitalizeFirstLetters(item, true)}</span>
+            </div>
+            <div className="board-type-preview">{renderBoardDisplay}</div>
+            <div className="board-type buttons">
+              <div className="board-type open-button">
+                <button
+                  onClick={e =>
+                    setTimeout(() => {
+                      this.openNewWindow(
+                        availableBoards[item].current_display.display_id
+                      ),
+                        300;
+                    })
+                  }
+                >
+                  Open in New Window
+                </button>
               </div>
-              <div className="board-type-preview">
-                <BoardDisplay thisBoard={availableBoards[item]} />
+              <div className="board-type edit-button">
+                <button
+                  onClick={e => {
+                    // e.stopPropagation();
+                    setTimeout(() => {
+                      timedAnimation(boardsAreHidden);
+                      this.openEditPage(e, item);
+                    }, 300);
+                  }}
+                >
+                  Edit
+                </button>
               </div>
-              <div className="board-type buttons">
-                <div className="board-type open-button">
-                  <button
-                    onClick={e =>
-                      setTimeout(() => {
-                        this.openNewWindow(
-                          availableBoards[item].current_display.display_id
-                        ),
-                          300;
-                      })
-                    }
-                  >
-                    Open in New Window
-                  </button>
-                </div>
-                <div className="board-type edit-button">
-                  <button
-                    onClick={e => {
-                      // e.stopPropagation();
-                      setTimeout(() => {
-                        timedAnimation(boardsAreHidden);
-                        this.openEditPage(e, item);
-                      }, 300);
-                    }}
-                  >
-                    Edit
-                  </button>
-                </div>
-              </div>
-            </li>
-          );
-        } else {
-          return null;
-        }
+            </div>
+          </li>
+        );
       });
     } else {
       var listOfBoards = null;

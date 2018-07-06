@@ -45,10 +45,9 @@ class EditDisplayModal extends React.Component {
 
     //update available boards and current board
     const available_path = `/boards/${location}/${board}/available_displays`;
-    db.ref(available_path).push(dataToSend, snapshot1 => {
-      const currentDisplay_path = `/boards/${location}/${board}/current_display`;
-      db.ref(currentDisplay_path).push(dataToSend, snapshot2 => {});
-    });
+    db.ref(available_path).push(dataToSend, snapshot1 => {});
+    const currentDisplay_path = `/boards/${location}/${board}/current_display`;
+    db.ref(currentDisplay_path).set(dataToSend, snapshot2 => {});
   }
 
   updateDisplays(e) {
