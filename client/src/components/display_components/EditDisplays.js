@@ -29,7 +29,11 @@ class EditDisplays extends React.Component {
       const currentDisplay = snapshot.val().current_display;
 
       //find key of availableDisplays and assign it to currentDisplay object.
-      if (availableDisplays)
+      if (
+        availableDisplays &&
+        currentDisplay &&
+        Object.keys(availableDisplays).length
+      )
         for (let keyIndex in availableDisplays) {
           if (
             availableDisplays[keyIndex].display_id === currentDisplay.display_id
@@ -95,7 +99,7 @@ class EditDisplays extends React.Component {
     const { board, selected } = this.props.match.params;
     var displaysAvailable = true;
 
-    if (availableDisplays) {
+    if (availableDisplays && Object.keys(availableDisplays).length) {
       displaysAvailable = true;
       var renderAvailableDisplays = Object.keys(availableDisplays).map(
         (item, index) => {

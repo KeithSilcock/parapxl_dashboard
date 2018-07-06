@@ -131,7 +131,6 @@ class EditTemplate extends React.Component {
               className="template-edit create-template"
               onClick={e => {
                 this.submitTemplate(e);
-                slideAnim();
               }}
             >
               Add New Display
