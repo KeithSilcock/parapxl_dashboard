@@ -86,6 +86,10 @@ class Boards extends React.Component {
     window.open(`http://localhost:3000/display/${board_id}`);
   }
 
+  deleteBoard(e) {
+    debugger;
+  }
+
   render() {
     const {
       currentData,
@@ -116,31 +120,45 @@ class Boards extends React.Component {
             </div>
             <div className="board-type-preview">{renderBoardDisplay}</div>
             <div className="board-type buttons">
-              <div className="board-type open-button">
-                <button
-                  onClick={e =>
-                    setTimeout(() => {
-                      this.openNewWindow(
-                        availableBoards[item].current_display.display_id
-                      ),
-                        300;
-                    })
-                  }
-                >
-                  Open in New Window
-                </button>
+              <div className="board-type top-buttons">
+                <div className="board-type open-button">
+                  <button
+                    className="standard-button"
+                    onClick={e =>
+                      setTimeout(() => {
+                        this.openNewWindow(
+                          availableBoards[item].current_display.display_id
+                        ),
+                          300;
+                      })
+                    }
+                  >
+                    Open in New Window
+                  </button>
+                </div>
+                <div className="board-type edit-button">
+                  <button
+                    className="standard-button"
+                    onClick={e => {
+                      // e.stopPropagation();
+                      setTimeout(() => {
+                        timedAnimation(boardsAreHidden);
+                        this.openEditPage(e, item);
+                      }, 300);
+                    }}
+                  >
+                    Edit
+                  </button>
+                </div>
               </div>
-              <div className="board-type edit-button">
+              <div className="board-type bottom-buttons">
                 <button
                   onClick={e => {
-                    // e.stopPropagation();
-                    setTimeout(() => {
-                      timedAnimation(boardsAreHidden);
-                      this.openEditPage(e, item);
-                    }, 300);
+                    this.deleteBoard(e);
                   }}
+                  className="board-type delete-button"
                 >
-                  Edit
+                  Delete
                 </button>
               </div>
             </div>

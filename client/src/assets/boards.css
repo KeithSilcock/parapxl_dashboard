@@ -43,21 +43,9 @@
 .board-type span {
   text-align: center;
 }
-.board-type button {
-  border-radius: 5px;
-  background-color: rgb(0, 193, 241);
-  color: white;
-  font-size: 0.9em;
-  font-weight: bold;
-  /* border: 1px solid rgb(0, 90, 105); */
-  /* border-style: outset; */
-  min-height: 30px;
-  cursor: pointer;
-
-  align-self: flex-end;
-}
 .board-type.buttons {
   display: flex;
+  flex-flow: column;
 }
 
 .board-type-preview {
@@ -66,9 +54,7 @@
   height: 85%;
   width: 100%;
 
-
   overflow-y: auto;
-
 }
 
 .display-preview {

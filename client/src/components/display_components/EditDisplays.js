@@ -143,7 +143,7 @@ class EditDisplays extends React.Component {
           </p>
           <div className="edit-item add-displays-box">
             <button
-              className="edit-item add-displays"
+              className="edit-item add-displays standard-button"
               onClick={this.showAllDisplays.bind(this)}
             >
               Add Displays
@@ -183,7 +183,10 @@ class EditDisplays extends React.Component {
               )}"
             </h3>
             <div className="edit-close">
-              <button onClick={this.showAllDisplays.bind(this)}>
+              <button
+                className="standard-button"
+                onClick={this.showAllDisplays.bind(this)}
+              >
                 More Options
               </button>
               <div

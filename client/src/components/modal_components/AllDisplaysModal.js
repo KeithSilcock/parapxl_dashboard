@@ -74,7 +74,10 @@ class AllDisplays extends React.Component {
             <h2>All Displays</h2>
           </div>
           <div className="modal-button ">
-            <button onClick={e => this.createNewDisplay(e)}>
+            <button
+              className="standard-button"
+              onClick={e => this.createNewDisplay(e)}
+            >
               Create New Display
             </button>
           </div>

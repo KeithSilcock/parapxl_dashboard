@@ -1,6 +1,6 @@
 import React from "react";
 import db from "../../firebase";
-import TemplateDisplay from "./TemplateOptions";
+import TemplateOptions from "./TemplateOptions";
 
 import "../../assets/displayFromTemplate.css";
 import "../../assets/animations/openEditNewDisplay.css";
@@ -59,7 +59,7 @@ class DisplayTemplates extends React.Component {
               onClick={e => this.selectTemplate(e, templateData[templateType])}
             >
               <p className="add-from-template item-name">{templateType}</p>
-              <TemplateDisplay displayData={templateData[templateType]} />
+              <TemplateOptions displayData={templateData[templateType]} />
             </li>
           );
         }

@@ -128,7 +128,7 @@ class EditDataDisplayed extends React.Component {
         clickedDisplay.availableDisplay_id !==
           currentDisplay.availableDisplay_id &&
         clickedDisplay.availableDisplay_id
-          ? "remove"
+          ? "delete-button"
           : "";
 
       var selectedClassName =
@@ -141,7 +141,7 @@ class EditDataDisplayed extends React.Component {
 
     const buttonsDisplay = displaysAvailable ? (
       <div className="edit-data button-box">
-        <button type="submit" className="edit-data form-button">
+        <button type="submit" className="edit-data form-button standard-button">
           Update Data
         </button>
         <button
