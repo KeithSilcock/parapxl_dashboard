@@ -1,5 +1,6 @@
 import React from "react";
 import db from "../../firebase";
+import { capitalizeFirstLetters } from "../../helpers";
 
 class EditDisplayModal extends React.Component {
   constructor(props) {
@@ -111,13 +112,13 @@ class EditDisplayModal extends React.Component {
       <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
         <ul className="edit-data edit-list">{displayItems}</ul>
         <button
-          className="edit-data form-button"
+          className="edit-data form-button standard-button"
           onClick={e => {
             this.addDisplayToAvailable(e);
             closeModal();
           }}
         >
-          Add Display to "{board}"
+          Add Display to "{capitalizeFirstLetters(board)}"
         </button>
       </form>
     ) : null;

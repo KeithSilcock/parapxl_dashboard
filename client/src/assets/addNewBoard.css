@@ -8,12 +8,6 @@
 }
 .add-new-board-button {
   align-self: center;
-  border-radius: 10px;
-
-  background-color: rgb(0, 193, 241);
-  color: white;
-  border: none;
-  min-height: 30px;
 }
 .add-new-board-form-container {
   position: relative;

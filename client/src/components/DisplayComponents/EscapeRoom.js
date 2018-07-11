@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 export default props => {
   const { displayData } = props;
 
-  const bkgImgStyle = {
+  var bkgImgStyle = {
     backgroundImage: `url(${displayData.background_img})`
   };
 
