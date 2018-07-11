@@ -3,10 +3,20 @@ import "../assets/nav.css";
 import { Link } from "react-router-dom";
 
 class Nav extends React.Component {
+  navToHome(e) {
+    debugger;
+    // const { location, board } = this.props.match.params;
+    // const _location = location ? `/${location}` : "";
+    // this.props.history.push(`/admin/home/`);
+  }
+
   render() {
     return (
       <div className="nav-bar-container">
         <svg
+          onClick={e => {
+            this.navToHome(e);
+          }}
           id="Layer_1"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"

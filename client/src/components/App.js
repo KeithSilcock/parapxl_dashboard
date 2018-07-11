@@ -44,9 +44,9 @@ class App extends Component {
           path="/admin/home/:location/:board/add-new/:new_type"
           render={props => <NewDisplayModal {...props} />}
         />
-        <Route path="/admin" component={Nav} />
+        <Route path="/admin/home/:location?/:board?" component={Nav} />
         <Route
-          path="/admin/home"
+          path="/admin/home/:location?/:board?"
           render={props => <LandingPage {...props} />}
         />
         <Route

@@ -1,11 +1,11 @@
 import React from "react";
 import db from "../../firebase";
-import TemplateDisplay from "./TemplateOptions";
+import TemplateOptions from "./TemplateOptions";
 
 import "../../assets/displayFromTemplate.css";
 import "../../assets/animations/openEditNewDisplay.css";
 
-class AddDisplayFromTemplate extends React.Component {
+class DisplayTemplates extends React.Component {
   constructor(props) {
     super(props);
 
@@ -35,11 +35,11 @@ class AddDisplayFromTemplate extends React.Component {
     });
   }
 
-  // addTemplateToBoard() {
-  //   const { callBackData } = this.props;
-  //   const { selectedTemplate } = this.state;
-  //   // callBackData(selectedTemplate);
-  // }
+  onCancel() {
+    //push history back to prev location
+    const { location, board } = this.props.match.params;
+    this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
+  }
 
   render() {
     const { templateData, selectedTemplate } = this.state;
@@ -59,7 +59,7 @@ class AddDisplayFromTemplate extends React.Component {
               onClick={e => this.selectTemplate(e, templateData[templateType])}
             >
               <p className="add-from-template item-name">{templateType}</p>
-              <TemplateDisplay displayData={templateData[templateType]} />
+              <TemplateOptions displayData={templateData[templateType]} />
             </li>
           );
         }
@@ -90,10 +90,18 @@ class AddDisplayFromTemplate extends React.Component {
           >
             Edit Template Data
           </button>
+          <button
+            onClick={e => {
+              this.onCancel(e);
+            }}
+            className={`add-from-template cancel`}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     );
   }
 }
 
-export default AddDisplayFromTemplate;
+export default DisplayTemplates;

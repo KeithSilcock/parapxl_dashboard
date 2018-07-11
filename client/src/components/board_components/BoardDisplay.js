@@ -10,7 +10,7 @@ class BoardDisplay extends React.Component {
     super(props);
 
     this.state = {
-      displayData: {}
+      displayData: null
     };
   }
   componentWillMount() {
@@ -64,16 +64,18 @@ class BoardDisplay extends React.Component {
       : thisBoard.type;
 
     var toRender = null;
-    switch (display) {
-      case "escape-room":
-        toRender = <EscapeRoom displayData={displayData} />;
-        break;
-      case "text-board":
-        toRender = <TextBoard displayData={displayData} />;
-        break;
-      default:
-        toRender = null;
-        break;
+    if (displayData) {
+      switch (display) {
+        case "escape-room":
+          toRender = <EscapeRoom displayData={displayData} />;
+          break;
+        case "text-board":
+          toRender = <TextBoard displayData={displayData} />;
+          break;
+        default:
+          toRender = null;
+          break;
+      }
     }
 
     return <div className="display-preview">{toRender}</div>;
