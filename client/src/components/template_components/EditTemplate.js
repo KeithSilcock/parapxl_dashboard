@@ -30,7 +30,6 @@ class EditTemplate extends React.Component {
 
   onInputChange(e) {
     const { name, value } = e.target;
-
     this.setState({
       ...this.state,
       template: { ...this.state.template, [name]: value }
@@ -83,11 +82,11 @@ class EditTemplate extends React.Component {
     const { location, board, new_type } = this.props.match.params;
     debugger;
 
-    // db.ref(`/displays`).push(template, snapshot => {
-    //   this.props.history.push(
-    //     `/admin/home/${location}/${board}/add-new/${new_type}`
-    //   );
-    // });
+    db.ref(`/displays`).push(template, snapshot => {
+      this.props.history.push(
+        `/admin/home/${location}/${board}/add-new/${new_type}`
+      );
+    });
   }
 
   render() {

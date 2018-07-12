@@ -117,7 +117,7 @@ class EditDisplays extends React.Component {
           return (
             <li
               key={index}
-              className={`${selectedClassName} display-item`}
+              className={`${selectedClassName} edit-item display-item`}
               onClick={e => this.clickedDisplay(display, item)}
             >
               <div className="edit-item-content">
@@ -190,10 +190,10 @@ class EditDisplays extends React.Component {
                 More Options
               </button>
               <div
-                className="x"
+                className="close-edit delete-button"
                 onClick={e => this.closeAnimation(boardsAreHidden)}
               >
-                <span>&#10006;</span>
+                <span>&times;</span>
               </div>
               <div className="spacer" />
             </div>

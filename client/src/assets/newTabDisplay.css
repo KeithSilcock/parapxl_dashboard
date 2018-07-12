@@ -1,6 +1,6 @@
 .new-tab {
   height: 100vh;
-  width: 90vw;
+  width: 100vw;
   margin: auto;
   overflow-x: hidden;
 }
@@ -58,4 +58,8 @@
 }
 .new-tab .escape-room.video div {
   height: 100%;
+}
+
+.new-tab .escape-room-list.item {
+  height: 30%;
 }

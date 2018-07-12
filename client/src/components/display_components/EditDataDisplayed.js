@@ -88,6 +88,38 @@ class EditDataDisplayed extends React.Component {
           case "type":
             break;
 
+          case "list_of_displays":
+            //display all escape rooms as checkboxes
+            const displays = value.map((display, index2) => {
+              return (
+                <li key={index2} className="escape-room-list-edit item">
+                  <input
+                    onClick={e => {
+                      this.toggleEscapeRoom(e, display, index2);
+                    }}
+                    type="checkbox"
+                    id={`checkbox${index}`}
+                    defaultChecked
+                  />
+                  <label for={`checkbox${index}`}>{display.title}</label>
+                </li>
+              );
+            });
+
+            inputCont = (
+              <li key={index} className="edit-data item escape-room-list-edit">
+                <p>Displayed Escape Rooms:</p>
+                <ul className="escape-room-list-edit list">{displays}</ul>
+                <button
+                  type="button"
+                  onClick={e => this.updateEscapeRoomListDisplay(e)}
+                  className="escape-room-list-edit standard-button"
+                >
+                  Update Display
+                </button>
+              </li>
+            );
+            break;
           case "content":
             inputCont = (
               <li key={index} className="edit-data item">
@@ -135,7 +167,7 @@ class EditDataDisplayed extends React.Component {
         clickedDisplay.availableDisplay_id !==
           currentDisplay.availableDisplay_id &&
         clickedDisplay.availableDisplay_id
-          ? "selectedDisplay"
+          ? "standard-button"
           : "";
     }
 

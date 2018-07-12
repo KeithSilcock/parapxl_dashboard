@@ -54,7 +54,10 @@ class App extends Component {
           path={`/admin/:location/:board/create-new/:new_type`}
           render={props => <TemplatePage {...props} />}
         />
-        <Route path="/display/*" component={DataDisplayNewTab} />
+        <Route
+          path={`/display/:display_id?`}
+          render={props => <DataDisplayNewTab {...props} />}
+        />
       </div>
     );
   }

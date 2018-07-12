@@ -8,7 +8,8 @@ class EditDisplayModal extends React.Component {
 
     this.state = {
       currentData: {},
-      currentDisplay_id: ""
+      currentDisplay_id: "",
+      excludedDisplays: []
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
   }
@@ -51,6 +52,50 @@ class EditDisplayModal extends React.Component {
     db.ref(currentDisplay_path).set(dataToSend, snapshot2 => {});
   }
 
+  toggleEscapeRoom(e, display, arrayIndex) {
+    const { excludedDisplays } = this.state;
+    const { checked } = e.target;
+
+    //add or remove index from display data
+    if (checked) {
+      const displayIndex = excludedDisplays.indexOf(arrayIndex);
+      const copy = [...excludedDisplays];
+      const removedDisplay = copy.splice(displayIndex, 1);
+
+      this.setState({
+        ...this.state,
+        excludedDisplays: [...copy]
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        excludedDisplays: [...excludedDisplays, arrayIndex]
+      });
+    }
+  }
+  updateEscapeRoomListDisplay(e) {
+    const {
+      currentData: { list_of_displays },
+      excludedDisplays,
+      currentDisplay_id
+    } = this.state;
+
+    //remove targeted displays
+    const newListOfDisplays = [...list_of_displays];
+    let count = 0;
+    for (let exIndex = 0; exIndex < excludedDisplays.length; exIndex++) {
+      const indexToRemove = excludedDisplays[exIndex];
+      newListOfDisplays.splice(indexToRemove - count++, 1);
+    }
+
+    const newData = {
+      ...this.state.currentData,
+      list_of_displays: newListOfDisplays
+    };
+    const path = `/displays/${currentDisplay_id}/`;
+    db.ref(path).set(newData);
+  }
+
   updateDisplays(e) {
     e.preventDefault();
     const { currentData, currentDisplay_id } = this.state;
@@ -73,6 +118,38 @@ class EditDisplayModal extends React.Component {
           case "type":
             break;
           case "display_id":
+            break;
+          case "list_of_displays":
+            //display all escape rooms as checkboxes
+            const displays = value.map((display, index2) => {
+              return (
+                <li key={index2} className="escape-room-list-edit item">
+                  <input
+                    onClick={e => {
+                      this.toggleEscapeRoom(e, display, index2);
+                    }}
+                    type="checkbox"
+                    id={`checkbox${index}`}
+                    defaultChecked
+                  />
+                  <label for={`checkbox${index}`}>{display.title}</label>
+                </li>
+              );
+            });
+
+            inputCont = (
+              <li key={index} className="edit-data item escape-room-list-edit">
+                <p>Displayed Escape Rooms:</p>
+                <ul className="escape-room-list-edit list">{displays}</ul>
+                <button
+                  type="button"
+                  onClick={e => this.updateEscapeRoomListDisplay(e)}
+                  className="escape-room-list-edit standard-button"
+                >
+                  Update Display
+                </button>
+              </li>
+            );
             break;
           case "content":
             inputCont = (

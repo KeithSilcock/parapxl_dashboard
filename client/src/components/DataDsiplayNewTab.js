@@ -13,14 +13,24 @@ class DataDisplayNewTab extends React.Component {
     };
   }
 
+  componentDidUpdate(newProps, newState) {
+    this.props;
+    this.state;
+
+    if (
+      this.props.match.params.display_id !== newProps.match.params.display_id
+    ) {
+      this.componentWillMount();
+    }
+  }
+
   componentWillMount() {
-    const display_id = this.props.match.params["0"];
+    const display_id = this.props.match.params.display_id;
     const path = `/displays/${display_id}`;
     const testDispRef = db.ref(path);
 
     testDispRef.on("value", snapshot => {
       const currentDisplayData = snapshot.val();
-
       this.setState({
         ...this.state,
         currentDisplayData
@@ -30,10 +40,12 @@ class DataDisplayNewTab extends React.Component {
 
   render() {
     const { currentDisplayData } = this.state;
-
     return (
       <div className="new-tab">
-        <RenderDisplayComponent currentDisplayData={currentDisplayData} />
+        <RenderDisplayComponent
+          {...this.props}
+          currentDisplayData={currentDisplayData}
+        />
       </div>
     );
   }
