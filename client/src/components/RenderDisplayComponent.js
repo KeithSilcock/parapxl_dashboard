@@ -7,21 +7,24 @@ class RenderDisplayComponent extends React.Component {
   render() {
     const { currentDisplayData } = this.props;
     var toRender = null;
-    switch (currentDisplayData.type) {
-      case "escape-room":
-        toRender = <EscapeRoom displayData={currentDisplayData} />;
-        break;
-      case "text-board":
-        toRender = <TextBoard displayData={currentDisplayData} />;
-        break;
-      case "escape-room-list":
-        toRender = <EscapeRoomList displayData={currentDisplayData} />;
-        break;
+    if (currentDisplayData)
+      switch (currentDisplayData.type) {
+        case "escape-room":
+          toRender = <EscapeRoom displayData={currentDisplayData} />;
+          break;
+        case "text-board":
+          toRender = <TextBoard displayData={currentDisplayData} />;
+          break;
+        case "escape-room-list":
+          toRender = (
+            <EscapeRoomList {...this.props} displayData={currentDisplayData} />
+          );
+          break;
 
-      default:
-        toRender = null;
-        break;
-    }
+        default:
+          toRender = null;
+          break;
+      }
     return toRender;
   }
 }

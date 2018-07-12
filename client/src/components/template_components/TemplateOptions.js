@@ -13,7 +13,7 @@ class TemplateOptions extends React.Component {
     ) : null;
 
     const content = displayData.content ? (
-      <span className="template-display content">
+      <span className="template-display contents">
         Content... (Lorem ipsum dolor sit amet consectetur adipisicing elit.
         Laborum, corporis sit. Tempora doloremque modi provident voluptatibus,
         illo pariatur blanditiis ad unde officia minus, iste ipsa?)
@@ -30,11 +30,51 @@ class TemplateOptions extends React.Component {
 
     const escapeRoomList = displayData.list_of_displays ? (
       <ul className="template-display display-list">
-        <li className="template-display display-item">escape room1</li>
-        <li className="template-display display-item">escape room2</li>
-        <li className="template-display display-item">escape room3</li>
-        <li className="template-display display-item">escape room4</li>
-        <li className="template-display display-item">escape room5</li>
+        <li
+          className="template-display display-item"
+          style={{
+            backgroundImage:
+              "url(https://brainyactzsocal.com/wp-content/uploads/2018/02/barbershopbacklash-1600xauto@2x.jpg)"
+          }}
+        >
+          <div className="escape-room-list hover-cover">Escape Room 1</div>
+        </li>
+        <li
+          className="template-display display-item"
+          style={{
+            backgroundImage:
+              "url(https://brainyactzsocal.com/wp-content/uploads/2018/02/santas-cabin-2-1600xauto@2x.jpg)"
+          }}
+        >
+          <div className="escape-room-list hover-cover">Escape Room 2</div>
+        </li>
+        <li
+          className="template-display display-item"
+          style={{
+            backgroundImage:
+              "url(https://brainyactzsocal.com/wp-content/uploads/2018/02/cwzgudmxxq5gfn0oita2160922-cropped-400x230-1600xauto@2x.jpg)"
+          }}
+        >
+          <div className="escape-room-list hover-cover">Escape Room 3</div>
+        </li>
+        <li
+          className="template-display display-item"
+          style={{
+            backgroundImage:
+              "url(https://brainyactzsocal.com/wp-content/uploads/2018/02/carnivalchallenge-1600xauto@2x.jpg)"
+          }}
+        >
+          <div className="escape-room-list hover-cover">Escape Room 4</div>
+        </li>
+        <li
+          className="template-display display-item"
+          style={{
+            backgroundImage:
+              "url(https://brainyactzsocal.com/wp-content/uploads/2018/02/thegreatpirateescape-1600xauto@2x.jpg)"
+          }}
+        >
+          <div className="escape-room-list hover-cover">Escape Room 5</div>
+        </li>
       </ul>
     ) : null;
 

@@ -64,6 +64,7 @@ class ChooseDisplays extends React.Component {
 
       for (let displayKey in displays) {
         const thisDisplay = displays[displayKey];
+        thisDisplay.display_id = displayKey;
 
         if (selection === displayKey) {
           listOfDisplays.push(thisDisplay);
