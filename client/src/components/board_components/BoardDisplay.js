@@ -2,6 +2,8 @@ import React from "react";
 import db from "../../firebase";
 import TextBoard from "../DisplayComponents/TextBoard";
 import EscapeRoom from "../DisplayComponents/EscapeRoom";
+import EscapeRoomList from "../DisplayComponents/EscapeRoomList";
+import EscapeRoomCarousel from "../DisplayComponents/EscapeRoomCarousel";
 
 import "../../assets/displayComponents.css";
 
@@ -71,6 +73,12 @@ class BoardDisplay extends React.Component {
           break;
         case "text-board":
           toRender = <TextBoard displayData={displayData} />;
+          break;
+        case "escape-room-list":
+          toRender = <EscapeRoomList displayData={displayData} />;
+          break;
+        case "carousel":
+          toRender = <EscapeRoomCarousel displayData={displayData} />;
           break;
         default:
           toRender = null;

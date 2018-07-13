@@ -36,14 +36,20 @@ body {
   min-height: 30px !important;
   cursor: pointer !important;
 }
+.selectedDisplay {
+  box-sizing: border-box;
+  border: 2px solid rgb(133, 186, 255) !important;
+  /* box-shadow: inset 0 0 5 rgb(113, 175, 255); */
+  background-color: rgb(234, 243, 255) !important;
+}
 .delete-button {
-  border-radius: 5px !important;
-  background-color: rgb(255, 44, 44) !important;
-  color: white !important;
-  font-size: 0.9em !important;
-  font-weight: bold !important;
-  min-height: 30px !important;
-  cursor: pointer !important;
+  border-radius: 5px;
+  background-color: rgb(255, 44, 44);
+  color: white;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-height: 30px;
+  cursor: pointer;
 }
 .unavailable-button {
   border-radius: 5px;
@@ -53,4 +59,16 @@ body {
   font-weight: bold;
   min-height: 30px;
   cursor: initial;
+}
+.hover-cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+.hover-cover:hover {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 5;
 }
