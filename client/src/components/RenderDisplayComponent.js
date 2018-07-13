@@ -2,6 +2,7 @@ import React from "react";
 import TextBoard from "./DisplayComponents/TextBoard";
 import EscapeRoom from "./DisplayComponents/EscapeRoom";
 import EscapeRoomList from "./DisplayComponents/EscapeRoomList";
+import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
 
 class RenderDisplayComponent extends React.Component {
   render() {
@@ -19,6 +20,9 @@ class RenderDisplayComponent extends React.Component {
           toRender = (
             <EscapeRoomList {...this.props} displayData={currentDisplayData} />
           );
+          break;
+        case "carousel":
+          toRender = <EscapeRoomCarousel displayData={currentDisplayData} />;
           break;
 
         default:

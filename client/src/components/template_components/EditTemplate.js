@@ -66,12 +66,24 @@ class EditTemplate extends React.Component {
   }
 
   addDisplaysToTemplate(list_of_displays, list_of_ids) {
-    this.setState({
-      ...this.state,
-      escapeRoomsListOpen: false,
-      template: { ...this.state.template, list_of_displays },
-      prev_ids: list_of_ids
-    });
+    if (this.state.template.type === "escape-room-list") {
+      this.setState({
+        ...this.state,
+        escapeRoomsListOpen: false,
+        template: { ...this.state.template, list_of_displays },
+        prev_ids: list_of_ids
+      });
+    } else if (this.state.template.type === "carousel") {
+      this.setState({
+        ...this.state,
+        escapeRoomsListOpen: false,
+        template: {
+          ...this.state.template,
+          carousel_displays: list_of_displays
+        },
+        prev_ids: list_of_ids
+      });
+    }
   }
 
   submitTemplate(e) {
@@ -80,7 +92,6 @@ class EditTemplate extends React.Component {
     //and make sure the new template is displayed
     const { template } = this.state;
     const { location, board, new_type } = this.props.match.params;
-    debugger;
 
     db.ref(`/displays`).push(template, snapshot => {
       this.props.history.push(
@@ -105,6 +116,18 @@ class EditTemplate extends React.Component {
             case "name":
               break;
             case "list_of_displays":
+              inputCont = (
+                <li key={index} className={`template-edit item ${item}`}>
+                  <button
+                    onClick={e => this.toggleEscapeRoomsList(e)}
+                    className="standard-button template-edit escape-room"
+                  >
+                    Add Escape Rooms
+                  </button>
+                </li>
+              );
+              break;
+            case "carousel_displays":
               inputCont = (
                 <li key={index} className={`template-edit item ${item}`}>
                   <button

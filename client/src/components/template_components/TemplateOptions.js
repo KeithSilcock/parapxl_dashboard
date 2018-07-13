@@ -1,5 +1,6 @@
 import React from "react";
 import ReactPlayer from "react-player";
+import { Carousel } from "react-responsive-carousel";
 
 class TemplateOptions extends React.Component {
   render() {
@@ -78,6 +79,72 @@ class TemplateOptions extends React.Component {
       </ul>
     ) : null;
 
+    const escapeRoomCarousel = displayData.carousel_displays ? (
+      <Carousel
+        className="template-display carousel-container"
+        infiniteLoop={true}
+        autoPlay={true}
+        interval={2500}
+        transitionTime={350}
+        stopOnHover={false}
+        showArrows={false}
+        showStatus={false}
+        showIndicators={false}
+        showThumbs={false}
+      >
+        <div
+          className="template-display carousel-item"
+          style={{
+            backgroundImage: `url("https://brainyactzsocal.com/wp-content/uploads/2018/02/barbershopbacklash-1600xauto@2x.jpg")`
+          }}
+        >
+          <div className="template-display carousel-text">
+            Carousel Display 1
+          </div>
+        </div>
+        <div
+          className="template-display carousel-item"
+          style={{
+            backgroundImage: `url("https://brainyactzsocal.com/wp-content/uploads/2018/02/santas-cabin-2-1600xauto@2x.jpg")`
+          }}
+        >
+          <div className="template-display carousel-text">
+            Carousel Display 2
+          </div>
+        </div>
+        <div
+          className="template-display carousel-item"
+          style={{
+            backgroundImage: `url("https://brainyactzsocal.com/wp-content/uploads/2018/02/cwzgudmxxq5gfn0oita2160922-cropped-400x230-1600xauto@2x.jpg")`
+          }}
+        >
+          <div className="template-display carousel-text">
+            Carousel Display 3
+          </div>
+        </div>
+        <div
+          className="template-display carousel-item"
+          style={{
+            backgroundImage: `url("https://brainyactzsocal.com/wp-content/uploads/2018/02/carnivalchallenge-1600xauto@2x.jpg")`
+          }}
+        >
+          <div className="template-display carousel-text">
+            Carousel Display 4
+          </div>
+        </div>
+        <div
+          className="template-display carousel-item"
+          style={{
+            backgroundImage: `url("https://brainyactzsocal.com/wp-content/uploads/2018/02/thegreatpirateescape-1600xauto@2x.jpg")`
+          }}
+        >
+          <div className="template-display carousel-text">
+            Carousel Display 5
+          </div>
+        </div>
+      </Carousel>
+    ) : null;
+
     const backgroundImg = displayData.background_img ? (
       <div>
         <input
@@ -109,7 +176,7 @@ class TemplateOptions extends React.Component {
           {title} {subtitle}
         </div>
         <div className="template-display content">
-          {content} {image} {video} {escapeRoomList}
+          {content} {image} {video} {escapeRoomList} {escapeRoomCarousel}
         </div>
         <div className="template-display misc">{backgroundImg}</div>
       </div>

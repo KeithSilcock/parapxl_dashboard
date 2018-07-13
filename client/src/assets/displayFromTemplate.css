@@ -137,6 +137,25 @@
   justify-content: center;
   align-items: center;
 }
+.template-display.carousel-container,
+.carousel.carousel-slider,
+.slider-wrapper,
+.slider.animated,
+.template-display.carousel-item {
+  height: 100%;
+}
+.template-display.carousel-item {
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.template-display.carousel-text {
+  font-size: 1.3em;
+  color: white;
+  text-shadow: 2px 2px #000;
+}
 
 .selected-template {
   border-radius: 15px;

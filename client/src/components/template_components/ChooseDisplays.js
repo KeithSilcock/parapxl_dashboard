@@ -72,7 +72,6 @@ class ChooseDisplays extends React.Component {
         }
       }
     }
-
     submit(listOfDisplays, currentSelection);
   }
 
