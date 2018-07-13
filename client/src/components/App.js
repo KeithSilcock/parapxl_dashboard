@@ -6,6 +6,7 @@ import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
 import NewDisplayModal from "./modal_components/NewDisplayModal";
 import TemplatePage from "./template_components/TemplatePage";
+import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
 
 //TODO Finish adding animation for "EditDisplays"
 
@@ -57,6 +58,10 @@ class App extends Component {
         <Route
           path={`/display/:display_id?`}
           render={props => <DataDisplayNewTab {...props} />}
+        />
+        <Route
+          path={`/carousel`}
+          render={props => <EscapeRoomCarousel {...props} />}
         />
       </div>
     );
