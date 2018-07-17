@@ -2,6 +2,7 @@ import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import RenderDisplayComponent from "../RenderDisplayComponent";
+import { formatToMiliSeconds } from "../../helpers";
 
 import db from "../../firebase";
 
@@ -31,6 +32,9 @@ class EscapeRoomCarousel extends React.Component {
       displayData,
       displayData: { list_of_displays }
     } = this.props;
+
+    const interval = displayData.interval ? displayData.interval : 2;
+
     const { displays } = this.state;
     if (typeof displayData.carousel_displays === "object") {
       var renderDisplays = displayData.carousel_displays.map(
@@ -55,7 +59,7 @@ class EscapeRoomCarousel extends React.Component {
         showArrows={false}
         showStatus={false}
         autoPlay={true}
-        interval={10000}
+        interval={formatToMiliSeconds(interval)}
         transitionTime={350}
         stopOnHover={false}
       >

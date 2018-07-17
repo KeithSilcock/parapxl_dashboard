@@ -2,6 +2,8 @@ import React from "react";
 import RenderDisplayComponent from "../RenderDisplayComponent";
 import ChooseDisplays from "./ChooseDisplays";
 import db from "../../firebase";
+import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
+import { formatToMiliSeconds, formatFromMiliSeconds } from "../../helpers";
 
 class EditTemplate extends React.Component {
   constructor(props) {
@@ -35,6 +37,13 @@ class EditTemplate extends React.Component {
       template: { ...this.state.template, [name]: value }
     });
   }
+  onIntervalChange(e) {
+    const { name, value } = e.target;
+    this.setState({
+      ...this.state,
+      template: { ...this.state.template, [name]: formatToMiliSeconds(value) }
+    });
+  }
 
   emptyInputOnFocus(e) {
     const { template } = this.state;
@@ -66,6 +75,10 @@ class EditTemplate extends React.Component {
   }
 
   addDisplaysToTemplate(list_of_displays, list_of_ids) {
+    if (!list_of_ids) {
+      var list_of_ids = this.state.prev_ids;
+    }
+
     if (this.state.template.type === "escape-room-list") {
       this.setState({
         ...this.state,
@@ -115,21 +128,35 @@ class EditTemplate extends React.Component {
               break;
             case "name":
               break;
-            case "list_of_displays":
+            case "interval":
               inputCont = (
-                <li key={index} className={`template-edit item ${item}`}>
-                  <button
-                    onClick={e => this.toggleEscapeRoomsList(e)}
-                    className="standard-button template-edit escape-room"
-                  >
-                    Add Escape Rooms
-                  </button>
+                <li className={`template-edit item ${item}`} key={index}>
+                  <p>Timing Interval:</p>
+                  <div className="template-edit input-container">
+                    <input
+                      className="template-edit interval"
+                      onFocus={e => this.emptyInputOnFocus(e)}
+                      onChange={e => this.onInputChange(e)}
+                      type="text"
+                      name={item}
+                      value={template[item]}
+                      placeholder="#"
+                    />
+                    <span> Seconds</span>
+                  </div>
                 </li>
               );
               break;
+            case "list_of_displays":
             case "carousel_displays":
               inputCont = (
                 <li key={index} className={`template-edit item ${item}`}>
+                  <DisplayListOfDisplays
+                    currentData={template}
+                    currentDisplay={{}}
+                    submitTemps={this.addDisplaysToTemplate.bind(this)}
+                    isTemplate={true}
+                  />
                   <button
                     onClick={e => this.toggleEscapeRoomsList(e)}
                     className="standard-button template-edit escape-room"

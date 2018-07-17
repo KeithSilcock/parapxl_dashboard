@@ -21,3 +21,10 @@ export function capitalizeFirstLetters(text, everyWord = false) {
     return `${text[0].toUpperCase()}${text.slice(1)}`;
   }
 }
+
+export function formatToMiliSeconds(secs) {
+  return Number(secs) * 1000;
+}
+export function formatFromMiliSeconds(ms) {
+  return Number(ms) / 1000;
+}

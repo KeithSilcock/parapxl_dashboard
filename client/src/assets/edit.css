@@ -21,6 +21,7 @@
 }
 .edit-content {
   display: flex;
+  max-width: 100%;
 
   padding: 0 1%;
   border-radius: 10px;
@@ -124,6 +125,12 @@
 }
 .edit-data.item p {
   margin-bottom: 0;
+}
+.edit-data.input-container {
+  display: flex;
+}
+input.edit-data.interval {
+  width: 3em;
 }
 .edit-data.item input {
   /* width: 8%; */

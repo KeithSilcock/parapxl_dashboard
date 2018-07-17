@@ -85,11 +85,10 @@ class TemplateOptions extends React.Component {
         infiniteLoop={true}
         autoPlay={true}
         interval={2500}
-        transitionTime={350}
         stopOnHover={false}
-        showArrows={false}
+        showArrows={true}
         showStatus={false}
-        showIndicators={false}
+        showIndicators={true}
         showThumbs={false}
       >
         <div
