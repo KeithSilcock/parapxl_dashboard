@@ -44,8 +44,8 @@ body {
 }
 .delete-button {
   border-radius: 5px;
-  background-color: rgb(255, 44, 44);
-  color: white;
+  background-color: rgb(255, 44, 44) !important;
+  color: white !important;
   font-size: 0.9em;
   font-weight: bold;
   min-height: 30px;
