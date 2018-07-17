@@ -3,6 +3,7 @@ import db from "../../firebase";
 import AddNewBoard from "./AddNewBoard";
 import BoardDisplay from "./BoardDisplay";
 import { capitalizeFirstLetters } from "../../helpers";
+import WarningModal from "../WarningModal";
 
 import "../../assets/animations/openEditBoard.css";
 import "../../assets/boards.css";
@@ -14,7 +15,8 @@ class Boards extends React.Component {
     this.state = {
       currentLocation: "",
       clickedBoard: "",
-      availableBoards: {}
+      availableBoards: {},
+      displayWarningModal: false
     };
   }
 
@@ -86,8 +88,22 @@ class Boards extends React.Component {
     window.open(`http://localhost:3000/display/${board_id}`);
   }
 
+  toggleModal() {
+    const { displayWarningModal } = this.state;
+
+    this.setState({
+      ...this.state,
+      displayWarningModal: !displayWarningModal
+    });
+  }
+
   deleteBoard(e) {
-    debugger;
+    const { location } = this.props.match.params;
+    const { clickedBoard } = this.state;
+    const path = `/boards/${location}/${clickedBoard}`;
+    db.ref(path).remove(() => {
+      this.toggleModal();
+    });
   }
 
   render() {
@@ -97,8 +113,16 @@ class Boards extends React.Component {
       boardsAreTransitioning,
       timedAnimation
     } = this.props;
-    const { availableBoards, clickedBoard } = this.state;
+    const { availableBoards, clickedBoard, displayWarningModal } = this.state;
     const { location } = this.props.match.params;
+
+    const warningModal = displayWarningModal ? (
+      <WarningModal
+        header={clickedBoard}
+        cancel={this.toggleModal.bind(this)}
+        confirm={this.deleteBoard.bind(this)}
+      />
+    ) : null;
 
     if (availableBoards) {
       var listOfBoards = Object.keys(availableBoards).map((item, index) => {
@@ -154,7 +178,15 @@ class Boards extends React.Component {
               <div className="board-type bottom-buttons">
                 <button
                   onClick={e => {
-                    this.deleteBoard(e);
+                    e.stopPropagation();
+                    //opens modal and sets item for delete
+                    //ran into propigation issue where running
+                    //two setState functions didn't work
+                    this.setState({
+                      ...this.state,
+                      clickedBoard: item,
+                      displayWarningModal: !displayWarningModal
+                    });
                   }}
                   className="board-type delete-button"
                 >
@@ -203,6 +235,7 @@ class Boards extends React.Component {
           className={`boards-container ${animationClassUpStart ||
             animationClassDownStart}`}
         >
+          {warningModal}
           <div className="boards-content">
             <ul className="boards-list">
               {listOfBoards}

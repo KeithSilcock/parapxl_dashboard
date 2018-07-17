@@ -1,13 +1,14 @@
 import React from "react";
 import db from "../../firebase";
+import { formatToMiliSeconds, formatFromMiliSeconds } from "../../helpers";
+import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
 
 class EditDataDisplayed extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentData: {},
-      excludedDisplays: []
+      currentData: {}
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
   }
@@ -38,56 +39,9 @@ class EditDataDisplayed extends React.Component {
     }
   }
 
-  toggleEscapeRoom(e, display, arrayIndex) {
-    const { excludedDisplays } = this.state;
-    const { checked } = e.target;
-
-    //add or remove index from display data
-    if (checked) {
-      const displayIndex = excludedDisplays.indexOf(arrayIndex);
-      const copy = [...excludedDisplays];
-      const removedDisplay = copy.splice(displayIndex, 1);
-
-      this.setState({
-        ...this.state,
-        excludedDisplays: [...copy]
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        excludedDisplays: [...excludedDisplays, arrayIndex]
-      });
-    }
-  }
-  updateEscapeRoomListDisplay(e) {
-    const { currentData, excludedDisplays } = this.state;
-
-    if (currentData.type === "carousel") {
-      var list_of_displays = currentData.carousel_displays;
-      var name = "carousel_displays";
-    } else if (currentData.type === "escape-room-list") {
-      var list_of_displays = currentData.list_of_displays;
-      var name = "list_of_displays";
-    }
-    //remove targeted displays
-    const newListOfDisplays = [...list_of_displays];
-    let count = 0;
-    for (let exIndex = 0; exIndex < excludedDisplays.length; exIndex++) {
-      const indexToRemove = excludedDisplays[exIndex];
-      newListOfDisplays.splice(indexToRemove - count++, 1);
-    }
-
-    const newData = {
-      ...this.state.currentData,
-      [name]: newListOfDisplays
-    };
-    const path = `/displays/${this.props.currentDisplay.display_id}/`;
-    db.ref(path).set(newData);
-  }
-
-  onDisplayDataChange(event) {
+  onDisplayDataChange(e) {
     const { currentData } = this.state;
-    const { name, value } = event.currentTarget;
+    const { name, value } = e.currentTarget;
 
     const newData = { ...currentData, [name]: value };
 
@@ -129,82 +83,39 @@ class EditDataDisplayed extends React.Component {
 
     if (currentData) {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
-        const value = currentData[dataKey];
+        const displayData = currentData[dataKey];
 
         var inputCont = null;
         switch (dataKey) {
           case "type":
             break;
-
-          case "carousel_displays":
-            //display all escape rooms as checkboxes
-            const carouselDisplays = value.map((display, index2) => {
-              return (
-                <li key={index2} className="escape-room-list-edit item">
-                  <input
-                    onClick={e => {
-                      this.toggleEscapeRoom(e, display, index2);
-                    }}
-                    type="checkbox"
-                    id={`checkbox${""}${display.display_id}`}
-                    defaultChecked
-                  />
-                  <label for={`checkbox${display.display_id}`}>
-                    {display.title}
-                  </label>
-                </li>
-              );
-            });
-
+          case "interval":
             inputCont = (
-              <li key={index} className="edit-data item escape-room-list-edit">
-                <p>Displayed Escape Rooms:</p>
-                <ul className="escape-room-list-edit list">
-                  {carouselDisplays}
-                </ul>
-                <button
-                  type="button"
-                  onClick={e => this.updateEscapeRoomListDisplay(e)}
-                  className="escape-room-list-edit standard-button"
-                >
-                  Update Display
-                </button>
+              <li className={`edit-data item ${dataKey}`} key={index}>
+                <p>Timing Interval:</p>
+                <div className="edit-data input-container">
+                  <input
+                    className="edit-data interval"
+                    onChange={this.onDisplayDataChange}
+                    type="text"
+                    name={dataKey}
+                    value={displayData}
+                    placeholder="#"
+                  />
+                  <span> Seconds</span>
+                </div>
               </li>
             );
             break;
-
+          case "carousel_displays":
           case "list_of_displays":
-            //display all escape rooms as checkboxes
-            const displays = value.map((display, index2) => {
-              return (
-                <li key={index2} className="escape-room-list-edit item">
-                  <input
-                    onClick={e => {
-                      this.toggleEscapeRoom(e, display, index2);
-                    }}
-                    type="checkbox"
-                    id={`checkbox${display.display_id}`}
-                    defaultChecked
-                  />
-                  <label for={`checkbox${display.display_id}`}>
-                    {display.title}
-                  </label>
-                </li>
-              );
-            });
-
             inputCont = (
-              <li key={index} className="edit-data item escape-room-list-edit">
-                <p>Displayed Escape Rooms:</p>
-                <ul className="escape-room-list-edit list">{displays}</ul>
-                <button
-                  type="button"
-                  onClick={e => this.updateEscapeRoomListDisplay(e)}
-                  className="escape-room-list-edit standard-button"
-                >
-                  Update Display
-                </button>
-              </li>
+              <DisplayListOfDisplays
+                key={index}
+                currentData={currentData}
+                displayData={displayData}
+                currentDisplay={currentDisplay}
+              />
             );
             break;
           case "content":
@@ -216,7 +127,7 @@ class EditDataDisplayed extends React.Component {
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
-                  value={value}
+                  value={displayData}
                 />
               </li>
             );
@@ -230,7 +141,7 @@ class EditDataDisplayed extends React.Component {
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
-                  value={value}
+                  value={displayData}
                 />
               </li>
             );

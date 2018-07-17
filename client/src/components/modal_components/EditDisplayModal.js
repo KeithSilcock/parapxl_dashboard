@@ -1,6 +1,8 @@
 import React from "react";
 import db from "../../firebase";
 import { capitalizeFirstLetters } from "../../helpers";
+import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
+import WarningModal from "../WarningModal";
 
 class EditDisplayModal extends React.Component {
   constructor(props) {
@@ -9,7 +11,8 @@ class EditDisplayModal extends React.Component {
     this.state = {
       currentData: {},
       currentDisplay_id: "",
-      excludedDisplays: []
+      excludedDisplays: [],
+      displayWarningModal: false
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
   }
@@ -108,85 +111,74 @@ class EditDisplayModal extends React.Component {
     db.ref(path).set({ ...currentData });
   }
 
+  toggleModal() {
+    const { displayWarningModal } = this.state;
+
+    this.setState({
+      ...this.state,
+      displayWarningModal: !displayWarningModal
+    });
+  }
+
+  deleteDisplay(e) {
+    const { currentDisplay_id } = this.state;
+    const { resetSelection } = this.props;
+
+    const path = `/displays/${currentDisplay_id}`;
+    db.ref(path).remove(() => {
+      this.toggleModal();
+      resetSelection();
+    });
+  }
+
   render() {
-    const { currentData } = this.state;
+    const { currentData, displayWarningModal } = this.state;
     const { closeModal } = this.props;
     const { board } = this.props.match.params;
-    // const { currentSelection } = this.props;
+
+    const warningModal = displayWarningModal ? (
+      <WarningModal
+        header={currentData.name}
+        cancel={this.toggleModal.bind(this)}
+        confirm={this.deleteDisplay.bind(this)}
+      />
+    ) : null;
 
     if (currentData) {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
-        const value = currentData[dataKey];
+        const displayData = currentData[dataKey];
         var inputCont = null;
         switch (dataKey) {
           case "type":
             break;
           case "display_id":
             break;
-          case "carousel_displays":
-            //display all escape rooms as checkboxes
-            const carouselDisplays = value.map((display, index2) => {
-              return (
-                <li key={index2} className="escape-room-list-edit item">
-                  <input
-                    onClick={e => {
-                      this.toggleEscapeRoom(e, display, index2);
-                    }}
-                    type="checkbox"
-                    id={`checkbox${index}`}
-                    defaultChecked
-                  />
-                  <label for={`checkbox${index}`}>{display.title}</label>
-                </li>
-              );
-            });
-
+          case "interval":
             inputCont = (
-              <li key={index} className="edit-data item escape-room-list-edit">
-                <p>Displayed Escape Rooms:</p>
-                <ul className="escape-room-list-edit list">
-                  {carouselDisplays}
-                </ul>
-                <button
-                  type="button"
-                  onClick={e => this.updateEscapeRoomListDisplay(e)}
-                  className="escape-room-list-edit standard-button"
-                >
-                  Update Display
-                </button>
+              <li className={`edit-data item ${dataKey}`} key={index}>
+                <p>Timing Interval:</p>
+                <div className="edit-data input-container">
+                  <input
+                    className="edit-data interval"
+                    onChange={this.onDisplayDataChange}
+                    type="text"
+                    name={dataKey}
+                    value={displayData}
+                    placeholder="#"
+                  />
+                  <span> Seconds</span>
+                </div>
               </li>
             );
             break;
+          case "carousel_displays":
           case "list_of_displays":
-            //display all escape rooms as checkboxes
-            const displays = value.map((display, index2) => {
-              return (
-                <li key={index2} className="escape-room-list-edit item">
-                  <input
-                    onClick={e => {
-                      this.toggleEscapeRoom(e, display, index2);
-                    }}
-                    type="checkbox"
-                    id={`checkbox${index}`}
-                    defaultChecked
-                  />
-                  <label for={`checkbox${index}`}>{display.title}</label>
-                </li>
-              );
-            });
-
             inputCont = (
-              <li key={index} className="edit-data item escape-room-list-edit">
-                <p>Displayed Escape Rooms:</p>
-                <ul className="escape-room-list-edit list">{displays}</ul>
-                <button
-                  type="button"
-                  onClick={e => this.updateEscapeRoomListDisplay(e)}
-                  className="escape-room-list-edit standard-button"
-                >
-                  Update Display
-                </button>
-              </li>
+              <DisplayListOfDisplays
+                key={index}
+                currentData={currentData}
+                currentDisplay={{ display_id: this.state.currentDisplay_id }}
+              />
             );
             break;
           case "content":
@@ -198,7 +190,7 @@ class EditDisplayModal extends React.Component {
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
-                  value={value}
+                  value={displayData}
                 />
               </li>
             );
@@ -211,7 +203,7 @@ class EditDisplayModal extends React.Component {
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
-                  value={value}
+                  value={displayData}
                 />
               </li>
             );
@@ -224,22 +216,44 @@ class EditDisplayModal extends React.Component {
     }
 
     const update_data_form = currentData ? (
-      <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
-        <ul className="edit-data edit-list">{displayItems}</ul>
-        <button
-          className="edit-data form-button standard-button"
-          onClick={e => {
-            this.addDisplayToAvailable(e);
-            closeModal();
-          }}
-        >
-          Add Display to "{capitalizeFirstLetters(board)}"
-        </button>
+      <form className="edit-data form">
+        <ul className="edit-data edit-list">
+          {displayItems}{" "}
+          <li>
+            <button
+              type="button"
+              className="edit-data standard-button"
+              onClick={e => this.updateDisplays(e)}
+            >
+              Update Changes
+            </button>
+          </li>
+        </ul>
+        <div className="edit-data buttons">
+          <button
+            className="edit-data form-button standard-button"
+            type="button"
+            onClick={e => {
+              this.addDisplayToAvailable(e);
+              closeModal();
+            }}
+          >
+            Add Display to "{capitalizeFirstLetters(board)}"
+          </button>
+          <button
+            onClick={e => this.toggleModal(e)}
+            type="button"
+            className="edit-data delete-button"
+          >
+            Delete
+          </button>
+        </div>
       </form>
     ) : null;
 
     return (
       <div className="edit-data container">
+        {warningModal}
         <div className="edit-data data">
           <p className="edit-text">
             Select any available displays. You may recognize some from different

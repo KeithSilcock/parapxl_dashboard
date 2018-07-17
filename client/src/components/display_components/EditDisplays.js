@@ -193,7 +193,7 @@ class EditDisplays extends React.Component {
                 className="close-edit delete-button"
                 onClick={e => this.closeAnimation(boardsAreHidden)}
               >
-                <span>&times;</span>
+                <span>Close</span>
               </div>
               <div className="spacer" />
             </div>

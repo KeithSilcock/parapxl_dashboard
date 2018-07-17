@@ -21,6 +21,7 @@
 }
 .edit-content {
   display: flex;
+  max-width: 100%;
 
   padding: 0 1%;
   border-radius: 10px;
@@ -114,8 +115,9 @@
   padding: 0;
   display: flex;
   flex-flow: column;
-  align-items: flex-start;
+  align-items: center;
   margin: 0;
+  margin-bottom: 5%;
 }
 .edit-data.item {
   width: 90%;
@@ -124,6 +126,12 @@
 }
 .edit-data.item p {
   margin-bottom: 0;
+}
+.edit-data.input-container {
+  display: flex;
+}
+input.edit-data.interval {
+  width: 3em;
 }
 .edit-data.item input {
   /* width: 8%; */
@@ -162,7 +170,7 @@
 }
 .close-edit {
   padding: 0 4% !important;
-  font-size: 1.4em;
+  font-size: 1.1em;
   display: flex;
   justify-content: center;
   align-items: center;

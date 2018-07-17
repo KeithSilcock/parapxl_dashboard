@@ -58,7 +58,9 @@ class DisplayTemplates extends React.Component {
               className={`add-from-template item ${selectedClass}`}
               onClick={e => this.selectTemplate(e, templateData[templateType])}
             >
-              <p className="add-from-template item-name">{templateType}</p>
+              <div className="add-from-template type-box">
+                <p className="add-from-template item-name">{templateType}</p>
+              </div>
               <TemplateOptions displayData={templateData[templateType]} />
             </li>
           );
@@ -72,32 +74,42 @@ class DisplayTemplates extends React.Component {
       <div
         className={`add-from-template container ${aCLS || aCRS} ${positionEnd}`}
       >
-        <div className="add-from-template header">
+        <div className="add-from-template left-container">
+          <h3>Available Templates</h3>
+          <p>
+            Choose from any of the available templates to the right and then
+            press the edit button below! After doing so you'll be prompted to
+            add your relevant data to your chosen template.
+          </p>
+          <div className="add-from-template footer">
+            <button
+              onClick={e => {
+                if (selectedTemplate) {
+                  // this.addTemplateToBoard(e);
+                  slideAnim();
+                }
+              }}
+              className={`add-from-template add-button ${selectedClass}`}
+            >
+              Edit Template Data
+            </button>
+            <button
+              onClick={e => {
+                this.onCancel(e);
+              }}
+              className={`add-from-template cancel`}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+        <div className="add-from-template right-container">
+          {/* <div className="add-from-template header">
           <h1>Available Templates</h1>
-        </div>
-        <div className="add-from-template content">
-          <ul className="add-from-template list">{renderTemplates}</ul>
-        </div>
-        <div className="add-from-template footer">
-          <button
-            onClick={e => {
-              if (selectedTemplate) {
-                // this.addTemplateToBoard(e);
-                slideAnim();
-              }
-            }}
-            className={`add-from-template add-button ${selectedClass}`}
-          >
-            Edit Template Data
-          </button>
-          <button
-            onClick={e => {
-              this.onCancel(e);
-            }}
-            className={`add-from-template cancel`}
-          >
-            Cancel
-          </button>
+        </div> */}
+          <div className="add-from-template content">
+            <ul className="add-from-template list">{renderTemplates}</ul>
+          </div>
         </div>
       </div>
     );
