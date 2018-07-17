@@ -39,6 +39,7 @@ class AllDisplays extends React.Component {
 
   render() {
     const { displays, currentSelection } = this.state;
+    const { closeModal } = this.props;
 
     const renderObjects = Object.keys(displays).map((displayHash, index) => {
       const newDisplay = displays[displayHash];
@@ -74,6 +75,9 @@ class AllDisplays extends React.Component {
             <h2>All Displays</h2>
           </div>
           <div className="modal-button ">
+            <button className="delete-button" onClick={e => closeModal(e)}>
+              Close
+            </button>
             <button
               className="standard-button"
               onClick={e => this.createNewDisplay(e)}

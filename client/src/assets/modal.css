@@ -11,10 +11,9 @@
 .modal-frame {
   position: relative;
 
-  width: 90%;
-  height: 90%;
-  left: 5%;
-  top: 5%;
+  width: 95%;
+  height: 95%;
+  margin: auto;
 
   z-index: 5;
 
@@ -35,7 +34,7 @@
   height: 10%;
 
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .modal-content {
   width: 100%;
@@ -63,7 +62,14 @@
   width: 30%;
 }
 .modal-button {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+
   align-self: center;
+}
+.modal-button .delete-button {
+  width: 55px;
 }
 .display-template {
   height: 47.5%;

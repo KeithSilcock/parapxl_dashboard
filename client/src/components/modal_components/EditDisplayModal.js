@@ -1,6 +1,7 @@
 import React from "react";
 import db from "../../firebase";
 import { capitalizeFirstLetters } from "../../helpers";
+import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
 
 class EditDisplayModal extends React.Component {
   constructor(props) {
@@ -116,7 +117,7 @@ class EditDisplayModal extends React.Component {
 
     if (currentData) {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
-        const value = currentData[dataKey];
+        const displayData = currentData[dataKey];
         var inputCont = null;
         switch (dataKey) {
           case "type":
@@ -125,68 +126,84 @@ class EditDisplayModal extends React.Component {
             break;
           case "carousel_displays":
             //display all escape rooms as checkboxes
-            const carouselDisplays = value.map((display, index2) => {
-              return (
-                <li key={index2} className="escape-room-list-edit item">
-                  <input
-                    onClick={e => {
-                      this.toggleEscapeRoom(e, display, index2);
-                    }}
-                    type="checkbox"
-                    id={`checkbox${index}`}
-                    defaultChecked
-                  />
-                  <label for={`checkbox${index}`}>{display.title}</label>
-                </li>
-              );
-            });
+            // const carouselDisplays = value.map((display, index2) => {
+            //   return (
+            //     <li key={index2} className="escape-room-list-edit item">
+            //       <input
+            //         onClick={e => {
+            //           this.toggleEscapeRoom(e, display, index2);
+            //         }}
+            //         type="checkbox"
+            //         id={`checkbox${index}`}
+            //         defaultChecked
+            //       />
+            //       <label for={`checkbox${index}`}>{display.title}</label>
+            //     </li>
+            //   );
+            // });
 
+            // inputCont = (
+            //   <li key={index} className="edit-data item escape-room-list-edit">
+            //     <p>Displayed Escape Rooms:</p>
+            //     <ul className="escape-room-list-edit list">
+            //       {carouselDisplays}
+            //     </ul>
+            //     <button
+            //       type="button"
+            //       onClick={e => this.updateEscapeRoomListDisplay(e)}
+            //       className="escape-room-list-edit standard-button"
+            //     >
+            //       Update Display
+            //     </button>
+            //   </li>
+            // );
             inputCont = (
-              <li key={index} className="edit-data item escape-room-list-edit">
-                <p>Displayed Escape Rooms:</p>
-                <ul className="escape-room-list-edit list">
-                  {carouselDisplays}
-                </ul>
-                <button
-                  type="button"
-                  onClick={e => this.updateEscapeRoomListDisplay(e)}
-                  className="escape-room-list-edit standard-button"
-                >
-                  Update Display
-                </button>
-              </li>
+              <DisplayListOfDisplays
+                key={index}
+                currentData={currentData}
+                displayData={displayData}
+                currentDisplay={{ display_id: this.state.currentDisplay_id }}
+              />
             );
             break;
           case "list_of_displays":
             //display all escape rooms as checkboxes
-            const displays = value.map((display, index2) => {
-              return (
-                <li key={index2} className="escape-room-list-edit item">
-                  <input
-                    onClick={e => {
-                      this.toggleEscapeRoom(e, display, index2);
-                    }}
-                    type="checkbox"
-                    id={`checkbox${index}`}
-                    defaultChecked
-                  />
-                  <label for={`checkbox${index}`}>{display.title}</label>
-                </li>
-              );
-            });
+            // const displays = value.map((display, index2) => {
+            //   return (
+            //     <li key={index2} className="escape-room-list-edit item">
+            //       <input
+            //         onClick={e => {
+            //           this.toggleEscapeRoom(e, display, index2);
+            //         }}
+            //         type="checkbox"
+            //         id={`checkbox${index}`}
+            //         defaultChecked
+            //       />
+            //       <label for={`checkbox${index}`}>{display.title}</label>
+            //     </li>
+            //   );
+            // });
 
+            // inputCont = (
+            //   <li key={index} className="edit-data item escape-room-list-edit">
+            //     <p>Displayed Escape Rooms:</p>
+            //     <ul className="escape-room-list-edit list">{displays}</ul>
+            //     <button
+            //       type="button"
+            //       onClick={e => this.updateEscapeRoomListDisplay(e)}
+            //       className="escape-room-list-edit standard-button"
+            //     >
+            //       Update Display
+            //     </button>
+            //   </li>
+            // );
             inputCont = (
-              <li key={index} className="edit-data item escape-room-list-edit">
-                <p>Displayed Escape Rooms:</p>
-                <ul className="escape-room-list-edit list">{displays}</ul>
-                <button
-                  type="button"
-                  onClick={e => this.updateEscapeRoomListDisplay(e)}
-                  className="escape-room-list-edit standard-button"
-                >
-                  Update Display
-                </button>
-              </li>
+              <DisplayListOfDisplays
+                key={index}
+                currentData={currentData}
+                displayData={displayData}
+                currentDisplay={{ display_id: this.state.currentDisplay_id }}
+              />
             );
             break;
           case "content":
@@ -198,7 +215,7 @@ class EditDisplayModal extends React.Component {
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
-                  value={value}
+                  value={displayData}
                 />
               </li>
             );
@@ -211,7 +228,7 @@ class EditDisplayModal extends React.Component {
                   onChange={this.onDisplayDataChange}
                   type="text"
                   name={dataKey}
-                  value={value}
+                  value={displayData}
                 />
               </li>
             );
