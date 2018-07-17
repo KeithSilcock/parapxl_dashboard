@@ -12,6 +12,8 @@
   border-radius: 0 10px 10px 10px;
   background-color: rgb(233, 233, 233);
   border: 3px solid rgb(190, 190, 190);
+
+  z-index: 1;
 }
 .choose-display.display {
   width: 100%;
