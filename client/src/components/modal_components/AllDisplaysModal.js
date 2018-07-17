@@ -17,11 +17,18 @@ class AllDisplays extends React.Component {
   }
   componentDidMount() {
     const path = `/displays`;
-    db.ref(path).once("value", snapshot => {
+    db.ref(path).on("value", snapshot => {
       const displays = snapshot.val();
       this.setState({
         displays
       });
+    });
+  }
+
+  resetSelection() {
+    this.setState({
+      ...this.state,
+      currentSelection: {}
     });
   }
 
@@ -91,6 +98,7 @@ class AllDisplays extends React.Component {
           <div className="modal-left"> {renderObjects}</div>
           <EditDisplayModal
             {...this.props}
+            resetSelection={this.resetSelection.bind(this)}
             currentSelection={currentSelection}
             // updateCurrentDisplay={this.updateCurrentDisplay.bind(this)}
           />

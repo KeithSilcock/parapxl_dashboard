@@ -2,6 +2,7 @@ import React from "react";
 import db from "../../firebase";
 import { capitalizeFirstLetters } from "../../helpers";
 import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
+import WarningModal from "../WarningModal";
 
 class EditDisplayModal extends React.Component {
   constructor(props) {
@@ -10,7 +11,8 @@ class EditDisplayModal extends React.Component {
     this.state = {
       currentData: {},
       currentDisplay_id: "",
-      excludedDisplays: []
+      excludedDisplays: [],
+      displayWarningModal: false
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
   }
@@ -109,11 +111,38 @@ class EditDisplayModal extends React.Component {
     db.ref(path).set({ ...currentData });
   }
 
+  toggleModal() {
+    const { displayWarningModal } = this.state;
+
+    this.setState({
+      ...this.state,
+      displayWarningModal: !displayWarningModal
+    });
+  }
+
+  deleteDisplay(e) {
+    const { currentDisplay_id } = this.state;
+    const { resetSelection } = this.props;
+
+    const path = `/displays/${currentDisplay_id}`;
+    db.ref(path).remove(() => {
+      this.toggleModal();
+      resetSelection();
+    });
+  }
+
   render() {
-    const { currentData } = this.state;
+    const { currentData, displayWarningModal } = this.state;
     const { closeModal } = this.props;
     const { board } = this.props.match.params;
-    // const { currentSelection } = this.props;
+
+    const warningModal = displayWarningModal ? (
+      <WarningModal
+        header={currentData.name}
+        cancel={this.toggleModal.bind(this)}
+        confirm={this.deleteDisplay.bind(this)}
+      />
+    ) : null;
 
     if (currentData) {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
@@ -188,28 +217,43 @@ class EditDisplayModal extends React.Component {
 
     const update_data_form = currentData ? (
       <form className="edit-data form">
-        <ul className="edit-data edit-list">{displayItems}</ul>
-        <button
-          className="edit-data standard-button"
-          onClick={e => this.updateDisplays(e)}
-        >
-          Update Changes
-        </button>
-        <button
-          className="edit-data form-button standard-button"
-          type="button"
-          onClick={e => {
-            this.addDisplayToAvailable(e);
-            closeModal();
-          }}
-        >
-          Add Display to "{capitalizeFirstLetters(board)}"
-        </button>
+        <ul className="edit-data edit-list">
+          {displayItems}{" "}
+          <li>
+            <button
+              type="button"
+              className="edit-data standard-button"
+              onClick={e => this.updateDisplays(e)}
+            >
+              Update Changes
+            </button>
+          </li>
+        </ul>
+        <div className="edit-data buttons">
+          <button
+            className="edit-data form-button standard-button"
+            type="button"
+            onClick={e => {
+              this.addDisplayToAvailable(e);
+              closeModal();
+            }}
+          >
+            Add Display to "{capitalizeFirstLetters(board)}"
+          </button>
+          <button
+            onClick={e => this.toggleModal(e)}
+            type="button"
+            className="edit-data delete-button"
+          >
+            Delete
+          </button>
+        </div>
       </form>
     ) : null;
 
     return (
       <div className="edit-data container">
+        {warningModal}
         <div className="edit-data data">
           <p className="edit-text">
             Select any available displays. You may recognize some from different
