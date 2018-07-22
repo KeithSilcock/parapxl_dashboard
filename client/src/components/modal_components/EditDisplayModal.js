@@ -12,11 +12,11 @@ class EditDisplayModal extends React.Component {
       currentData: {},
       currentDisplay_id: "",
       excludedDisplays: [],
-      displayWarningModal: false
+      displayWarningModal: false,
+      shouldUpdate: true
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
   }
-
   componentWillReceiveProps(nextProps) {
     const { currentSelection } = nextProps;
 
@@ -49,10 +49,12 @@ class EditDisplayModal extends React.Component {
     };
 
     //update available boards and current board
-    const available_path = `/boards/${location}/${board}/available_displays`;
-    db.ref(available_path).push(dataToSend, snapshot1 => {});
+
     const currentDisplay_path = `/boards/${location}/${board}/current_display`;
-    db.ref(currentDisplay_path).set(dataToSend, snapshot2 => {});
+    db.ref(currentDisplay_path).set(dataToSend, snapshot2 => {
+      const available_path = `/boards/${location}/${board}/available_displays`;
+      db.ref(available_path).push(dataToSend, snapshot1 => {});
+    });
   }
 
   toggleEscapeRoom(e, display, arrayIndex) {
@@ -76,39 +78,19 @@ class EditDisplayModal extends React.Component {
       });
     }
   }
-  updateEscapeRoomListDisplay(e) {
-    const { currentData, excludedDisplays, currentDisplay_id } = this.state;
-
-    if (currentData.type === "carousel") {
-      var list_of_displays = currentData.carousel_displays;
-      var name = "carousel_displays";
-    } else if (currentData.type === "escape-room-list") {
-      var list_of_displays = currentData.list_of_displays;
-      var name = "list_of_displays";
-    }
-
-    //remove targeted displays
-    const newListOfDisplays = [...list_of_displays];
-    let count = 0;
-    for (let exIndex = 0; exIndex < excludedDisplays.length; exIndex++) {
-      const indexToRemove = excludedDisplays[exIndex];
-      newListOfDisplays.splice(indexToRemove - count++, 1);
-    }
-
-    const newData = {
-      ...this.state.currentData,
-      [name]: newListOfDisplays
-    };
-    const path = `/displays/${currentDisplay_id}/`;
-    db.ref(path).set(newData);
-  }
 
   updateDisplays(e) {
     e.preventDefault();
     const { currentData, currentDisplay_id } = this.state;
 
     const path = `/displays/${currentDisplay_id}/`;
-    db.ref(path).set({ ...currentData });
+    db.ref(path).set({ ...currentData }, () => {
+      this.setState({
+        ...this.state,
+        currentData,
+        currentDisplay_id
+      });
+    });
   }
 
   toggleModal() {
@@ -216,15 +198,11 @@ class EditDisplayModal extends React.Component {
     }
 
     const update_data_form = currentData ? (
-      <form className="edit-data form">
+      <form onSubmit={e => this.updateDisplays(e)} className="edit-data form">
         <ul className="edit-data edit-list">
           {displayItems}{" "}
           <li>
-            <button
-              type="button"
-              className="edit-data standard-button"
-              onClick={e => this.updateDisplays(e)}
-            >
+            <button type="submit" className="edit-data standard-button">
               Update Changes
             </button>
           </li>
@@ -256,13 +234,24 @@ class EditDisplayModal extends React.Component {
         {warningModal}
         <div className="edit-data data">
           <p className="edit-text">
-            Select any available displays. You may recognize some from different
-            locations. Please be aware, editing them will edit any of their live
-            versions. Once you've found the display you'd like to show, press
-            the "Change Current Display" to add that to your list of available
-            options. If you'd like to create a new display, press the "Create
-            New Display" button in the top right corner to create a new Display
-            from the templates
+            <span className="edit-data bold">
+              Select any available displays.
+            </span>{" "}
+            You may recognize some from different locations. Please be aware,{" "}
+            <span className="edit-data blue bold">
+              editing them will edit them everywhere!
+            </span>{" "}
+          </p>
+          <p className="edit-text">
+            Once you've found your display, press the "<span className="edit-data bold">
+              Change Current Display
+            </span>" to add it to the{" "}
+            <span className="edit-data bold">
+              {capitalizeFirstLetters(this.props.match.params.board)}
+            </span>{" "}
+            board. If you'd like to create a new display from a template, press
+            the "<span className="edit-data bold">Create New Display</span>"
+            button in the top right corner
           </p>
           {update_data_form}
         </div>

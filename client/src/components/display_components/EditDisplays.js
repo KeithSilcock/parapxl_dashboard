@@ -25,28 +25,31 @@ class EditDisplays extends React.Component {
 
     const path = `/boards/${location}/${board}`;
     db.ref(path).on("value", snapshot => {
-      const availableDisplays = snapshot.val().available_displays;
-      const currentDisplay = snapshot.val().current_display;
+      if (snapshot.val()) {
+        const availableDisplays = snapshot.val().available_displays;
+        const currentDisplay = snapshot.val().current_display;
 
-      //find key of availableDisplays and assign it to currentDisplay object.
-      if (
-        availableDisplays &&
-        currentDisplay &&
-        Object.keys(availableDisplays).length
-      )
-        for (let keyIndex in availableDisplays) {
-          if (
-            availableDisplays[keyIndex].display_id === currentDisplay.display_id
-          ) {
-            currentDisplay["availableDisplayKey"] = keyIndex;
-            break;
+        //find key of availableDisplays and assign it to currentDisplay object.
+        if (
+          availableDisplays &&
+          currentDisplay &&
+          Object.keys(availableDisplays).length
+        )
+          for (let keyIndex in availableDisplays) {
+            if (
+              availableDisplays[keyIndex].display_id ===
+              currentDisplay.display_id
+            ) {
+              currentDisplay["availableDisplayKey"] = keyIndex;
+              break;
+            }
           }
-        }
 
-      this.setState({
-        availableDisplays,
-        currentDisplay
-      });
+        this.setState({
+          availableDisplays,
+          currentDisplay
+        });
+      }
     });
   }
 
@@ -113,6 +116,12 @@ class EditDisplays extends React.Component {
           } else {
             var selectedClassName = selected === item ? "selectedDisplay" : "";
           }
+          const currentDisplayedBoard =
+            currentDisplay.availableDisplayKey === item ? (
+              <span className="edit-item current-display blue bold">
+                Currently Displayed
+              </span>
+            ) : null;
 
           return (
             <li
@@ -123,6 +132,7 @@ class EditDisplays extends React.Component {
               <div className="edit-item-content">
                 <div className={`display-type ${item}`}>
                   <span>{capitalizeFirstLetters(display.name, true)}</span>
+                  {currentDisplayedBoard}
                 </div>
                 <div className="display-type-preview">
                   <BoardDisplay thisBoard={display} />
@@ -137,9 +147,10 @@ class EditDisplays extends React.Component {
       var renderAvailableDisplays = (
         <li className="display-item edit-item displays-unavailable">
           <p>
-            There are no available displays for the "{`${board}`}" board. Please
-            select "Add Displays" under this message to add some displays to
-            your board
+            There are currently no previous displays for the{" "}
+            <span className="edit-data bold">{`${board}`}</span>. Please "<span className="edit-data bold">
+              Add Displays
+            </span>" to add some displays to your board
           </p>
           <div className="edit-item add-displays-box">
             <button
@@ -155,7 +166,7 @@ class EditDisplays extends React.Component {
 
     const listDisplayStyle = displaysAvailable
       ? {}
-      : { justifyContent: "center" };
+      : { justifyContent: "center", width: "60%" };
 
     //aniamation
     if (boardsAreTransitioning) {
@@ -178,9 +189,8 @@ class EditDisplays extends React.Component {
           <div className="edit-header">
             <div className="spacer" />
             <h3>
-              Available Displays for the "{capitalizeFirstLetters(
-                this.props.match.params.board
-              )}"
+              Previous {capitalizeFirstLetters(this.props.match.params.board)}{" "}
+              Displays
             </h3>
             <div className="edit-close">
               <button
@@ -189,12 +199,13 @@ class EditDisplays extends React.Component {
               >
                 More Options
               </button>
-              <div
+
+              <button
                 className="close-edit delete-button"
                 onClick={e => this.closeAnimation(boardsAreHidden)}
               >
-                <span>Close</span>
-              </div>
+                Close
+              </button>
               <div className="spacer" />
             </div>
           </div>

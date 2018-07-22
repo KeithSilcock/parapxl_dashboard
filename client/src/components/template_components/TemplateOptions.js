@@ -22,11 +22,13 @@ class TemplateOptions extends React.Component {
     ) : null;
 
     const image = displayData.image ? (
-      <img
-        className="template-display image"
-        src="https://www.potterybarn.com/pbimgs/rk/images/dp/wcm/201824/0424/faux-potted-orchid-c.jpg"
-        alt="template image"
-      />
+      <div>
+        <img
+          className="template-display image"
+          src="https://www.potterybarn.com/pbimgs/rk/images/dp/wcm/201824/0424/faux-potted-orchid-c.jpg"
+          alt="template image"
+        />
+      </div>
     ) : null;
 
     const escapeRoomList = displayData.list_of_displays ? (

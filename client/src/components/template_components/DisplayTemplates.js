@@ -59,7 +59,9 @@ class DisplayTemplates extends React.Component {
               onClick={e => this.selectTemplate(e, templateData[templateType])}
             >
               <div className="add-from-template type-box">
-                <p className="add-from-template item-name">{templateType}</p>
+                <div className="add-from-template rotated">
+                  <p className="add-from-template item-name">{templateType}</p>
+                </div>
               </div>
               <TemplateOptions displayData={templateData[templateType]} />
             </li>

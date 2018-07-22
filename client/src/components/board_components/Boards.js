@@ -34,6 +34,7 @@ class Boards extends React.Component {
       // this.props.history.push(`/admin/home/${location}/${newBoardName}`);
     });
   }
+
   componentWillMount() {
     const { location, board } = this.props.match.params;
     const { timedAnimation, boardsAreHidden } = this.props;
@@ -64,7 +65,8 @@ class Boards extends React.Component {
         this.setState({
           ...this.state,
           currentLocation: location,
-          availableBoards: listOfBoards
+          availableBoards: listOfBoards,
+          clickedBoard: ""
         });
       });
     }
@@ -83,9 +85,11 @@ class Boards extends React.Component {
   }
 
   openNewWindow(board_id) {
-    this.props;
-    debugger;
-    window.open(`http://localhost:3000/display/${board_id}`);
+    if (board_id) {
+      window.open(`http://localhost:3000/display/${board_id}`);
+    } else {
+      window.open(`http://localhost:3000/display/no-data`);
+    }
   }
 
   toggleModal() {
@@ -102,6 +106,7 @@ class Boards extends React.Component {
     const { clickedBoard } = this.state;
     const path = `/boards/${location}/${clickedBoard}`;
     db.ref(path).remove(() => {
+      this.props.history.push(`/admin/home/${location}`);
       this.toggleModal();
     });
   }
@@ -150,10 +155,13 @@ class Boards extends React.Component {
                     className="standard-button"
                     onClick={e =>
                       setTimeout(() => {
-                        this.openNewWindow(
-                          availableBoards[item].current_display.display_id
-                        ),
-                          300;
+                        if (availableBoards[item].current_display) {
+                          this.openNewWindow(
+                            availableBoards[item].current_display.display_id
+                          );
+                        } else {
+                          this.openNewWindow();
+                        }
                       })
                     }
                   >

@@ -62,4 +62,5 @@
 
 .new-tab .escape-room-list.item {
   height: 30%;
+  cursor: pointer;
 }
