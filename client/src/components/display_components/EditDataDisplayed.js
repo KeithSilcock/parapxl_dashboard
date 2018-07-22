@@ -1,6 +1,6 @@
 import React from "react";
 import db from "../../firebase";
-import { formatToMiliSeconds, formatFromMiliSeconds } from "../../helpers";
+import { capitalizeFirstLetters } from "../../helpers";
 import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
 
 class EditDataDisplayed extends React.Component {
@@ -156,14 +156,14 @@ class EditDataDisplayed extends React.Component {
     if (Object.keys(clickedDisplay).length) {
       var removeButtonClass =
         clickedDisplay.availableDisplay_id !==
-          currentDisplay.availableDisplay_id &&
+          currentDisplay.availableDisplayKey &&
         clickedDisplay.availableDisplay_id
           ? "delete-button"
           : "";
 
       var selectedClassName =
         clickedDisplay.availableDisplay_id !==
-          currentDisplay.availableDisplay_id &&
+          currentDisplay.availableDisplayKey &&
         clickedDisplay.availableDisplay_id
           ? "standard-button"
           : "";
@@ -199,10 +199,15 @@ class EditDataDisplayed extends React.Component {
       <div className="edit-data container">
         <div className="edit-data data">
           <p className="edit-text">
-            Select any available display. Once you've found the display you'd
-            like to show, press the "Change Current Display". If you'd like to
-            add a new board, press the "+" button below to create a new Display
-            from the templates
+            <span className="edit-data bold">Select any previous display</span>{" "}
+            from the left. Once you've found the display you'd like to show, you
+            can update the{" "}
+            {capitalizeFirstLetters(this.props.match.params.board)}'s display
+            data below and add it to the board by confirming "<span className="edit-data bold">
+              Change to Current Display
+            </span>" under that. If you'd like to create a new board, press the
+            "<span className="edit-data bold">+</span>" button to create a new
+            display from the templates
           </p>
           {update_data_form}
         </div>
@@ -219,9 +224,19 @@ class EditDataDisplayed extends React.Component {
               }
             }}
           >
-            Change Current Display
+            Change to Current Display
           </button>
-          <button className="new">+</button>
+          <button
+            onClick={e => {
+              const { location, board } = this.props.match.params;
+              this.props.history.push(
+                `/admin/${location}/${board}/create-new/display`
+              );
+            }}
+            className="new standard-button"
+          >
+            +
+          </button>
         </div>
       </div>
     );

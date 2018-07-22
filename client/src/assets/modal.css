@@ -68,6 +68,7 @@
   align-items: flex-end;
 
   align-self: center;
+  margin: 0 2% 0 0;
 }
 .modal-button .delete-button {
   width: 55px;
