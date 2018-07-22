@@ -64,7 +64,9 @@ class AllDisplays extends React.Component {
           }}
           key={index}
         >
-          <h4>{newDisplay.type}</h4>
+          <h4>
+            {newDisplay.name} ({newDisplay.type})
+          </h4>
           <div className="display-type-preview">
             <BoardDisplay
               thisBoard={{ display_id: displayHash, type: newDisplay.type }}
@@ -79,7 +81,7 @@ class AllDisplays extends React.Component {
         <div className="modal-header">
           <div className="empty" />
           <div className="modal-header-text">
-            <h2>All Displays</h2>
+            <h2>BrainyActz Displays</h2>
           </div>
           <div className="modal-button ">
             <button className="delete-button" onClick={e => closeModal(e)}>

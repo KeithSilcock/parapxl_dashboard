@@ -15,15 +15,18 @@
   position: absolute;
   height: 100%;
   display: flex;
+  justify-content: flex-start;
 }
 .add-from-template.left-container {
-  width: 35%;
+  width: 25%;
 
   text-align: center;
   padding: 1%;
 }
 .add-from-template.right-container {
-  width: 65%;
+  width: 75%;
+  border-left: 2px solid rgb(184, 184, 184);
+
   display: flex;
   flex-flow: column;
   justify-content: space-around;
@@ -37,9 +40,6 @@
 }
 .add-from-template.content {
   height: 100%;
-
-  border: 1px solid rgb(184, 184, 184);
-  border-radius: 10px;
 }
 .add-from-template.list {
   height: 100%;
@@ -55,7 +55,7 @@
 .add-from-template.item {
   width: 95%;
   margin: 1% auto;
-  min-height: 45%;
+  min-height: 65%;
   text-align: center;
   border: 2px solid rgb(184, 184, 184);
   border-radius: 15px;
@@ -65,17 +65,21 @@
   background-color: white;
 }
 .add-from-template.type-box {
-  height: 100%;
-  width: 15%;
-  max-width: 15%;
+  display: flex;
+  height: 300px;
+  width: 10%;
+  max-width: 10%;
   margin: 0 1%;
   align-self: center;
+}
+.add-from-template.rotated {
+  transform: rotateZ(-90deg);
 }
 .add-from-template.item-name {
   margin: 0;
   font-weight: bold;
   font-size: 1.5em;
-  transform: rotateZ(-90deg);
+  width: 300px;
 }
 .add-from-template.footer {
   height: 8%;
@@ -137,7 +141,7 @@
   margin-bottom: 5%;
 }
 .template-display.image {
-  max-width: 100%;
+  max-width: 50%;
 }
 .template-display.display-list {
   height: 100%;
@@ -151,7 +155,7 @@
 .template-display.display-item {
   border-radius: 10px;
   overflow: hidden;
-  width: 50%;
+  width: 30%;
   margin-bottom: 1%;
   background-repeat: no-repeat;
   background-size: cover;

@@ -1,6 +1,7 @@
 import React from "react";
 import db from "../firebase";
 import RenderDisplayComponent from "./RenderDisplayComponent";
+import NoData from "./DisplayComponents/NoData";
 
 import "../assets/newTabDisplay.css";
 
@@ -40,14 +41,19 @@ class DataDisplayNewTab extends React.Component {
 
   render() {
     const { currentDisplayData } = this.state;
-    return (
-      <div className="new-tab">
-        <RenderDisplayComponent
-          {...this.props}
-          currentDisplayData={currentDisplayData}
-        />
-      </div>
-    );
+
+    if (this.props.match.params.display_id !== "no-data") {
+      return (
+        <div className="new-tab">
+          <RenderDisplayComponent
+            {...this.props}
+            currentDisplayData={currentDisplayData}
+          />
+        </div>
+      );
+    } else {
+      return <NoData />;
+    }
   }
 }
 

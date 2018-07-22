@@ -6,6 +6,7 @@ import Boards from "./board_components/Boards";
 import EditDisplays from "./display_components/EditDisplays";
 
 import "../assets/landing_page.css";
+import NoLocationSelected from "./NoLocationSelected";
 
 class DatabaseTest extends React.Component {
   constructor(props) {
@@ -17,7 +18,6 @@ class DatabaseTest extends React.Component {
       boards: [],
       currentBoard: "",
       displays: [],
-      currentDisplayType: "",
       currentDisplay_id: "",
       currentDisplayData: {},
 
@@ -40,7 +40,6 @@ class DatabaseTest extends React.Component {
       locations: [],
       boards: [],
       displays: [],
-      currentDisplayType: "",
       currentDisplayData: {},
       currentDisplay_id: ""
     });
@@ -58,7 +57,6 @@ class DatabaseTest extends React.Component {
         boards: [],
         currentBoard: "",
         displays: [],
-        currentDisplayType: "",
         currentDisplay_id: "",
         currentDisplayData: {}
       });
@@ -73,7 +71,6 @@ class DatabaseTest extends React.Component {
       this.setState({
         ...this.state,
         currentDisplayData,
-        currentDisplayType: displayType,
         currentDisplay_id: display_id
       });
     });
@@ -118,11 +115,8 @@ class DatabaseTest extends React.Component {
   render() {
     const {
       locations,
-      boards,
-      displays,
       currentLocation,
       currentBoard,
-      currentDisplayType,
       currentDisplay_id,
       currentDisplayData,
 
@@ -133,7 +127,6 @@ class DatabaseTest extends React.Component {
     const currentData = {
       currentLocation,
       currentBoard,
-      currentDisplayType,
       currentDisplay_id,
       currentDisplayData
     };
@@ -141,7 +134,7 @@ class DatabaseTest extends React.Component {
     return (
       <div className="landing-page-container">
         <Route
-          path={`/admin/home/:location?/:board?`}
+          path={`/admin/home/:location?`}
           render={props => (
             <Locations
               {...props}
@@ -151,6 +144,11 @@ class DatabaseTest extends React.Component {
               currentData={currentData}
             />
           )}
+        />
+        <Route
+          exact
+          path={`/admin/home/`}
+          render={props => <NoLocationSelected {...props} />}
         />
         <Route
           path={`/admin/home/:location/:board?`}
@@ -175,20 +173,6 @@ class DatabaseTest extends React.Component {
             />
           )}
         />
-        {/* <Displays
-          displays={displays}
-          currentData={currentData}
-          toggleModal={toggleModal}
-          selectNewTemplate={this.selectNewTemplate.bind(this)}
-          getDisplayData={this.getDisplayData.bind(this)}
-        />
-        <DataDisplayAdmin
-          currentData={currentData}
-          currentDisplay_id={currentDisplay_id}
-          currentDisplayData={currentDisplayData}
-          onDisplayDataChange={this.onDisplayDataChange.bind(this)}
-          updateDisplays={this.updateDisplays.bind(this)}
-        /> */}
       </div>
     );
   }

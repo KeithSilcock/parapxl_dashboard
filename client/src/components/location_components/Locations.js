@@ -17,9 +17,7 @@ class Locations extends React.Component {
 
   render() {
     const { locations, timedAnimation, boardsAreHidden } = this.props;
-    const location = this.props.location.pathname
-      .replace("/admin/home/", "")
-      .split("/")[0];
+    const { location } = this.props.match.params;
     const listOfLocations = locations.map((item, index) => {
       if (location) {
         var selectedClassName = location === item ? "selectedLocation" : "";
