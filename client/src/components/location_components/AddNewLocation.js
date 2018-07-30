@@ -49,15 +49,12 @@ class AddNewDBItem extends React.Component {
     ) : null;
 
     return (
-      <div className="add-new-item-container">
-        <button
-          className="add-new-item-button"
-          onClick={this.toggleInputOpen.bind(this)}
-        >
-          Add a New {newText}
-        </button>
-        <div className="add-new-item-form-container">{openForm}</div>
-      </div>
+      <li className="location-item" onClick={this.toggleInputOpen.bind(this)}>
+        <div className="add-new-item-container">
+          <button className="add-new-item-button">+</button>
+          <div className="add-new-item-form-container">{openForm}</div>
+        </div>
+      </li>
     );
   }
 }

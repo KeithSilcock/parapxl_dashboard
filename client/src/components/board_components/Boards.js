@@ -1,11 +1,13 @@
 import React from "react";
 import db from "../../firebase";
+import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
 import BoardDisplay from "./BoardDisplay";
+import { toggleTab2 } from "../../actions/";
 import { capitalizeFirstLetters } from "../../helpers";
 import WarningModal from "../WarningModal";
 
-import "../../assets/animations/openEditBoard.css";
+// import "../../assets/animations/openEditBoard.css";
 import "../../assets/boards.css";
 
 class Boards extends React.Component {
@@ -112,13 +114,8 @@ class Boards extends React.Component {
   }
 
   render() {
-    const {
-      currentData,
-      boardsAreHidden,
-      boardsAreTransitioning,
-      timedAnimation
-    } = this.props;
     const { availableBoards, clickedBoard, displayWarningModal } = this.state;
+    const { toggleTab2, tab2Open } = this.props;
     const { location } = this.props.match.params;
 
     const warningModal = displayWarningModal ? (
@@ -133,89 +130,20 @@ class Boards extends React.Component {
       var listOfBoards = Object.keys(availableBoards).map((item, index) => {
         const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
 
-        const renderBoardDisplay =
-          typeof availableBoards[item] === "object" ? (
-            <BoardDisplay thisBoard={availableBoards[item]} />
-          ) : null;
-
         return (
           <li
             key={index}
             className={`${selectedClassName} board-item`}
             onClick={e => this.boardSelected(item)}
           >
-            <div className={`board-type ${item}`}>
-              <span>{capitalizeFirstLetters(item, true)}</span>
-            </div>
-            <div className="board-type-preview">{renderBoardDisplay}</div>
-            <div className="board-type buttons">
-              <div className="board-type top-buttons">
-                <div className="board-type open-button">
-                  <button
-                    className="standard-button"
-                    onClick={e =>
-                      setTimeout(() => {
-                        if (availableBoards[item].current_display) {
-                          this.openNewWindow(
-                            availableBoards[item].current_display.display_id
-                          );
-                        } else {
-                          this.openNewWindow();
-                        }
-                      })
-                    }
-                  >
-                    Open in New Window
-                  </button>
-                </div>
-                <div className="board-type edit-button">
-                  <button
-                    className="standard-button"
-                    onClick={e => {
-                      // e.stopPropagation();
-                      setTimeout(() => {
-                        timedAnimation(boardsAreHidden);
-                        this.openEditPage(e, item);
-                      }, 300);
-                    }}
-                  >
-                    Edit
-                  </button>
-                </div>
-              </div>
-              <div className="board-type bottom-buttons">
-                <button
-                  onClick={e => {
-                    e.stopPropagation();
-                    //opens modal and sets item for delete
-                    //ran into propigation issue where running
-                    //two setState functions didn't work
-                    this.setState({
-                      ...this.state,
-                      clickedBoard: item,
-                      displayWarningModal: !displayWarningModal
-                    });
-                  }}
-                  className="board-type delete-button"
-                >
-                  Delete
-                </button>
-              </div>
+            <div className={`board-item-container`}>
+              {capitalizeFirstLetters(item, true)}
             </div>
           </li>
         );
       });
     } else {
       var listOfBoards = null;
-    }
-
-    if (boardsAreTransitioning) {
-      var animationClassUpStart = boardsAreTransitioning.up
-        ? "board-slide-up-start"
-        : "";
-      var animationClassDownStart = boardsAreTransitioning.down
-        ? "board-slide-down-start"
-        : "";
     }
 
     const displayAddNewBoard = location ? (
@@ -235,27 +163,31 @@ class Boards extends React.Component {
       </li>
     ) : null;
 
-    const animationClassUpEnd =
-      !boardsAreHidden ||
-      boardsAreTransitioning.down ||
-      boardsAreTransitioning.up ? (
-        <div
-          className={`boards-container ${animationClassUpStart ||
-            animationClassDownStart}`}
-        >
-          {warningModal}
-          <div className="boards-content">
-            <ul className="boards-list">
-              {listOfBoards}
-              {displayAddNewBoardText}
-            </ul>
-          </div>
-          {/* <div className="boards-footer">{displayAddNewBoard}</div> */}
+    return (
+      <div
+        onMouseEnter={e => toggleTab2()}
+        onMouseLeave={e => toggleTab2()}
+        className={`boards-container`}
+      >
+        {warningModal}
+        <div className="boards-content">
+          <ul className="boards-list">
+            {listOfBoards}
+            {displayAddNewBoardText}
+          </ul>
         </div>
-      ) : null;
-
-    return animationClassUpEnd;
+      </div>
+    );
   }
 }
 
-export default Boards;
+function mapStateToProps(state) {
+  return {
+    tab2Open: state.navData.tab2Open
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { toggleTab2 }
+)(Boards);
