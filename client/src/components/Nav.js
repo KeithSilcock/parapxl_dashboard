@@ -49,9 +49,7 @@ class Nav extends React.Component {
         </svg>
 
         {/* <h2>Brainy Actz</h2> */}
-        <div className="nav-bar-log-out">
-          <button>Log Out</button>
-        </div>
+        <div className="nav-bar-log-out">{/* <button>Log Out</button> */}</div>
         {/* <Link to="/">To Home</Link>
         <Link to="/test">To boring</Link>
         <Link to="/test2">To boring 2</Link> */}
