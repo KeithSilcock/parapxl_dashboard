@@ -4,8 +4,7 @@
 /node_modules
 
 # credentials
-/config
-index.js
+config/
 
 # testing
 /coverage

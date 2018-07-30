@@ -28,3 +28,13 @@ export function formatToMiliSeconds(secs) {
 export function formatFromMiliSeconds(ms) {
   return Number(ms) / 1000;
 }
+
+export function getFirstLetters(text) {
+  const words = text.split(" ");
+  let response = "";
+  for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
+    const word = words[wordIndex];
+    response += word.slice(0, 1);
+  }
+  return response;
+}
