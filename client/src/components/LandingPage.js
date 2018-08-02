@@ -5,8 +5,8 @@ import Locations from "./location_components/Locations";
 import Boards from "./board_components/Boards";
 import EditDisplays from "./display_components/EditDisplays";
 
-import "../assets/landing_page.css";
 import NoLocationSelected from "./NoLocationSelected";
+import BoardDisplay from "./board_components/BoardDisplay";
 
 class DatabaseTest extends React.Component {
   constructor(props) {
@@ -19,10 +19,7 @@ class DatabaseTest extends React.Component {
       currentBoard: "",
       displays: [],
       currentDisplay_id: "",
-      currentDisplayData: {},
-
-      boardsAreTransitioning: { up: false, down: false },
-      boardsAreHidden: false
+      currentDisplayData: {}
     };
   }
 
@@ -81,47 +78,13 @@ class DatabaseTest extends React.Component {
     this.getDisplayData(templateType, display_id);
   }
 
-  timedAnimation(slidingDown, instant = false, pushTo = null) {
-    const { location } = this.props.match.params;
-    if (instant) {
-      this.setState({
-        ...this.state,
-        boardsAreHidden: !slidingDown,
-        boardsAreTransitioning: { up: false, down: false }
-      });
-      if (pushTo) {
-        this.props.history.push(pushTo);
-      }
-      return;
-    }
-
-    this.setState({
-      ...this.state,
-      boardsAreHidden: slidingDown,
-      boardsAreTransitioning: { up: !slidingDown, down: slidingDown }
-    });
-    setTimeout(() => {
-      if (pushTo) {
-        this.props.history.push(pushTo);
-      }
-      this.setState({
-        ...this.state,
-        boardsAreHidden: !slidingDown,
-        boardsAreTransitioning: { up: false, down: false }
-      });
-    }, 990);
-  }
-
   render() {
     const {
       locations,
       currentLocation,
       currentBoard,
       currentDisplay_id,
-      currentDisplayData,
-
-      boardsAreHidden,
-      boardsAreTransitioning
+      currentDisplayData
     } = this.state;
 
     const currentData = {
@@ -134,13 +97,11 @@ class DatabaseTest extends React.Component {
     return (
       <div className="landing-page-container">
         <Route
-          path={`/admin/home/:location?`}
+          path={`/admin/home/:location?/:board?`}
           render={props => (
             <Locations
               {...props}
               locations={locations}
-              timedAnimation={this.timedAnimation.bind(this)}
-              boardsAreHidden={boardsAreHidden}
               currentData={currentData}
             />
           )}
@@ -152,26 +113,17 @@ class DatabaseTest extends React.Component {
         />
         <Route
           path={`/admin/home/:location/:board?`}
+          render={props => <Boards {...props} currentData={currentData} />}
+        />
+        <Route
+          path={`/admin/home/:location/:board?`}
           render={props => (
-            <Boards
-              {...props}
-              currentData={currentData}
-              timedAnimation={this.timedAnimation.bind(this)}
-              boardsAreHidden={boardsAreHidden}
-              boardsAreTransitioning={boardsAreTransitioning}
-            />
+            <BoardDisplay {...props} currentData={currentData} />
           )}
         />
         <Route
           path={`/admin/home/:location/:board/:selected?`}
-          render={props => (
-            <EditDisplays
-              {...props}
-              timedAnimation={this.timedAnimation.bind(this)}
-              boardsAreHidden={boardsAreHidden}
-              boardsAreTransitioning={boardsAreTransitioning}
-            />
-          )}
+          render={props => <EditDisplays {...props} />}
         />
       </div>
     );

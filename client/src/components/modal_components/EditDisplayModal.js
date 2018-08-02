@@ -2,7 +2,7 @@ import React from "react";
 import db from "../../firebase";
 import { capitalizeFirstLetters } from "../../helpers";
 import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
-import WarningModal from "../WarningModal";
+import WarningModal from "../EasyModal";
 
 class EditDisplayModal extends React.Component {
   constructor(props) {
