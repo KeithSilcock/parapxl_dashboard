@@ -3,9 +3,9 @@ import db from "../../firebase";
 import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
 import BoardDisplay from "./BoardDisplay";
-import { toggleTab2 } from "../../actions/";
-import { capitalizeFirstLetters } from "../../helpers";
-import WarningModal from "../WarningModal";
+import { toggleTab2, setBoard } from "../../actions/";
+import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
+import WarningModal from "../EasyModal";
 
 // import "../../assets/animations/openEditBoard.css";
 import "../../assets/boards.css";
@@ -18,8 +18,74 @@ class Boards extends React.Component {
       currentLocation: "",
       clickedBoard: "",
       availableBoards: {},
+      currentBoard: {},
       displayWarningModal: false
     };
+  }
+
+  componentWillMount() {
+    const { location, board } = this.props.match.params;
+    const { timedAnimation, boardsAreHidden } = this.props;
+
+    if (board) {
+      const path = `/boards/${location}/${board}/current_display`;
+      db.ref(path).on("value", snapshot => {
+        const currentDisplay = snapshot.val();
+        this.setState({
+          ...this.state,
+          currentLocation: location,
+          currentBoard: currentDisplay
+        });
+      });
+    } else {
+      const path = `/boards/${location}`;
+      db.ref(path).on("value", snapshot => {
+        const listOfBoards = snapshot.val();
+
+        if (listOfBoards !== "no data yet") {
+          const firstBoard = listOfBoards[Object.keys(listOfBoards)[0]];
+          this.boardSelected(firstBoard, Object.keys(listOfBoards)[0]);
+        }
+
+        // this.setState({
+        //   ...this.state,
+        //   currentLocation: location,
+        //   currentBoard: firstBoard.current_display,
+        //   clickedBoard: Object.keys(listOfBoards)[0]
+        // });
+      });
+    }
+  }
+  componentWillReceiveProps(newProps) {
+    const { currentLocation, availableBoards } = this.state;
+    const { location, board } = newProps.match.params;
+
+    if (!board) {
+      const path = `/boards/${location}`;
+      db.ref(path).on("value", snapshot => {
+        const listOfBoards = snapshot.val();
+
+        const firstBoard = listOfBoards[Object.keys(listOfBoards)[0]];
+        if (firstBoard && listOfBoards !== "no data yet")
+          this.boardSelected(firstBoard, Object.keys(listOfBoards)[0]);
+      });
+    }
+
+    //if changed location, switch location
+    if (!currentLocation || currentLocation !== location) {
+      const path = `/boards/${location}`;
+      db.ref(path).on("value", snapshot => {
+        const listOfBoards = snapshot.val();
+        if (listOfBoards !== "no data yet") {
+          this.setState({
+            ...this.state,
+            currentLocation: location,
+            availableBoards: listOfBoards,
+            clickedBoard: ""
+          });
+        }
+      });
+    }
   }
 
   createNewBoard(e, newBoardName) {
@@ -27,63 +93,32 @@ class Boards extends React.Component {
     const { location } = this.props.match.params;
     const { boardsAreHidden, timedAnimation } = this.props;
 
-    db.ref(`boards/${location}/${newBoardName}`).set(true, snapshot => {
-      timedAnimation(
-        boardsAreHidden,
-        true,
-        `/admin/home/${location}/${newBoardName}`
-      );
-      // this.props.history.push(`/admin/home/${location}/${newBoardName}`);
-    });
+    db.ref(`boards/${location}/${newBoardName}`).set(
+      "no data yet",
+      snapshot => {
+        // timedAnimation(
+        //   boardsAreHidden,
+        //   true,
+        //   `/admin/home/${location}/${newBoardName}`
+        // );
+        // this.props.history.push(`/admin/home/${location}/${newBoardName}`);
+      }
+    );
   }
 
-  componentWillMount() {
-    const { location, board } = this.props.match.params;
-    const { timedAnimation, boardsAreHidden } = this.props;
-    const path = `/boards/${location}`;
-    db.ref(path).on("value", snapshot => {
-      const listOfBoards = snapshot.val();
+  boardSelected(clickedBoard, boardLocation) {
+    const { location } = this.props.match.params;
 
-      this.setState({
+    this.setState(
+      {
         ...this.state,
-        currentLocation: location,
-        availableBoards: listOfBoards
-      });
-    });
-    if (board) {
-      timedAnimation(boardsAreHidden, true);
-    } else {
-      timedAnimation(!boardsAreHidden);
-    }
-  }
-  componentWillReceiveProps(newProps) {
-    const { currentLocation } = this.state;
-    const { location, board } = newProps.match.params;
-    if (currentLocation !== location) {
-      const path = `/boards/${location}`;
-      db.ref(path).on("value", snapshot => {
-        const listOfBoards = snapshot.val();
-
-        this.setState({
-          ...this.state,
-          currentLocation: location,
-          availableBoards: listOfBoards,
-          clickedBoard: ""
-        });
-      });
-    }
-  }
-
-  boardSelected(clickedBoard) {
-    this.setState({
-      ...this.state,
-      clickedBoard
-    });
-  }
-
-  openEditPage(e, board) {
-    const { currentLocation } = this.state;
-    this.props.history.push(`/admin/home/${currentLocation}/${board}`);
+        clickedBoard: boardLocation
+      },
+      () => {
+        this.props.setBoard(clickedBoard);
+        this.props.history.push(`/admin/home/${location}/${boardLocation}`);
+      }
+    );
   }
 
   openNewWindow(board_id) {
@@ -92,15 +127,6 @@ class Boards extends React.Component {
     } else {
       window.open(`http://localhost:3000/display/no-data`);
     }
-  }
-
-  toggleModal() {
-    const { displayWarningModal } = this.state;
-
-    this.setState({
-      ...this.state,
-      displayWarningModal: !displayWarningModal
-    });
   }
 
   deleteBoard(e) {
@@ -115,29 +141,43 @@ class Boards extends React.Component {
 
   render() {
     const { availableBoards, clickedBoard, displayWarningModal } = this.state;
-    const { toggleTab2, tab2Open } = this.props;
-    const { location } = this.props.match.params;
-
-    const warningModal = displayWarningModal ? (
-      <WarningModal
-        header={clickedBoard}
-        cancel={this.toggleModal.bind(this)}
-        confirm={this.deleteBoard.bind(this)}
-      />
-    ) : null;
+    const { toggleTab2, tab2Open, activeTabDistance } = this.props;
+    const { board } = this.props.match.params;
 
     if (availableBoards) {
       var listOfBoards = Object.keys(availableBoards).map((item, index) => {
         const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
+        var boardAbbrev =
+          board !== item && !tab2Open
+            ? getFirstLetters(capitalizeFirstLetters(item, true))
+            : item;
 
+        if (board) {
+          var selectedContainerName = selectedClassName
+            ? "selected-container"
+            : "";
+        }
+
+        const boardHeight = {
+          height: `${boardAbbrev.length / 2 + 1}em`
+        };
+        if (tab2Open) {
+          var tab2ItemHeight = { height: `${item.split(" ").length + 0.5}em` };
+        }
+        const itemStyle = Object.assign({}, boardHeight, tab2ItemHeight);
         return (
           <li
+            style={itemStyle}
             key={index}
             className={`${selectedClassName} board-item`}
-            onClick={e => this.boardSelected(item)}
+            onClick={e => this.boardSelected(availableBoards[item], item)}
           >
             <div className={`board-item-container`}>
-              {capitalizeFirstLetters(item, true)}
+              <div className="board grow-container">
+                <div className={`board grow-item ${selectedContainerName}`}>
+                  {capitalizeFirstLetters(boardAbbrev, true)}
+                </div>
+              </div>
             </div>
           </li>
         );
@@ -146,22 +186,8 @@ class Boards extends React.Component {
       var listOfBoards = null;
     }
 
-    const displayAddNewBoard = location ? (
-      <AddNewBoard
-        addNewItem={this.createNewBoard.bind(this)}
-        newText={"Board"}
-      />
-    ) : null;
-    const displayAddNewBoardText = location ? (
-      <li className="board-item">
-        <div className="board-type new-board-display">
-          <span>Create New Board</span>
-        </div>
-        <div className="board-type-preview new-board">
-          <div className="display-preview">{displayAddNewBoard}</div>
-        </div>
-      </li>
-    ) : null;
+    //push second nav down towards current location selection
+    const pushDownNavStyle = { marginTop: `${activeTabDistance}em` };
 
     return (
       <div
@@ -169,13 +195,13 @@ class Boards extends React.Component {
         onMouseLeave={e => toggleTab2()}
         className={`boards-container`}
       >
-        {warningModal}
-        <div className="boards-content">
-          <ul className="boards-list">
-            {listOfBoards}
-            {displayAddNewBoardText}
-          </ul>
-        </div>
+        <ul style={pushDownNavStyle} className="boards-list">
+          {listOfBoards}
+        </ul>
+        <AddNewBoard
+          addNewItem={this.createNewBoard.bind(this)}
+          newText={"Board"}
+        />
       </div>
     );
   }
@@ -183,11 +209,12 @@ class Boards extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    tab2Open: state.navData.tab2Open
+    tab2Open: state.navData.tab2Open,
+    activeTabDistance: state.navData.activeTabDistance
   };
 }
 
 export default connect(
   mapStateToProps,
-  { toggleTab2 }
+  { toggleTab2, setBoard }
 )(Boards);

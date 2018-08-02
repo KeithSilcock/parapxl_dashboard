@@ -14,23 +14,11 @@ class EditDataDisplayed extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { clickedDisplay, currentDisplay } = nextProps;
-
-    if (Object.keys(clickedDisplay).length) {
-      var path = `/displays/${clickedDisplay.display_id}`;
-      db.ref(path).on("value", snapshot => {
-        const currentData = snapshot.val();
-
-        this.setState({
-          ...this.state,
-          currentData
-        });
-      });
-    } else if (currentDisplay) {
+    const { currentDisplay } = nextProps;
+    if (Object.keys(currentDisplay).length) {
       var path = `/displays/${currentDisplay.display_id}`;
       db.ref(path).on("value", snapshot => {
         const currentData = snapshot.val();
-
         this.setState({
           ...this.state,
           currentData
@@ -60,26 +48,24 @@ class EditDataDisplayed extends React.Component {
     db.ref(path).set({ ...currentData });
   }
 
-  removeDisplayFromBoard(e) {
-    e.preventDefault();
-    const { clickedDisplay } = this.props;
+  showAllDisplays() {
     const { location, board } = this.props.match.params;
-    const path = `/boards/${location}/${board}/available_displays/${
-      clickedDisplay.availableDisplay_id
-    }`;
-    db.ref(path).remove();
+    this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
   }
+
+  // removeDisplayFromBoard(e) {
+  //   e.preventDefault();
+  //   const { clickedDisplay } = this.props;
+  //   const { location, board } = this.props.match.params;
+  //   const path = `/boards/${location}/${board}/available_displays/${
+  //     clickedDisplay.availableDisplay_id
+  //   }`;
+  //   db.ref(path).remove();
+  // }
 
   render() {
     const { currentData } = this.state;
-    const {
-      updateCurrentDisplay,
-      currentDisplay,
-      closeAnimation,
-      boardsAreHidden,
-      clickedDisplay,
-      displaysAvailable
-    } = this.props;
+    const { currentDisplay } = this.props;
 
     if (currentData) {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
@@ -153,28 +139,53 @@ class EditDataDisplayed extends React.Component {
       var displayItems = null;
     }
 
-    if (Object.keys(clickedDisplay).length) {
-      var removeButtonClass =
-        clickedDisplay.availableDisplay_id !==
-          currentDisplay.availableDisplayKey &&
-        clickedDisplay.availableDisplay_id
-          ? "delete-button"
-          : "";
+    const update_data_form = currentData ? (
+      <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
+        <ul className="edit-data edit-list">{displayItems}</ul>
+      </form>
+    ) : null;
 
-      var selectedClassName =
-        clickedDisplay.availableDisplay_id !==
-          currentDisplay.availableDisplayKey &&
-        clickedDisplay.availableDisplay_id
-          ? "standard-button"
-          : "";
-    }
-
-    const buttonsDisplay = displaysAvailable ? (
-      <div className="edit-data button-box">
-        <button type="submit" className="edit-data form-button standard-button">
-          Update Data
-        </button>
-        <button
+    return (
+      <div className="edit-data container">
+        <div className="edit-data left-container">
+          <div>
+            <p className="edit-text">
+              Above is the current data for the{" "}
+              <span className="edit-data bold">
+                {capitalizeFirstLetters(this.props.match.params.location)}{" "}
+              </span>
+              location's{" "}
+              <span className="edit-data bold">
+                {capitalizeFirstLetters(this.props.match.params.board)}
+              </span>{" "}
+              display.
+            </p>{" "}
+            <p className="edit-text">
+              Update the data as you see fit and update it by pressing "<span className="edit-data bold">
+                Update Data
+              </span>" below. If you'd like to create a new board or view other
+              boards that have been made, press the "<span className="edit-data bold">
+                More Options
+              </span>" button.
+            </p>
+          </div>
+          <div className="edit-data button-box">
+            <button
+              type="button"
+              onClick={e => {
+                this.showAllDisplays();
+              }}
+              className="new standard-button"
+            >
+              More Options
+            </button>
+            <button
+              type="submit"
+              className="edit-data form-button standard-button"
+            >
+              Update Data
+            </button>
+            {/* <button
           type="button"
           className={`edit-data form-button update ${removeButtonClass}`}
           onClick={e => {
@@ -184,60 +195,11 @@ class EditDataDisplayed extends React.Component {
           }}
         >
           Remove
-        </button>
-      </div>
-    ) : null;
-
-    const update_data_form = currentData ? (
-      <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
-        <ul className="edit-data edit-list">{displayItems}</ul>
-        {buttonsDisplay}
-      </form>
-    ) : null;
-
-    return (
-      <div className="edit-data container">
-        <div className="edit-data data">
-          <p className="edit-text">
-            <span className="edit-data bold">Select any previous display</span>{" "}
-            from the left. Once you've found the display you'd like to show, you
-            can update the{" "}
-            {capitalizeFirstLetters(this.props.match.params.board)}'s display
-            data below and add it to the board by confirming "<span className="edit-data bold">
-              Change to Current Display
-            </span>" under that. If you'd like to create a new board, press the
-            "<span className="edit-data bold">+</span>" button to create a new
-            display from the templates
-          </p>
-          {update_data_form}
+        </button> */}
+          </div>
         </div>
 
-        <div className="buttons">
-          <button
-            className={`update ${selectedClassName}`}
-            onClick={e => {
-              if (selectedClassName) {
-                updateCurrentDisplay();
-
-                if (typeof boardsAreHidden !== "undefined")
-                  closeAnimation(boardsAreHidden);
-              }
-            }}
-          >
-            Change to Current Display
-          </button>
-          <button
-            onClick={e => {
-              const { location, board } = this.props.match.params;
-              this.props.history.push(
-                `/admin/${location}/${board}/create-new/display`
-              );
-            }}
-            className="new standard-button"
-          >
-            +
-          </button>
-        </div>
+        {update_data_form}
       </div>
     );
   }
