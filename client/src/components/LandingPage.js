@@ -1,12 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 import db from "../firebase";
+import { setLocations } from "../actions";
 import Locations from "./location_components/Locations";
 import Boards from "./board_components/Boards";
-import EditDisplays from "./display_components/EditDisplays";
+import EditDataDisplayed from "./display_components/EditDataDisplayed";
 
-import "../assets/landing_page.css";
 import NoLocationSelected from "./NoLocationSelected";
+import BoardDisplay from "./board_components/BoardDisplay";
 
 class DatabaseTest extends React.Component {
   constructor(props) {
@@ -14,15 +16,8 @@ class DatabaseTest extends React.Component {
 
     this.state = {
       locations: [],
-      currentLocation: "",
-      boards: [],
-      currentBoard: "",
-      displays: [],
       currentDisplay_id: "",
-      currentDisplayData: {},
-
-      boardsAreTransitioning: { up: false, down: false },
-      boardsAreHidden: false
+      currentDisplayData: {}
     };
   }
 
@@ -32,34 +27,11 @@ class DatabaseTest extends React.Component {
   // remove currentDisplayType from state
 
   componentWillMount() {
-    this.getAllLocations();
-  }
-
-  componentWillUnmount() {
-    this.setState({
-      locations: [],
-      boards: [],
-      displays: [],
-      currentDisplayData: {},
-      currentDisplay_id: ""
-    });
-  }
-
-  getAllLocations() {
     const path = "/location_list";
     db.ref(path).on("value", snapshot => {
       const listOfLocations = Object.keys(snapshot.val());
-
-      this.setState({
-        ...this.state,
-        locations: listOfLocations,
-        currentLocation: "",
-        boards: [],
-        currentBoard: "",
-        displays: [],
-        currentDisplay_id: "",
-        currentDisplayData: {}
-      });
+      this.props.setLocations(listOfLocations);
+      return;
     });
   }
 
@@ -81,101 +53,47 @@ class DatabaseTest extends React.Component {
     this.getDisplayData(templateType, display_id);
   }
 
-  timedAnimation(slidingDown, instant = false, pushTo = null) {
-    const { location } = this.props.match.params;
-    if (instant) {
-      this.setState({
-        ...this.state,
-        boardsAreHidden: !slidingDown,
-        boardsAreTransitioning: { up: false, down: false }
-      });
-      if (pushTo) {
-        this.props.history.push(pushTo);
-      }
-      return;
-    }
-
-    this.setState({
-      ...this.state,
-      boardsAreHidden: slidingDown,
-      boardsAreTransitioning: { up: !slidingDown, down: slidingDown }
-    });
-    setTimeout(() => {
-      if (pushTo) {
-        this.props.history.push(pushTo);
-      }
-      this.setState({
-        ...this.state,
-        boardsAreHidden: !slidingDown,
-        boardsAreTransitioning: { up: false, down: false }
-      });
-    }, 990);
-  }
-
   render() {
-    const {
-      locations,
-      currentLocation,
-      currentBoard,
-      currentDisplay_id,
-      currentDisplayData,
-
-      boardsAreHidden,
-      boardsAreTransitioning
-    } = this.state;
-
-    const currentData = {
-      currentLocation,
-      currentBoard,
-      currentDisplay_id,
-      currentDisplayData
-    };
+    const { locations } = this.state;
 
     return (
       <div className="landing-page-container">
         <Route
-          path={`/admin/home/:location?`}
-          render={props => (
-            <Locations
-              {...props}
-              locations={locations}
-              timedAnimation={this.timedAnimation.bind(this)}
-              boardsAreHidden={boardsAreHidden}
-              currentData={currentData}
-            />
-          )}
+          path={`/admin/home/:location?/:board?`}
+          component={Locations}
+          // render={props => <Locations {...props}/>}
         />
         <Route
           exact
           path={`/admin/home/`}
-          render={props => <NoLocationSelected {...props} />}
+          component={NoLocationSelected}
+          // render={props => <NoLocationSelected {...props} />}
         />
         <Route
           path={`/admin/home/:location/:board?`}
-          render={props => (
-            <Boards
-              {...props}
-              currentData={currentData}
-              timedAnimation={this.timedAnimation.bind(this)}
-              boardsAreHidden={boardsAreHidden}
-              boardsAreTransitioning={boardsAreTransitioning}
-            />
-          )}
+          component={Boards}
+          // render={props => <Boards {...props} />}
+        />
+        <Route
+          path={`/admin/home/:location/:board?`}
+          component={BoardDisplay}
+          // render={props => <BoardDisplay {...props} />}
         />
         <Route
           path={`/admin/home/:location/:board/:selected?`}
-          render={props => (
-            <EditDisplays
-              {...props}
-              timedAnimation={this.timedAnimation.bind(this)}
-              boardsAreHidden={boardsAreHidden}
-              boardsAreTransitioning={boardsAreTransitioning}
-            />
-          )}
+          component={EditDataDisplayed}
+          // render={props => <EditDisplays {...props} />}
         />
       </div>
     );
   }
 }
 
-export default DatabaseTest;
+function mSTP(state) {
+  return state;
+}
+
+export default connect(
+  mSTP,
+  { setLocations }
+)(DatabaseTest);

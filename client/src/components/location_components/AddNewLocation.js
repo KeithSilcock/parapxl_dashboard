@@ -1,62 +1,50 @@
 import React from "react";
+import { connect } from "react-redux";
+import { toggleModal } from "../../actions";
 import "../../assets/addNewLocation.css";
+import WarningModal from "../EasyModal";
+import EasyForm from "../EasyForm";
 
 class AddNewDBItem extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      openInput: false,
-      newDataName: ""
-    };
-  }
-
-  toggleInputOpen() {
-    const { openInput } = this.state;
-    this.setState({
-      openInput: !openInput,
-      newDataName: ""
-    });
-  }
-
-  handleInputChange(event) {
-    const { name, value } = event.currentTarget;
-
-    this.setState({
-      ...this.state,
-      [name]: value
-    });
-  }
   render() {
-    const { openInput, newDataName } = this.state;
-    const { addNewItem, newText } = this.props;
+    const { addNewItem, tab1Open, toggleModal } = this.props;
 
-    const openForm = openInput ? (
-      <form
-        onSubmit={e => {
-          addNewItem(e, newDataName);
-          this.toggleInputOpen();
-        }}
-      >
-        <input
-          autoFocus
-          type="text"
-          name="newDataName"
-          onChange={this.handleInputChange.bind(this)}
-          value={newDataName}
-        />
-      </form>
+    const buttonText = tab1Open ? (
+      <p className="add-new-item-text">Add New Location</p>
     ) : null;
 
+    const modalData = {
+      header: "Create a new location?",
+      content: (
+        <EasyForm
+          onSub={addNewItem}
+          placeholder="New Location Name"
+          autoFocus={true}
+        />
+      ),
+      confirm: addNewItem,
+      cancel: toggleModal
+    };
+
     return (
-      <li className="location-item" onClick={this.toggleInputOpen.bind(this)}>
-        <div className="add-new-item-container">
-          <button className="add-new-item-button">+</button>
-          <div className="add-new-item-form-container">{openForm}</div>
-        </div>
-      </li>
+      <div
+        onClick={e => toggleModal(modalData)}
+        className="add-new-item-container"
+      >
+        {buttonText}
+        <button className="add-new-item-button">+</button>
+      </div>
     );
   }
 }
 
-export default AddNewDBItem;
+function mapStateToProps(state) {
+  return {
+    tab1Open: state.navData.tab1Open
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { toggleModal }
+)(AddNewDBItem);

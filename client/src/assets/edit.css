@@ -1,5 +1,6 @@
 .edit-container {
-  height: 80vh;
+  height: 30%;
+  width: 99%;
 
   display: flex;
   flex-flow: column;
@@ -21,12 +22,12 @@
 }
 .edit-content {
   display: flex;
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
 
-  padding: 0 1%;
+  /* padding: 0 1%; */
   border-radius: 10px;
 
-  height: 95%;
   justify-content: space-between;
 }
 .edit-close {
@@ -102,7 +103,7 @@
 
 .edit-data.container {
   height: 100%;
-  width: 35%;
+  width: 100%;
   margin: 0;
   padding: 0 1%;
   border-radius: 10px;
@@ -112,24 +113,39 @@
   border: 1px solid rgb(207, 207, 207);
 
   display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+.edit-data.left-container {
+  width: 25%;
+  display: flex;
   flex-flow: column;
   justify-content: space-between;
 }
-.edit-data .edit-text {
+.edit-data .edit-text:first-of-type {
   text-align: center;
-  margin: 1% 0;
+}
+.edit-data .edit-text {
+  text-align: justify;
+  margin: 5% 0;
+}
+.edit-data.form {
+  display: flex;
+  flex-flow: column;
+  width: 70%;
 }
 .edit-data.edit-list {
+  width: 100%;
   list-style: none;
   padding: 0;
   display: flex;
-  flex-flow: column;
-  align-items: center;
+  flex-flow: row wrap;
   margin: 0;
   margin-bottom: 1%;
 }
 .edit-data.item {
-  width: 90%;
+  width: 50%;
+  height: 50%;
   display: flex;
   flex-flow: column;
 }
@@ -146,11 +162,6 @@ input.edit-data.interval {
   /* width: 8%; */
   /* height: 2em; */
   font-size: 1.2em;
-}
-.edit-data.form {
-  display: flex;
-  flex-flow: column;
-  margin-bottom: 7.5%;
 }
 .edit-data .buttons {
   display: flex;

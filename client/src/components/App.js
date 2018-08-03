@@ -8,6 +8,7 @@ import NewDisplayModal from "./modal_components/NewDisplayModal";
 import TemplatePage from "./template_components/TemplatePage";
 import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
 import TempAuth from "./TempAuth";
+import WarningModal from "./EasyModal";
 
 //TODO Finish adding animation for "EditDisplays"
 
@@ -42,12 +43,14 @@ class App extends Component {
           href="https://fonts.googleapis.com/css?family=Karla"
           rel="stylesheet"
         />
+        <WarningModal />
         <Route exact path="/" render={props => <TempAuth {...props} />} />
+
         <Route
           path="/admin/home/:location/:board/add-new/:new_type"
           render={props => <NewDisplayModal {...props} />}
         />
-        <Route path="/admin/home/:location?/:board?" component={Nav} />
+        {/* <Route path="/admin/home/:location?/:board?" component={Nav} /> */}
         <Route
           path="/admin/home/:location?/:board?"
           render={props => <LandingPage {...props} />}
