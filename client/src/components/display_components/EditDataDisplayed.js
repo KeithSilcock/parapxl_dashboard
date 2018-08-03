@@ -1,7 +1,11 @@
 import React from "react";
 import db from "../../firebase";
 import { capitalizeFirstLetters } from "../../helpers";
+import { connect } from "react-redux";
+import {} from "../../actions";
 import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
+
+import "../../assets/edit.css";
 
 class EditDataDisplayed extends React.Component {
   constructor(props) {
@@ -14,9 +18,35 @@ class EditDataDisplayed extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { currentData } = this.state;
     const { currentDisplay } = nextProps;
-    if (Object.keys(currentDisplay).length) {
-      var path = `/displays/${currentDisplay.display_id}`;
+    const { location, board } = nextProps.match.params;
+    const prevBoard = this.props.boardLocation;
+
+    if (prevBoard !== board && Object.keys(currentDisplay).length) {
+      this.getData(currentDisplay);
+    }
+
+    if (
+      typeof currentDisplay === "object" &&
+      Object.keys(currentDisplay).length &&
+      !Object.keys(currentData).length
+    ) {
+      this.setState(
+        {
+          ...this.state,
+          currentData: { active: true }
+        },
+        () => {
+          this.getData(currentDisplay);
+        }
+      );
+    }
+  }
+
+  getData(currentDisplay) {
+    if (currentDisplay !== "no data yet") {
+      var path = `/displays/${currentDisplay.current_display.display_id}`;
       db.ref(path).on("value", snapshot => {
         const currentData = snapshot.val();
         this.setState({
@@ -49,8 +79,11 @@ class EditDataDisplayed extends React.Component {
   }
 
   showAllDisplays() {
-    const { location, board } = this.props.match.params;
-    this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
+    const { currentLocation, boardLocation } = this.props;
+
+    this.props.history.push(
+      `/admin/home/${currentLocation}/${boardLocation}/add-new/display`
+    );
   }
 
   // removeDisplayFromBoard(e) {
@@ -65,9 +98,9 @@ class EditDataDisplayed extends React.Component {
 
   render() {
     const { currentData } = this.state;
-    const { currentDisplay } = this.props;
+    const { currentDisplay, currentLocation, boardLocation } = this.props;
 
-    if (currentData) {
+    if (currentData && currentDisplay !== "no data yet") {
       var displayItems = Object.keys(currentData).map((dataKey, index) => {
         const displayData = currentData[dataKey];
 
@@ -146,46 +179,48 @@ class EditDataDisplayed extends React.Component {
     ) : null;
 
     return (
-      <div className="edit-data container">
-        <div className="edit-data left-container">
-          <div>
-            <p className="edit-text">
-              Above is the current data for the{" "}
-              <span className="edit-data bold">
-                {capitalizeFirstLetters(this.props.match.params.location)}{" "}
-              </span>
-              location's{" "}
-              <span className="edit-data bold">
-                {capitalizeFirstLetters(this.props.match.params.board)}
-              </span>{" "}
-              display.
-            </p>{" "}
-            <p className="edit-text">
-              Update the data as you see fit and update it by pressing "<span className="edit-data bold">
-                Update Data
-              </span>" below. If you'd like to create a new board or view other
-              boards that have been made, press the "<span className="edit-data bold">
-                More Options
-              </span>" button.
-            </p>
-          </div>
-          <div className="edit-data button-box">
-            <button
-              type="button"
-              onClick={e => {
-                this.showAllDisplays();
-              }}
-              className="new standard-button"
-            >
-              More Options
-            </button>
-            <button
-              type="submit"
-              className="edit-data form-button standard-button"
-            >
-              Update Data
-            </button>
-            {/* <button
+      <div className={`edit-container `}>
+        <div className="edit-content">
+          <div className="edit-data container">
+            <div className="edit-data left-container">
+              <div>
+                <p className="edit-text">
+                  Above is the current data for the{" "}
+                  <span className="edit-data bold">
+                    {capitalizeFirstLetters(currentLocation)}{" "}
+                  </span>
+                  location's{" "}
+                  <span className="edit-data bold">
+                    {capitalizeFirstLetters(boardLocation)}
+                  </span>{" "}
+                  display.
+                </p>{" "}
+                <p className="edit-text">
+                  Update the data as you see fit and save it by pressing "<span className="edit-data bold">
+                    Update Data
+                  </span>" below. If you'd like to create a new board or view
+                  other boards that have been made, press the "<span className="edit-data bold">
+                    More Options
+                  </span>" button.
+                </p>
+              </div>
+              <div className="edit-data button-box">
+                <button
+                  type="button"
+                  onClick={e => {
+                    this.showAllDisplays();
+                  }}
+                  className="new standard-button"
+                >
+                  More Options
+                </button>
+                <button
+                  type="submit"
+                  className="edit-data form-button standard-button"
+                >
+                  Update Data
+                </button>
+                {/* <button
           type="button"
           className={`edit-data form-button update ${removeButtonClass}`}
           onClick={e => {
@@ -196,13 +231,28 @@ class EditDataDisplayed extends React.Component {
         >
           Remove
         </button> */}
+              </div>
+              <div className="spacer" />
+            </div>
+
+            {update_data_form}
           </div>
         </div>
-
-        {update_data_form}
       </div>
     );
   }
 }
 
-export default EditDataDisplayed;
+function mapStateToProps(state) {
+  return {
+    currentLocation: state.data.currentLocation,
+    currentBoards: state.data.boards,
+    currentDisplay: state.data.display,
+    boardLocation: state.data.currentBoardLocation
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  {}
+)(EditDataDisplayed);

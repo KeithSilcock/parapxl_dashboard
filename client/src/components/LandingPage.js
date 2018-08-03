@@ -1,9 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 import db from "../firebase";
+import { setLocations } from "../actions";
 import Locations from "./location_components/Locations";
 import Boards from "./board_components/Boards";
-import EditDisplays from "./display_components/EditDisplays";
+import EditDataDisplayed from "./display_components/EditDataDisplayed";
 
 import NoLocationSelected from "./NoLocationSelected";
 import BoardDisplay from "./board_components/BoardDisplay";
@@ -14,10 +16,6 @@ class DatabaseTest extends React.Component {
 
     this.state = {
       locations: [],
-      currentLocation: "",
-      boards: [],
-      currentBoard: "",
-      displays: [],
       currentDisplay_id: "",
       currentDisplayData: {}
     };
@@ -29,34 +27,11 @@ class DatabaseTest extends React.Component {
   // remove currentDisplayType from state
 
   componentWillMount() {
-    this.getAllLocations();
-  }
-
-  componentWillUnmount() {
-    this.setState({
-      locations: [],
-      boards: [],
-      displays: [],
-      currentDisplayData: {},
-      currentDisplay_id: ""
-    });
-  }
-
-  getAllLocations() {
     const path = "/location_list";
     db.ref(path).on("value", snapshot => {
       const listOfLocations = Object.keys(snapshot.val());
-
-      this.setState({
-        ...this.state,
-        locations: listOfLocations,
-        currentLocation: "",
-        boards: [],
-        currentBoard: "",
-        displays: [],
-        currentDisplay_id: "",
-        currentDisplayData: {}
-      });
+      this.props.setLocations(listOfLocations);
+      return;
     });
   }
 
@@ -79,55 +54,46 @@ class DatabaseTest extends React.Component {
   }
 
   render() {
-    const {
-      locations,
-      currentLocation,
-      currentBoard,
-      currentDisplay_id,
-      currentDisplayData
-    } = this.state;
-
-    const currentData = {
-      currentLocation,
-      currentBoard,
-      currentDisplay_id,
-      currentDisplayData
-    };
+    const { locations } = this.state;
 
     return (
       <div className="landing-page-container">
         <Route
           path={`/admin/home/:location?/:board?`}
-          render={props => (
-            <Locations
-              {...props}
-              locations={locations}
-              currentData={currentData}
-            />
-          )}
+          component={Locations}
+          // render={props => <Locations {...props}/>}
         />
         <Route
           exact
           path={`/admin/home/`}
-          render={props => <NoLocationSelected {...props} />}
+          component={NoLocationSelected}
+          // render={props => <NoLocationSelected {...props} />}
         />
         <Route
           path={`/admin/home/:location/:board?`}
-          render={props => <Boards {...props} currentData={currentData} />}
+          component={Boards}
+          // render={props => <Boards {...props} />}
         />
         <Route
           path={`/admin/home/:location/:board?`}
-          render={props => (
-            <BoardDisplay {...props} currentData={currentData} />
-          )}
+          component={BoardDisplay}
+          // render={props => <BoardDisplay {...props} />}
         />
         <Route
           path={`/admin/home/:location/:board/:selected?`}
-          render={props => <EditDisplays {...props} />}
+          component={EditDataDisplayed}
+          // render={props => <EditDisplays {...props} />}
         />
       </div>
     );
   }
 }
 
-export default DatabaseTest;
+function mSTP(state) {
+  return state;
+}
+
+export default connect(
+  mSTP,
+  { setLocations }
+)(DatabaseTest);
