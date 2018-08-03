@@ -1,7 +1,7 @@
 import React from "react";
 import db from "../../firebase";
 import { connect } from "react-redux";
-import { setBoard } from "../../actions";
+import { setBoards } from "../../actions";
 import TextBoard from "../DisplayComponents/TextBoard";
 import EscapeRoom from "../DisplayComponents/EscapeRoom";
 import EscapeRoomList from "../DisplayComponents/EscapeRoomList";
@@ -19,32 +19,32 @@ class BoardDisplay extends React.Component {
     };
   }
   componentWillMount() {
-    const { location, board } = this.props.match.params;
+    const { currentLocation, boardLocation } = this.props;
 
-    if (board) {
-      var path1 = `/boards/${location}/${board}`;
-      db.ref(path1).on("value", snapshot => {
-        const displayData = snapshot.val();
-
-        if (displayData && displayData !== "no data yet") {
-          var path2 = `/displays/${displayData.current_display.display_id}`;
-          db.ref(path2).on("value", snapshot => {
-            const activeDisplay = snapshot.val();
-
-            this.setState({
-              ...this.state,
-              displayData,
-              activeDisplay
-            });
-          });
-        }
-      });
+    if (boardLocation) {
+      // var path1 = `/boards/${currentLocation}/${boardLocation}`;
+      // db.ref(path1).on("value", snapshot => {
+      //   const displayData = snapshot.val();
+      //   if (displayData && displayData !== "no data yet") {
+      //     var path2 = `/displays/${displayData.current_display.display_id}`;
+      //     db.ref(path2).on("value", snapshot => {
+      //       const activeDisplay = snapshot.val();
+      //       this.setState({
+      //         ...this.state,
+      //         displayData,
+      //         activeDisplay
+      //       });
+      //     });
+      //   }
+      // });
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { location, board } = nextProps.match.params;
-    const prevBoard = this.props.match.params.board;
+    const { currentDisplay } = nextProps;
+    const prevBoard = this.props.boardLocation;
+    const { activeDisplay } = this.state;
 
     if (!board) {
       this.setState({
@@ -55,37 +55,58 @@ class BoardDisplay extends React.Component {
       return;
     }
 
-    if (prevBoard !== board) {
-      var path1 = `/boards/${location}/${board}`;
-      db.ref(path1).on("value", snapshot => {
-        const displayData = snapshot.val();
-
-        if (displayData && displayData !== "no data yet") {
-          var path2 = `/displays/${displayData.current_display.display_id}`;
-          db.ref(path2).on("value", snapshot => {
-            const activeDisplay = snapshot.val();
-
-            this.setState({
-              ...this.state,
-              displayData,
-              activeDisplay
-            });
-          });
+    if (prevBoard !== board && Object.keys(currentDisplay).length) {
+      this.getDisplayData(currentDisplay);
+    }
+    if (
+      !Object.keys(activeDisplay).length &&
+      Object.keys(currentDisplay).length
+    ) {
+      this.setState(
+        {
+          ...this.state,
+          activeDisplay: { alive: true }
+        },
+        () => {
+          this.getDisplayData(currentDisplay);
         }
+      );
+    }
+  }
+
+  getDisplayData(display) {
+    if (display !== "no data yet") {
+      var path = `/displays/${display.current_display.display_id}`;
+      db.ref(path).on("value", snapshot => {
+        const activeDisplay = snapshot.val();
+
+        this.setState({
+          ...this.state,
+          displayData: display,
+          activeDisplay
+        });
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        activeDisplay: display
       });
     }
   }
 
   showAllDisplays() {
-    const { location, board } = this.props.match.params;
-    this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
+    const { currentLocation, boardLocation } = this.props;
+
+    this.props.history.push(
+      `/admin/home/${currentLocation}/${boardLocation}/add-new/display`
+    );
   }
 
   render() {
     const { activeDisplay } = this.state;
 
     var toRender = null;
-    if (activeDisplay) {
+    if (activeDisplay && activeDisplay !== "no data yet") {
       switch (activeDisplay.type) {
         case "escape-room":
           toRender = <EscapeRoom displayData={activeDisplay} />;
@@ -128,11 +149,14 @@ class BoardDisplay extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    board: state.data.board
+    currentLocation: state.data.currentLocation,
+    currentBoards: state.data.boards,
+    currentDisplay: state.data.display,
+    boardLocation: state.data.currentBoardLocation
   };
 }
 
 export default connect(
   mapStateToProps,
-  { setBoard }
+  { setBoards }
 )(BoardDisplay);

@@ -17,16 +17,34 @@ export function setTabDistanceDownNav(distance) {
   };
 }
 
-export function setLocation(location) {
+export function setCurrentLocation(location) {
   return {
-    type: types.SET_LOCATION,
+    type: types.SET_CURRENT_LOCATION,
     payload: location
   };
 }
-export function setBoard(board) {
+export function setLocations(locations) {
+  return {
+    type: types.SET_LOCATIONS,
+    payload: locations
+  };
+}
+export function setBoards(board) {
   return {
     type: types.SET_BOARD,
     payload: board
+  };
+}
+export function setBoardLocation(loc) {
+  return {
+    type: types.SET_BOARD_LOCATION,
+    payload: loc
+  };
+}
+export function setDisplay(display) {
+  return {
+    type: types.SET_DISPLAY,
+    payload: display
   };
 }
 export function toggleModal(modalData) {

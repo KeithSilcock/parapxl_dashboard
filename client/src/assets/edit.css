@@ -120,7 +120,7 @@
   width: 25%;
   display: flex;
   flex-flow: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 .edit-data .edit-text:first-of-type {
   text-align: center;

@@ -3,11 +3,14 @@ import db from "../../firebase";
 import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
 import BoardDisplay from "./BoardDisplay";
-import { toggleTab2, setBoard } from "../../actions/";
+import {
+  toggleTab2,
+  setBoards,
+  setDisplay,
+  setBoardLocation
+} from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
-import WarningModal from "../EasyModal";
 
-// import "../../assets/animations/openEditBoard.css";
 import "../../assets/boards.css";
 
 class Boards extends React.Component {
@@ -15,74 +18,60 @@ class Boards extends React.Component {
     super(props);
 
     this.state = {
-      currentLocation: "",
-      clickedBoard: "",
-      availableBoards: {},
-      currentBoard: {},
       displayWarningModal: false
     };
   }
 
   componentWillMount() {
-    const { location, board } = this.props.match.params;
-    const { timedAnimation, boardsAreHidden } = this.props;
+    const { currentLocation } = this.props;
+    this.getBoardData(currentLocation);
+  }
 
-    if (board) {
-      const path = `/boards/${location}/${board}/current_display`;
-      db.ref(path).on("value", snapshot => {
-        const currentDisplay = snapshot.val();
-        this.setState({
-          ...this.state,
-          currentLocation: location,
-          currentBoard: currentDisplay
-        });
-      });
-    } else {
-      const path = `/boards/${location}`;
-      db.ref(path).on("value", snapshot => {
-        const listOfBoards = snapshot.val();
+  componentWillReceiveProps(newProps) {
+    const { currentLocation, boardLocation } = this.props;
+    const { location: newLocation, board: newBoard } = newProps.match.params;
 
-        if (listOfBoards !== "no data yet") {
-          const firstBoard = listOfBoards[Object.keys(listOfBoards)[0]];
-          this.boardSelected(firstBoard, Object.keys(listOfBoards)[0]);
-        }
+    // if changed location, switch location
+    if (currentLocation && currentLocation !== newLocation) {
+      this.getBoardData(newLocation);
+    }
 
-        // this.setState({
-        //   ...this.state,
-        //   currentLocation: location,
-        //   currentBoard: firstBoard.current_display,
-        //   clickedBoard: Object.keys(listOfBoards)[0]
-        // });
-      });
+    //if change in board
+    if (!newBoard || boardLocation !== newBoard) {
+      this.getBoardData(newLocation, newBoard);
     }
   }
-  componentWillReceiveProps(newProps) {
-    const { currentLocation, availableBoards } = this.state;
-    const { location, board } = newProps.match.params;
 
+  getBoardData(location, board) {
+    if (!location) {
+      return;
+    }
     if (!board) {
       const path = `/boards/${location}`;
       db.ref(path).on("value", snapshot => {
         const listOfBoards = snapshot.val();
+        const { currentDisplay } = this.props;
 
-        const firstBoard = listOfBoards[Object.keys(listOfBoards)[0]];
-        if (firstBoard && listOfBoards !== "no data yet")
-          this.boardSelected(firstBoard, Object.keys(listOfBoards)[0]);
-      });
-    }
-
-    //if changed location, switch location
-    if (!currentLocation || currentLocation !== location) {
-      const path = `/boards/${location}`;
-      db.ref(path).on("value", snapshot => {
-        const listOfBoards = snapshot.val();
         if (listOfBoards !== "no data yet") {
-          this.setState({
-            ...this.state,
-            currentLocation: location,
-            availableBoards: listOfBoards,
-            clickedBoard: ""
-          });
+          const firstDisplay = Object.keys(listOfBoards)[0];
+          var firstBoard = listOfBoards[firstDisplay];
+          this.props.setBoards(listOfBoards);
+
+          if (!Object.keys(currentDisplay).length) {
+            this.props.setDisplay(firstBoard);
+            this.props.setBoardLocation(firstDisplay);
+            this.props.history.push(`/admin/home/${location}/${firstDisplay}`);
+          }
+        }
+      });
+    } else {
+      const path = `/boards/${location}/${board}`;
+      db.ref(path).on("value", snapshot => {
+        const thisDisplay = snapshot.val();
+
+        if (thisDisplay !== "no data yet") {
+          this.props.setDisplay(thisDisplay);
+          this.props.history.push(`/admin/home/${location}/${board}`);
         }
       });
     }
@@ -90,35 +79,24 @@ class Boards extends React.Component {
 
   createNewBoard(e, newBoardName) {
     e.preventDefault();
-    const { location } = this.props.match.params;
-    const { boardsAreHidden, timedAnimation } = this.props;
+    const { currentLocation } = this.props;
 
-    db.ref(`boards/${location}/${newBoardName}`).set(
+    this.props.setDisplay("no data yet");
+    this.props.setBoardLocation(newBoardName);
+    this.props.history.push(`/admin/home/${currentLocation}/${newBoardName}`);
+
+    db.ref(`boards/${currentLocation}/${newBoardName}`).set(
       "no data yet",
-      snapshot => {
-        // timedAnimation(
-        //   boardsAreHidden,
-        //   true,
-        //   `/admin/home/${location}/${newBoardName}`
-        // );
-        // this.props.history.push(`/admin/home/${location}/${newBoardName}`);
-      }
+      snapshot => {}
     );
   }
 
   boardSelected(clickedBoard, boardLocation) {
-    const { location } = this.props.match.params;
+    const { currentLocation } = this.props;
 
-    this.setState(
-      {
-        ...this.state,
-        clickedBoard: boardLocation
-      },
-      () => {
-        this.props.setBoard(clickedBoard);
-        this.props.history.push(`/admin/home/${location}/${boardLocation}`);
-      }
-    );
+    this.props.setDisplay(clickedBoard);
+    this.props.setBoardLocation(boardLocation);
+    this.props.history.push(`/admin/home/${currentLocation}/${boardLocation}`);
   }
 
   openNewWindow(board_id) {
@@ -130,29 +108,35 @@ class Boards extends React.Component {
   }
 
   deleteBoard(e) {
-    const { location } = this.props.match.params;
-    const { clickedBoard } = this.state;
-    const path = `/boards/${location}/${clickedBoard}`;
+    const { currentLocation } = this.props;
+
+    const { boardLocation } = this.props;
+    const path = `/boards/${currentLocation}/${boardLocation}`;
     db.ref(path).remove(() => {
-      this.props.history.push(`/admin/home/${location}`);
+      this.props.history.push(`/admin/home/${currentLocation}`);
       this.toggleModal();
     });
   }
 
   render() {
-    const { availableBoards, clickedBoard, displayWarningModal } = this.state;
-    const { toggleTab2, tab2Open, activeTabDistance } = this.props;
-    const { board } = this.props.match.params;
+    const {
+      toggleTab2,
+      tab2Open,
+      activeTabDistance,
+      currentBoards,
+      boardLocation
+    } = this.props;
 
-    if (availableBoards) {
-      var listOfBoards = Object.keys(availableBoards).map((item, index) => {
-        const selectedClassName = clickedBoard === item ? "selectedBoard" : "";
+    if (currentBoards) {
+      var listOfBoards = Object.keys(currentBoards).map((item, index) => {
+        const selectedClassName = boardLocation === item ? "selectedBoard" : "";
+
         var boardAbbrev =
-          board !== item && !tab2Open
+          boardLocation !== item && !tab2Open
             ? getFirstLetters(capitalizeFirstLetters(item, true))
             : item;
 
-        if (board) {
+        if (boardLocation) {
           var selectedContainerName = selectedClassName
             ? "selected-container"
             : "";
@@ -170,7 +154,7 @@ class Boards extends React.Component {
             style={itemStyle}
             key={index}
             className={`${selectedClassName} board-item`}
-            onClick={e => this.boardSelected(availableBoards[item], item)}
+            onClick={e => this.boardSelected(currentBoards[item], item)}
           >
             <div className={`board-item-container`}>
               <div className="board grow-container">
@@ -210,11 +194,15 @@ class Boards extends React.Component {
 function mapStateToProps(state) {
   return {
     tab2Open: state.navData.tab2Open,
-    activeTabDistance: state.navData.activeTabDistance
+    activeTabDistance: state.navData.activeTabDistance,
+    currentLocation: state.data.currentLocation,
+    currentBoards: state.data.boards,
+    currentDisplay: state.data.display,
+    boardLocation: state.data.currentBoardLocation
   };
 }
 
 export default connect(
   mapStateToProps,
-  { toggleTab2, setBoard }
+  { toggleTab2, setBoards, setDisplay, setBoardLocation }
 )(Boards);
