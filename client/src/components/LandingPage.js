@@ -75,7 +75,7 @@ class DatabaseTest extends React.Component {
           // render={props => <Boards {...props} />}
         />
         <Route
-          path={`/admin/home/:location/:board?`}
+          path={`/admin/home/:location/:board`}
           component={BoardDisplay}
           // render={props => <BoardDisplay {...props} />}
         />

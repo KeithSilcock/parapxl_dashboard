@@ -34,6 +34,7 @@ class Boards extends React.Component {
     // if changed location, switch location
     if (currentLocation && currentLocation !== newLocation) {
       this.getBoardData(newLocation);
+      return;
     }
 
     //if change in board
