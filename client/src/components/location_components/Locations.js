@@ -7,7 +7,8 @@ import {
   setTabDistanceDownNav,
   setCurrentLocation,
   setBoardLocation,
-  setBoards
+  setBoards,
+  setDisplay
 } from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 import Logo from "../Logo";
@@ -84,6 +85,7 @@ class Locations extends React.Component {
     if (newLocationName !== "") {
       db.ref(`boards/${newLocationName}`).set("no data yet");
       db.ref(`location_list/${newLocationName}`).set(true, () => {
+        this.props.setDisplay({});
         this.props.setBoardLocation("");
         this.props.setBoards([]);
         this.moveToBoardsRoute(newLocationName);
@@ -92,6 +94,7 @@ class Locations extends React.Component {
   }
 
   moveToBoardsRoute(location) {
+    this.props.setDisplay({});
     this.props.setCurrentLocation(location);
     this.props.history.push(`/admin/home/${location}`);
   }
@@ -183,6 +186,7 @@ export default connect(
     setTabDistanceDownNav,
     setCurrentLocation,
     setBoardLocation,
-    setBoards
+    setBoards,
+    setDisplay
   }
 )(Locations);
