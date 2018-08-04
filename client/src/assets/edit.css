@@ -144,8 +144,9 @@
   margin-bottom: 1%;
 }
 .edit-data.item {
-  width: 50%;
-  height: 50%;
+  width: calc(50% - 20px);
+  /* height: 50%; */
+  margin-left: 20px;
   display: flex;
   flex-flow: column;
 }
