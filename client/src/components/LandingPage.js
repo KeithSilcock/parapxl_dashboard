@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
 import db from "../firebase";
-import { setLocations } from "../actions";
+import { getData } from "../actions";
 import Locations from "./location_components/Locations";
 import Boards from "./board_components/Boards";
 import EditDataDisplayed from "./display_components/EditDataDisplayed";
@@ -27,12 +27,14 @@ class DatabaseTest extends React.Component {
   // remove currentDisplayType from state
 
   componentWillMount() {
-    const path = "/location_list";
-    db.ref(path).on("value", snapshot => {
-      const listOfLocations = Object.keys(snapshot.val());
-      this.props.setLocations(listOfLocations);
-      return;
-    });
+    // const path = "/location_list";
+    // db.ref(path).on("value", snapshot => {
+    //   const listOfLocations = Object.keys(snapshot.val());
+    //   this.props.setLocations(listOfLocations);
+    //   return;
+    // });
+
+    this.props.getData();
   }
 
   getDisplayData(displayType, display_id) {
@@ -74,7 +76,7 @@ class DatabaseTest extends React.Component {
           component={Boards}
           // render={props => <Boards {...props} />}
         />
-        <Route
+        {/* <Route
           path={`/admin/home/:location/:board`}
           component={BoardDisplay}
           // render={props => <BoardDisplay {...props} />}
@@ -83,7 +85,7 @@ class DatabaseTest extends React.Component {
           path={`/admin/home/:location/:board/:selected?`}
           component={EditDataDisplayed}
           // render={props => <EditDisplays {...props} />}
-        />
+        /> */}
       </div>
     );
   }
@@ -95,5 +97,5 @@ function mSTP(state) {
 
 export default connect(
   mSTP,
-  { setLocations }
+  { getData }
 )(DatabaseTest);

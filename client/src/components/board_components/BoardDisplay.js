@@ -1,7 +1,7 @@
 import React from "react";
 import db from "../../firebase";
 import { connect } from "react-redux";
-import { setBoards } from "../../actions";
+import {} from "../../actions";
 import TextBoard from "../DisplayComponents/TextBoard";
 import EscapeRoom from "../DisplayComponents/EscapeRoom";
 import EscapeRoomList from "../DisplayComponents/EscapeRoomList";
@@ -158,5 +158,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { setBoards }
+  {}
 )(BoardDisplay);

@@ -1,4 +1,28 @@
 import types from "./types";
+import db from "../firebase";
+
+export const getData = () => async dispatch => {
+  const path = "/boards";
+  await db.ref(path).on("value", snapshot => {
+    const data = snapshot.val();
+    dispatch({
+      type: types.GET_DATA,
+      payload: data
+    });
+  });
+};
+export function setBoardForLocation(location) {
+  return {
+    type: types.SET_BOARDS_FOR_LOCATION,
+    payload: location
+  };
+}
+export function setDisplayForBoard(board) {
+  return {
+    type: types.SET_DISPLAY,
+    payload: board
+  };
+}
 
 export function toggleTab1() {
   return {
@@ -17,36 +41,26 @@ export function setTabDistanceDownNav(distance) {
   };
 }
 
-export function setCurrentLocation(location) {
-  return {
-    type: types.SET_CURRENT_LOCATION,
-    payload: location
-  };
-}
-export function setLocations(locations) {
-  return {
-    type: types.SET_LOCATIONS,
-    payload: locations
-  };
-}
-export function setBoards(board) {
-  return {
-    type: types.SET_BOARD,
-    payload: board
-  };
-}
-export function setBoardLocation(loc) {
-  return {
-    type: types.SET_BOARD_LOCATION,
-    payload: loc
-  };
-}
-export function setDisplay(display) {
-  return {
-    type: types.SET_DISPLAY,
-    payload: display
-  };
-}
+// export function setCurrentLocation(location) {
+//   return {
+//     type: types.SET_CURRENT_LOCATION,
+//     payload: location
+//   };
+// }
+// export function setLocations(locations) {
+//   return {
+//     type: types.SET_LOCATIONS,
+//     payload: locations
+//   };
+// }
+
+// export function setBoardLocation(loc) {
+//   return {
+//     type: types.SET_BOARD_LOCATION,
+//     payload: loc
+//   };
+// }
+
 export function toggleModal(modalData) {
   return {
     type: types.TOGGLE_MODAL,
