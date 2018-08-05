@@ -178,49 +178,50 @@ class EditDataDisplayed extends React.Component {
       </form>
     ) : null;
 
-    return (
-      <div className={`edit-container `}>
-        <div className="edit-content">
-          <div className="edit-data container">
-            <div className="edit-data left-container">
-              <div>
-                <p className="edit-text">
-                  Above is the current data for the{" "}
-                  <span className="edit-data bold">
-                    {capitalizeFirstLetters(currentLocation)}{" "}
-                  </span>
-                  location's{" "}
-                  <span className="edit-data bold">
-                    {capitalizeFirstLetters(boardLocation)}
-                  </span>{" "}
-                  display.
-                </p>{" "}
-                <p className="edit-text">
-                  Update the data as you see fit and save it by pressing "<span className="edit-data bold">
-                    Update Data
-                  </span>" below. If you'd like to create a new board or view
-                  other boards that have been made, press the "<span className="edit-data bold">
+    if (currentLocation && boardLocation) {
+      return (
+        <div className={`edit-container `}>
+          <div className="edit-content">
+            <div className="edit-data container">
+              <div className="edit-data left-container">
+                <div>
+                  <p className="edit-text">
+                    Above is the current data for the{" "}
+                    <span className="edit-data bold">
+                      {capitalizeFirstLetters(currentLocation)}{" "}
+                    </span>
+                    location's{" "}
+                    <span className="edit-data bold">
+                      {capitalizeFirstLetters(boardLocation)}
+                    </span>{" "}
+                    display.
+                  </p>{" "}
+                  <p className="edit-text">
+                    Update the data as you see fit and save it by pressing "<span className="edit-data bold">
+                      Update Data
+                    </span>" below. If you'd like to create a new board or view
+                    other boards that have been made, press the "<span className="edit-data bold">
+                      More Options
+                    </span>" button.
+                  </p>
+                </div>
+                <div className="edit-data button-box">
+                  <button
+                    type="button"
+                    onClick={e => {
+                      this.showAllDisplays();
+                    }}
+                    className="new standard-button"
+                  >
                     More Options
-                  </span>" button.
-                </p>
-              </div>
-              <div className="edit-data button-box">
-                <button
-                  type="button"
-                  onClick={e => {
-                    this.showAllDisplays();
-                  }}
-                  className="new standard-button"
-                >
-                  More Options
-                </button>
-                <button
-                  type="submit"
-                  className="edit-data form-button standard-button"
-                >
-                  Update Data
-                </button>
-                {/* <button
+                  </button>
+                  <button
+                    type="submit"
+                    className="edit-data form-button standard-button"
+                  >
+                    Update Data
+                  </button>
+                  {/* <button
           type="button"
           className={`edit-data form-button update ${removeButtonClass}`}
           onClick={e => {
@@ -231,24 +232,24 @@ class EditDataDisplayed extends React.Component {
         >
           Remove
         </button> */}
+                </div>
+                <div className="spacer" />
               </div>
-              <div className="spacer" />
-            </div>
 
-            {update_data_form}
+              {update_data_form}
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   }
 }
 
 function mapStateToProps(state) {
   return {
-    currentLocation: state.data.currentLocation,
-    currentBoards: state.data.boards,
-    currentDisplay: state.data.display,
-    boardLocation: state.data.currentBoardLocation
+    dbData: state.data.dbData
   };
 }
 

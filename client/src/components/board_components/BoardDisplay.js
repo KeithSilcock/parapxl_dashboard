@@ -1,7 +1,7 @@
 import React from "react";
 import db from "../../firebase";
 import { connect } from "react-redux";
-import { setBoards } from "../../actions";
+import {} from "../../actions";
 import TextBoard from "../DisplayComponents/TextBoard";
 import EscapeRoom from "../DisplayComponents/EscapeRoom";
 import EscapeRoomList from "../DisplayComponents/EscapeRoomList";
@@ -42,9 +42,10 @@ class BoardDisplay extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { location, board } = nextProps.match.params;
-    const { currentDisplay } = nextProps;
+    const { dbData } = nextProps;
     const prevBoard = this.props.boardLocation;
     const { activeDisplay } = this.state;
+    const currentDisplay = dbData[location][board];
 
     if (!board) {
       this.setState({
@@ -54,10 +55,11 @@ class BoardDisplay extends React.Component {
       });
       return;
     }
-
-    if (prevBoard !== board && Object.keys(currentDisplay).length) {
+    debugger;
+    if (prevBoard !== board) {
       this.getDisplayData(currentDisplay);
     }
+
     if (
       !Object.keys(activeDisplay).length &&
       Object.keys(currentDisplay).length
@@ -75,6 +77,7 @@ class BoardDisplay extends React.Component {
   }
 
   getDisplayData(display) {
+    debugger;
     if (display !== "no data yet") {
       var path = `/displays/${display.current_display.display_id}`;
       db.ref(path).on("value", snapshot => {
@@ -106,7 +109,7 @@ class BoardDisplay extends React.Component {
     const { activeDisplay } = this.state;
 
     var toRender = null;
-    if (activeDisplay && activeDisplay !== "no data yet") {
+    if (activeDisplay) {
       switch (activeDisplay.type) {
         case "escape-room":
           toRender = <EscapeRoom displayData={activeDisplay} />;
@@ -149,14 +152,13 @@ class BoardDisplay extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    currentLocation: state.data.currentLocation,
-    currentBoards: state.data.boards,
-    currentDisplay: state.data.display,
-    boardLocation: state.data.currentBoardLocation
+    dbData: state.data.dbData,
+    boards: state.data.boards,
+    currentDisplay: state.data.display
   };
 }
 
 export default connect(
   mapStateToProps,
-  { setBoards }
+  {}
 )(BoardDisplay);
