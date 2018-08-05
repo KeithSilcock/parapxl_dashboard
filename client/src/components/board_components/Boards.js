@@ -10,7 +10,7 @@ import "../../assets/boards.css";
 
 class Boards extends React.Component {
   componentWillReceiveProps(nextProps, nextState) {
-    const { locations, boards } = nextProps;
+    const { locations, boards, dbData } = nextProps;
     const { locations: prevLocs, boards: prevBoards } = this.props;
     const { location, board } = this.props.match.params;
     const { location: newLocation, board: newBoard } = nextProps.match.params;
@@ -37,7 +37,7 @@ class Boards extends React.Component {
         return;
       }
 
-      if (!board && boards.length) {
+      if (!board && boards.length && dbData[newLocation] !== "no data yet") {
         this.props.history.push(`/admin/home/${newLocation}/${boards[0]}`);
       }
     }
@@ -82,10 +82,16 @@ class Boards extends React.Component {
   }
 
   render() {
-    const { toggleTab2, tab2Open, activeTabDistance, boards } = this.props;
+    const {
+      toggleTab2,
+      tab2Open,
+      activeTabDistance,
+      boards,
+      dbData
+    } = this.props;
     const { location, board } = this.props.match.params;
 
-    if (boards.length) {
+    if (boards.length && dbData[location] !== "no data yet") {
       var listOfBoards = boards.map((item, index) => {
         const selectedClassName = board === item ? "selectedBoard" : "";
 
@@ -151,6 +157,7 @@ class Boards extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    dbData: state.data.dbData,
     locations: state.data.locations,
     boards: state.data.boards,
     tab2Open: state.navData.tab2Open,

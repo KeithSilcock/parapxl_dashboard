@@ -8,6 +8,7 @@ import Boards from "./board_components/Boards";
 import EditDataDisplayed from "./display_components/EditDataDisplayed";
 
 import NoLocationSelected from "./NoLocationSelected";
+import NoBoardSelected from "./NoBoardSelected";
 import BoardDisplay from "./board_components/BoardDisplay";
 
 class DatabaseTest extends React.Component {
@@ -60,32 +61,20 @@ class DatabaseTest extends React.Component {
 
     return (
       <div className="landing-page-container">
-        <Route
-          path={`/admin/home/:location?/:board?`}
-          component={Locations}
-          // render={props => <Locations {...props}/>}
-        />
-        <Route
-          exact
-          path={`/admin/home/`}
-          component={NoLocationSelected}
-          // render={props => <NoLocationSelected {...props} />}
-        />
-        <Route
-          path={`/admin/home/:location/:board?`}
-          component={Boards}
-          // render={props => <Boards {...props} />}
-        />
+        <Route path={`/admin/home/:location?/:board?`} component={Locations} />
+        <Route path={`/admin/home/:location/:board?`} component={Boards} />
+        <Route path={`/admin/home/:location/:board`} component={BoardDisplay} />
         {/* <Route
-          path={`/admin/home/:location/:board`}
-          component={BoardDisplay}
-          // render={props => <BoardDisplay {...props} />}
-        />
-        <Route
           path={`/admin/home/:location/:board/:selected?`}
           component={EditDataDisplayed}
           // render={props => <EditDisplays {...props} />}
         /> */}
+        <Route
+          exact
+          path={`/admin/home/:location`}
+          component={NoBoardSelected}
+        />
+        <Route exact path={`/admin/home/`} component={NoLocationSelected} />
       </div>
     );
   }
