@@ -1,0 +1,33 @@
+.all-displays {
+}
+.all-displays.container {
+  /* width: 94%; */
+  height: 100%;
+  /* margin-left: 6%; */
+  position: relative;
+  /* top: -100%; */
+}
+.all-displays.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.all-displays.content {
+}
+
+.selected-new-display {
+  /* box-sizing: border-box; */
+  border: 3px solid rgb(121, 179, 255) !important;
+  /* box-shadow: inset 0 0 5 rgb(113, 175, 255); */
+  background-color: rgb(225, 238, 255);
+}
+
+.locations-container:hover ~ .all-displays .back-button {
+  transform: translateX(8vw);
+}
+.boards-container:hover + .all-displays .back-button {
+  transform: translateX(12vw);
+}
+.back-button {
+  transition: all 0.5s;
+}

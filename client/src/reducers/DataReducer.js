@@ -4,7 +4,8 @@ const DEFAULT_STATE = {
   dbData: {},
   locations: [],
   boards: [],
-  display: {},
+  displayInfo: {},
+  currentDisplayData: {},
   modalDisplayed: false,
   modalData: {}
 };
@@ -20,7 +21,7 @@ export default function(state = DEFAULT_STATE, action) {
       };
 
     case types.SET_BOARDS_FOR_LOCATION:
-      if (action.payload) {
+      if (action.payload && state.dbData[action.payload] !== "no data yet") {
         var boards = Object.keys(state.dbData[action.payload]);
       } else {
         var boards = [];
@@ -30,10 +31,10 @@ export default function(state = DEFAULT_STATE, action) {
         boards
       };
 
-    case types.SET_DISPLAY:
+    case types.SET_DISPLAY_DATA:
       return {
         ...state,
-        display: action.payload
+        currentDisplayData: action.payload
       };
 
     case types.TOGGLE_MODAL:

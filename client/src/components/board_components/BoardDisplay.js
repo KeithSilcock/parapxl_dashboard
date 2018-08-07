@@ -1,7 +1,7 @@
 import React from "react";
 import db from "../../firebase";
 import { connect } from "react-redux";
-import {} from "../../actions";
+import { setDisplayData } from "../../actions";
 import TextBoard from "../DisplayComponents/TextBoard";
 import EscapeRoom from "../DisplayComponents/EscapeRoom";
 import EscapeRoomList from "../DisplayComponents/EscapeRoomList";
@@ -15,12 +15,11 @@ class BoardDisplay extends React.Component {
 
     this.state = {
       displayData: {},
-      activeDisplay: {}
+      currentDisplayData: {}
     };
   }
   componentWillMount() {
     const { currentLocation, boardLocation } = this.props;
-
     if (boardLocation) {
       // var path1 = `/boards/${currentLocation}/${boardLocation}`;
       // db.ref(path1).on("value", snapshot => {
@@ -41,87 +40,73 @@ class BoardDisplay extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { location, board } = nextProps.match.params;
-    const { dbData } = nextProps;
-    const prevBoard = this.props.boardLocation;
-    const { activeDisplay } = this.state;
-    const currentDisplay = dbData[location][board];
+    if (!this.props.miniBoard) {
+      const { location, board } = nextProps.match.params;
+      const { dbData, currentDisplayData } = nextProps;
+      const prevBoard = this.props.match.params.board;
+      const currentDisplay = dbData[location][board];
 
-    if (!board) {
-      this.setState({
-        ...this.state,
-        displayData: {},
-        activeDisplay: {}
-      });
-      return;
-    }
-    debugger;
-    if (prevBoard !== board) {
-      this.getDisplayData(currentDisplay);
-    }
-
-    if (
-      !Object.keys(activeDisplay).length &&
-      Object.keys(currentDisplay).length
-    ) {
-      this.setState(
-        {
+      if (!board) {
+        this.setState({
           ...this.state,
-          activeDisplay: { alive: true }
-        },
-        () => {
-          this.getDisplayData(currentDisplay);
-        }
-      );
+          displayData: {}
+        });
+        return;
+      }
+      if (prevBoard !== board) {
+        this.getDisplayData(currentDisplay);
+      }
+
+      if (
+        !Object.keys(currentDisplayData).length &&
+        Object.keys(currentDisplay).length
+      ) {
+        this.props.setDisplayData({ alive: true });
+        this.getDisplayData(currentDisplay);
+      }
     }
   }
 
   getDisplayData(display) {
-    debugger;
     if (display !== "no data yet") {
       var path = `/displays/${display.current_display.display_id}`;
       db.ref(path).on("value", snapshot => {
         const activeDisplay = snapshot.val();
 
+        this.props.setDisplayData(activeDisplay);
         this.setState({
           ...this.state,
-          displayData: display,
-          activeDisplay
+          displayData: display
         });
       });
     } else {
-      this.setState({
-        ...this.state,
-        activeDisplay: display
-      });
+      this.props.setDisplayData(display);
     }
   }
 
   showAllDisplays() {
-    const { currentLocation, boardLocation } = this.props;
+    const { location, board } = this.props.match.params;
 
-    this.props.history.push(
-      `/admin/home/${currentLocation}/${boardLocation}/add-new/display`
-    );
+    this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
   }
 
   render() {
-    const { activeDisplay } = this.state;
+    const { currentDisplayData } = this.props;
 
     var toRender = null;
-    if (activeDisplay) {
-      switch (activeDisplay.type) {
+    if (currentDisplayData) {
+      switch (currentDisplayData.type) {
         case "escape-room":
-          toRender = <EscapeRoom displayData={activeDisplay} />;
+          toRender = <EscapeRoom displayData={currentDisplayData} />;
           break;
         case "text-board":
-          toRender = <TextBoard displayData={activeDisplay} />;
+          toRender = <TextBoard displayData={currentDisplayData} />;
           break;
         case "escape-room-list":
-          toRender = <EscapeRoomList displayData={activeDisplay} />;
+          toRender = <EscapeRoomList displayData={currentDisplayData} />;
           break;
         case "carousel":
-          toRender = <EscapeRoomCarousel displayData={activeDisplay} />;
+          toRender = <EscapeRoomCarousel displayData={currentDisplayData} />;
           break;
         default:
           toRender = (
@@ -154,11 +139,11 @@ function mapStateToProps(state) {
   return {
     dbData: state.data.dbData,
     boards: state.data.boards,
-    currentDisplay: state.data.display
+    currentDisplayData: state.data.currentDisplayData
   };
 }
 
 export default connect(
   mapStateToProps,
-  {}
+  { setDisplayData }
 )(BoardDisplay);

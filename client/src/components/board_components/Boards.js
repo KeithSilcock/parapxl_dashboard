@@ -3,7 +3,7 @@ import db from "../../firebase";
 import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
 import BoardDisplay from "./BoardDisplay";
-import { toggleTab2, setBoardForLocation, getData } from "../../actions/";
+import { toggleTab2, setBoardsForLocation, getData } from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 
 import "../../assets/boards.css";
@@ -26,14 +26,18 @@ class Boards extends React.Component {
           return prevLocs.indexOf(item) < 0;
         });
         this.props.history.push(`/admin/home/${newestLocation}`);
-        this.props.setBoardForLocation();
+        this.props.setBoardsForLocation(newestLocation);
         return;
       }
 
       // if changed location, switch location
       if (location && location !== newLocation) {
         //set first board for changed location
-        this.props.history.push(`/admin/home/${newLocation}/${boards[0]}`);
+        if (boards.length) {
+          this.props.history.push(`/admin/home/${newLocation}/${boards[0]}`);
+        } else {
+          this.props.history.push(`/admin/home/${newLocation}`);
+        }
         return;
       }
 
@@ -51,7 +55,7 @@ class Boards extends React.Component {
       "no data yet",
       snapshot => {
         this.props.getData();
-        this.props.setBoardForLocation(location);
+        this.props.setBoardsForLocation(location);
         this.props.history.push(`/admin/home/${location}/${newBoardName}`);
       }
     );
@@ -91,7 +95,11 @@ class Boards extends React.Component {
     } = this.props;
     const { location, board } = this.props.match.params;
 
-    if (boards.length && dbData[location] !== "no data yet") {
+    if (
+      boards.length &&
+      dbData[location] !== "no data yet" //&&
+      // typeof dbData[location][board] !== "undefined"
+    ) {
       var listOfBoards = boards.map((item, index) => {
         const selectedClassName = board === item ? "selectedBoard" : "";
 
@@ -137,12 +145,33 @@ class Boards extends React.Component {
     //push second nav down towards current location selection
     const pushDownNavStyle = { marginTop: `${activeTabDistance}em` };
 
+    // const backButton =
+    //   this.props.location.pathname ===
+    //   `/admin/home/${location}/${board}/add-new/display` ? (
+    //     <div
+    //       className="back-button-container"
+    //       onClick={e => {
+    //         this.props.history.push(`/admin/home/${location}/${board}`);
+    //       }}
+    //     >
+    //       <button className="back-button">
+    //         <div className="text">&lt;</div>
+    //       </button>
+    //       <div className="hider" />
+    //     </div>
+    //   ) : null;
+
     return (
       <div
-        onMouseEnter={e => toggleTab2()}
-        onMouseLeave={e => toggleTab2()}
+        onMouseEnter={e => {
+          toggleTab2();
+        }}
+        onMouseLeave={e => {
+          toggleTab2();
+        }}
         className={`boards-container`}
       >
+        {/* {backButton} */}
         <ul style={pushDownNavStyle} className="boards-list">
           {listOfBoards}
         </ul>
@@ -167,5 +196,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { toggleTab2, setBoardForLocation, getData }
+  { toggleTab2, setBoardsForLocation, getData }
 )(Boards);
