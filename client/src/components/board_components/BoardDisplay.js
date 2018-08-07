@@ -91,7 +91,11 @@ class BoardDisplay extends React.Component {
   }
 
   render() {
-    const { currentDisplayData } = this.props;
+    if (!this.props.miniBoard) {
+      var { currentDisplayData } = this.props;
+    } else {
+      var { displayData: currentDisplayData } = this.props;
+    }
 
     var toRender = null;
     if (currentDisplayData) {
