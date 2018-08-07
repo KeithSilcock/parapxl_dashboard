@@ -1,6 +1,6 @@
 import React from "react";
 import "../../assets/modal.css";
-import AllDisplays from "./AllDisplaysModal";
+import AllDisplays from "../display_components/AllDisplays";
 
 class NewDisplayModal extends React.Component {
   closeModal() {
@@ -16,12 +16,7 @@ class NewDisplayModal extends React.Component {
     var data = null;
     switch (this.props.match.params.new_type) {
       case "display":
-        data = (
-          <AllDisplays
-            {...this.props}
-            closeModal={this.closeModal.bind(this)}
-          />
-        );
+        data = <AllDisplays />;
         break;
 
       default:

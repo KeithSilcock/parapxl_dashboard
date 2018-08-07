@@ -6,8 +6,8 @@ import {
   toggleTab1,
   setTabDistanceDownNav,
   getData,
-  setBoardForLocation,
-  setDisplayForBoard
+  setDisplayData,
+  setBoardsForLocation
 } from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 import Logo from "../Logo";
@@ -32,9 +32,14 @@ class Locations extends React.Component {
     const {
       tab1Open: tab1OpenNew,
       tab2Open: tab2OpenNew,
-      locations
+      locations,
+      boards: nextBoards
     } = nextProps;
-    const { tab1Open: tab1OpenOld, tab2Open: tab2OpenOld } = this.props;
+    const {
+      tab1Open: tab1OpenOld,
+      tab2Open: tab2OpenOld,
+      boards: prevBoards
+    } = this.props;
 
     //set tab2 text height
     if (this.state.firstInstance && locations.length) {
@@ -46,15 +51,19 @@ class Locations extends React.Component {
         () => {
           const { location, board } = this.props.match.params;
           if (location) {
-            this.props.setBoardForLocation(location);
+            this.props.setBoardsForLocation(location);
           }
           if (board) {
-            this.props.setDisplayForBoard(board);
+            //TODO
           }
           this.getTabDistance(nextProps);
         }
       );
       return;
+    }
+
+    if (JSON.stringify(nextBoards) !== JSON.stringify(prevBoards)) {
+      this.getTabDistance(nextProps);
     }
 
     if (
@@ -67,7 +76,7 @@ class Locations extends React.Component {
 
   getTabDistance(props) {
     const { tab1Open, tab2Open, setTabDistanceDownNav, locations } = props;
-    const { location, board } = this.props.match.params;
+    const { location, board } = props.match.params;
 
     let stopReduce = false;
     if (locations.length) {
@@ -103,14 +112,15 @@ class Locations extends React.Component {
     if (newLocationName !== "") {
       db.ref(`boards/${newLocationName}`).set("no data yet", () => {
         this.props.history.push(`/admin/home/${newLocationName}`);
-        // this.moveToBoardsRoute(newLocationName);
+        this.props.setDisplayData({});
         this.props.getData();
       });
     }
   }
 
   moveToBoardsRoute(location) {
-    this.props.setBoardForLocation(location);
+    this.props.setDisplayData({});
+    this.props.setBoardsForLocation(location);
     this.props.history.push(`/admin/home/${location}`);
   }
 
@@ -181,6 +191,7 @@ class Locations extends React.Component {
 function mapStateToProps(state) {
   return {
     locations: state.data.locations,
+    boards: state.data.boards,
     tab1Open: state.navData.tab1Open,
     tab2Open: state.navData.tab2Open
   };
@@ -192,7 +203,7 @@ export default connect(
     toggleTab1,
     setTabDistanceDownNav,
     getData,
-    setBoardForLocation,
-    setDisplayForBoard
+    setBoardsForLocation,
+    setDisplayData
   }
 )(Locations);

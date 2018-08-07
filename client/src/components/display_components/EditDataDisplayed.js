@@ -2,7 +2,7 @@ import React from "react";
 import db from "../../firebase";
 import { capitalizeFirstLetters } from "../../helpers";
 import { connect } from "react-redux";
-import {} from "../../actions";
+import { setDisplayData } from "../../actions";
 import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
 
 import "../../assets/edit.css";
@@ -12,48 +12,39 @@ class EditDataDisplayed extends React.Component {
     super(props);
 
     this.state = {
-      currentData: {}
+      currentData: {},
+      canSubmit: false,
+      firstBreath: true
     };
     this.onDisplayDataChange = this.onDisplayDataChange.bind(this);
+    this.updateDisplays = this.updateDisplays.bind(this);
+    this.submitOnEnter = this.submitOnEnter.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { currentData } = this.state;
-    const { currentDisplay } = nextProps;
+  componentWillUpdate(nextProps, nextState) {
+    const { currentDisplayData: prevDisplayData } = this.props;
+    const { firstBreath, currentData, canSubmit } = nextState;
+    const { currentDisplayData } = nextProps;
     const { location, board } = nextProps.match.params;
-    const prevBoard = this.props.boardLocation;
+    const prevBoard = this.props.match.params.board;
 
-    if (prevBoard !== board && Object.keys(currentDisplay).length) {
-      this.getData(currentDisplay);
-    }
-
-    if (
-      typeof currentDisplay === "object" &&
-      Object.keys(currentDisplay).length &&
-      !Object.keys(currentData).length
-    ) {
-      this.setState(
-        {
-          ...this.state,
-          currentData: { active: true }
-        },
-        () => {
-          this.getData(currentDisplay);
-        }
-      );
-    }
-  }
-
-  getData(currentDisplay) {
-    if (currentDisplay !== "no data yet") {
-      var path = `/displays/${currentDisplay.current_display.display_id}`;
-      db.ref(path).on("value", snapshot => {
-        const currentData = snapshot.val();
+    if (typeof currentDisplayData.alive === "undefined") {
+      if (firstBreath) {
         this.setState({
           ...this.state,
-          currentData
+          currentData: currentDisplayData,
+          firstBreath: false
         });
-      });
+      }
+
+      if (
+        JSON.stringify(prevDisplayData) !== JSON.stringify(currentDisplayData)
+      ) {
+        this.setState({
+          ...this.state,
+          currentData: currentDisplayData
+        });
+      }
     }
   }
 
@@ -65,25 +56,36 @@ class EditDataDisplayed extends React.Component {
 
     this.setState({
       ...this.state,
-      currentData: newData
+      currentData: newData,
+      canSubmit: true
     });
   }
 
   updateDisplays(e) {
     e.preventDefault();
     const { currentData } = this.state;
-    const { currentDisplay } = this.props;
+    const { location, board } = this.props.match.params;
+    const currentDisplay = this.props.dbData[location][board].current_display;
 
     const path = `/displays/${currentDisplay.display_id}/`;
-    db.ref(path).set({ ...currentData });
+    db.ref(path).set({ ...currentData }, () => {
+      this.setState({
+        ...this.state,
+        canSubmit: false
+      });
+    });
   }
 
   showAllDisplays() {
-    const { currentLocation, boardLocation } = this.props;
+    const { location, board } = this.props.match.params;
 
-    this.props.history.push(
-      `/admin/home/${currentLocation}/${boardLocation}/add-new/display`
-    );
+    this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
+  }
+
+  submitOnEnter(e) {
+    if (e.key === "Enter") {
+      this.updateDisplays(e);
+    }
   }
 
   // removeDisplayFromBoard(e) {
@@ -97,79 +99,85 @@ class EditDataDisplayed extends React.Component {
   // }
 
   render() {
-    const { currentData } = this.state;
-    const { currentDisplay, currentLocation, boardLocation } = this.props;
+    const { currentData, canSubmit } = this.state;
+    const { dbData } = this.props;
+    const { location, board } = this.props.match.params;
+    var displayItems = null;
 
-    if (currentData && currentDisplay !== "no data yet") {
-      var displayItems = Object.keys(currentData).map((dataKey, index) => {
-        const displayData = currentData[dataKey];
+    if (Object.keys(dbData).length) {
+      const currentDisplay = dbData[location][board];
 
-        var inputCont = null;
-        switch (dataKey) {
-          case "type":
-            break;
-          case "interval":
-            inputCont = (
-              <li className={`edit-data item ${dataKey}`} key={index}>
-                <p>Timing Interval:</p>
-                <div className="edit-data input-container">
-                  <input
-                    className="edit-data interval"
+      if (currentData && currentDisplay !== "no data yet") {
+        var displayItems = Object.keys(currentData).map((dataKey, index) => {
+          const displayData = currentData[dataKey];
+
+          var inputCont = null;
+          switch (dataKey) {
+            case "type":
+              break;
+            case "interval":
+              inputCont = (
+                <li className={`edit-data item ${dataKey}`} key={index}>
+                  <p>Timing Interval:</p>
+                  <div className="edit-data input-container">
+                    <input
+                      onKeyDown={this.submitOnEnter}
+                      className="edit-data interval"
+                      onChange={this.onDisplayDataChange}
+                      type="text"
+                      name={dataKey}
+                      value={displayData}
+                      placeholder="#"
+                    />
+                    <span> Seconds</span>
+                  </div>
+                </li>
+              );
+              break;
+            case "carousel_displays":
+            case "list_of_displays":
+              inputCont = (
+                <DisplayListOfDisplays
+                  key={index}
+                  currentData={currentData}
+                  displayData={displayData}
+                  currentDisplay={currentDisplay}
+                />
+              );
+              break;
+            case "content":
+              inputCont = (
+                <li key={index} className="edit-data item">
+                  <p>{dataKey}:</p>
+                  <textarea
+                    rows="7"
                     onChange={this.onDisplayDataChange}
                     type="text"
                     name={dataKey}
                     value={displayData}
-                    placeholder="#"
                   />
-                  <span> Seconds</span>
-                </div>
-              </li>
-            );
-            break;
-          case "carousel_displays":
-          case "list_of_displays":
-            inputCont = (
-              <DisplayListOfDisplays
-                key={index}
-                currentData={currentData}
-                displayData={displayData}
-                currentDisplay={currentDisplay}
-              />
-            );
-            break;
-          case "content":
-            inputCont = (
-              <li key={index} className="edit-data item">
-                <p>{dataKey}:</p>
-                <textarea
-                  rows="7"
-                  onChange={this.onDisplayDataChange}
-                  type="text"
-                  name={dataKey}
-                  value={displayData}
-                />
-              </li>
-            );
-            break;
+                </li>
+              );
+              break;
 
-          default:
-            inputCont = (
-              <li key={index} className="edit-data item">
-                <p>{dataKey}:</p>
-                <input
-                  onChange={this.onDisplayDataChange}
-                  type="text"
-                  name={dataKey}
-                  value={displayData}
-                />
-              </li>
-            );
-            break;
-        }
-        return inputCont;
-      });
-    } else {
-      var displayItems = null;
+            default:
+              inputCont = (
+                <li key={index} className="edit-data item">
+                  <p>{dataKey}:</p>
+                  <input
+                    onKeyDown={this.submitOnEnter}
+                    onChange={this.onDisplayDataChange}
+                    type="text"
+                    name={dataKey}
+                    value={displayData}
+                  />
+                </li>
+              );
+              break;
+          }
+          return inputCont;
+        });
+      }
     }
 
     const update_data_form = currentData ? (
@@ -178,7 +186,9 @@ class EditDataDisplayed extends React.Component {
       </form>
     ) : null;
 
-    if (currentLocation && boardLocation) {
+    const buttonAvailableClass = canSubmit ? "" : "unavailable-button";
+
+    if (location && board) {
       return (
         <div className={`edit-container `}>
           <div className="edit-content">
@@ -188,11 +198,11 @@ class EditDataDisplayed extends React.Component {
                   <p className="edit-text">
                     Above is the current data for the{" "}
                     <span className="edit-data bold">
-                      {capitalizeFirstLetters(currentLocation)}{" "}
+                      {capitalizeFirstLetters(location)}{" "}
                     </span>
                     location's{" "}
                     <span className="edit-data bold">
-                      {capitalizeFirstLetters(boardLocation)}
+                      {capitalizeFirstLetters(board)}
                     </span>{" "}
                     display.
                   </p>{" "}
@@ -216,8 +226,8 @@ class EditDataDisplayed extends React.Component {
                     More Options
                   </button>
                   <button
-                    type="submit"
-                    className="edit-data form-button standard-button"
+                    onClick={this.updateDisplays}
+                    className={`edit-data form-button standard-button ${buttonAvailableClass} `}
                   >
                     Update Data
                   </button>
@@ -249,11 +259,13 @@ class EditDataDisplayed extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    dbData: state.data.dbData
+    dbData: state.data.dbData,
+    boards: state.data.boards,
+    currentDisplayData: state.data.currentDisplayData
   };
 }
 
 export default connect(
   mapStateToProps,
-  {}
+  { setDisplayData }
 )(EditDataDisplayed);
