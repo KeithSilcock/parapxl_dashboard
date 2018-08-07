@@ -11,16 +11,16 @@ export const getData = () => async dispatch => {
     });
   });
 };
-export function setBoardForLocation(location) {
+export function setBoardsForLocation(location) {
   return {
     type: types.SET_BOARDS_FOR_LOCATION,
     payload: location
   };
 }
-export function setDisplayForBoard(board) {
+export function setDisplayData(data) {
   return {
-    type: types.SET_DISPLAY,
-    payload: board
+    type: types.SET_DISPLAY_DATA,
+    payload: data
   };
 }
 

@@ -4,7 +4,7 @@ import "../assets/App.css";
 import LandingPage from "./LandingPage";
 import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
-import NewDisplayModal from "./modal_components/NewDisplayModal";
+import AllDisplays from "./display_components/AllDisplays";
 import TemplatePage from "./template_components/TemplatePage";
 import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
 import TempAuth from "./TempAuth";
@@ -43,13 +43,14 @@ class App extends Component {
           href="https://fonts.googleapis.com/css?family=Karla"
           rel="stylesheet"
         />
+        <link
+          rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+          crossorigin="anonymous"
+        />>
         <WarningModal />
         <Route exact path="/" render={props => <TempAuth {...props} />} />
-
-        <Route
-          path="/admin/home/:location/:board/add-new/:new_type"
-          render={props => <NewDisplayModal {...props} />}
-        />
         {/* <Route path="/admin/home/:location?/:board?" component={Nav} /> */}
         <Route
           path="/admin/home/:location?/:board?"

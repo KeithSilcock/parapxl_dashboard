@@ -2,9 +2,9 @@ import React from "react";
 import db from "../../firebase";
 import BoardDisplay from "../board_components/BoardDisplay";
 
-import EditDisplayModal from "./EditDisplayModal";
+// import EditDisplayModal from "./EditDisplayModal";
 
-import "../../assets/allDisplayModal.css";
+import "../../assets/allDisplays.css";
 
 class AllDisplays extends React.Component {
   constructor(props) {
@@ -39,6 +39,11 @@ class AllDisplays extends React.Component {
     });
   }
 
+  goBackToPrevPage() {
+    const { location, board } = this.props.match.params;
+    this.props.history.push(`/admin/${location}/${board}`);
+  }
+
   createNewDisplay(e) {
     const { location, board } = this.props.match.params;
     this.props.history.push(`/admin/${location}/${board}/create-new/display`);
@@ -46,7 +51,7 @@ class AllDisplays extends React.Component {
 
   render() {
     const { displays, currentSelection } = this.state;
-    const { closeModal } = this.props;
+    const { location, board } = this.props.match.params;
 
     const renderObjects = Object.keys(displays).map((displayHash, index) => {
       const newDisplay = displays[displayHash];
@@ -69,6 +74,7 @@ class AllDisplays extends React.Component {
           </h4>
           <div className="display-type-preview">
             <BoardDisplay
+              miniBoard={true}
               thisBoard={{ display_id: displayHash, type: newDisplay.type }}
             />
           </div>
@@ -76,34 +82,42 @@ class AllDisplays extends React.Component {
       );
     });
 
+    // const setHeight =
+    //   this.props.location.pathname ===
+    //   `/admin/home/${location}/${board}/add-new/display`
+    //     ? { top: "-100%", transition: "all 1s" }
+    //     : { top: "100%", transition: "all 1s" };
+
     return (
-      <div className="modal-container">
-        <div className="modal-header">
-          <div className="empty" />
-          <div className="modal-header-text">
-            <h2>BrainyActz Displays</h2>
+      <div className="all-displays container">
+        <div className="all-displays header">
+          <button
+            className="back-button"
+            onClick={e => {
+              this.props.history.push(`/admin/home/${location}/${board}`);
+            }}
+          >
+            <i class="fas fa-chevron-left" />
+          </button>
+          <div className="all-displays header-text">
+            <h2> All BrainyActz Displays</h2>
           </div>
-          <div className="modal-button ">
-            <button className="delete-button" onClick={e => closeModal(e)}>
-              Close
-            </button>
-            <button
-              className="standard-button"
-              onClick={e => this.createNewDisplay(e)}
-            >
-              Create New Display
-            </button>
-          </div>
+          <button
+            className="standard-button"
+            onClick={e => this.createNewDisplay(e)}
+          >
+            Create New Display
+          </button>
         </div>
 
-        <div className="modal-content">
-          <div className="modal-left"> {renderObjects}</div>
-          <EditDisplayModal
+        <div className="all-displays content">
+          <div className=" all-displays left"> {renderObjects}</div>
+          {/* <EditDisplayModal
             {...this.props}
             resetSelection={this.resetSelection.bind(this)}
             currentSelection={currentSelection}
             // updateCurrentDisplay={this.updateCurrentDisplay.bind(this)}
-          />
+          /> */}
         </div>
       </div>
     );
