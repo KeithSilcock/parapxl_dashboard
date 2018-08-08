@@ -10,7 +10,8 @@
   top: 0;
   width: 3%;
   height: 100vh;
-  background: linear-gradient(#baa3fc, #6d1cf8);
+  /* background: linear-gradient(#baa3fc, #6d1cf8); */
+  background: linear-gradient(#a3f9fc, #1cd7f8);
 
   /* anim */
   z-index: 10;

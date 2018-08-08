@@ -26,17 +26,35 @@ class DataDisplayNewTab extends React.Component {
   }
 
   componentWillMount() {
-    const display_id = this.props.match.params.display_id;
-    const path = `/displays/${display_id}`;
-    const testDispRef = db.ref(path);
+    const { location, board, display_id } = this.props.match.params;
 
-    testDispRef.on("value", snapshot => {
-      const currentDisplayData = snapshot.val();
-      this.setState({
-        ...this.state,
-        currentDisplayData
+    if (location && board) {
+      const path2 = `/boards/${location}/${board}`;
+      db.ref(path2).on("value", snapshot => {
+        const localDisplay = snapshot.val();
+
+        const path1 = `/displays/${localDisplay.current_display.display_id}`;
+        db.ref(path1).on("value", snapshot => {
+          const currentDisplay = snapshot.val();
+
+          this.setState({
+            ...this.state,
+            currentDisplayData: currentDisplay
+          });
+        });
       });
-    });
+      return;
+    } else {
+      const path1 = `/displays/${display_id}`;
+      db.ref(path1).on("value", snapshot => {
+        const currentDisplay = snapshot.val();
+
+        this.setState({
+          ...this.state,
+          currentDisplayData: currentDisplay
+        });
+      });
+    }
   }
 
   render() {
