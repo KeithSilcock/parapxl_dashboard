@@ -62,7 +62,11 @@ class App extends Component {
           render={props => <TemplatePage {...props} />}
         />
         <Route
-          path={`/display/:display_id?`}
+          path={`/displays/:display_id?`}
+          render={props => <DataDisplayNewTab {...props} />}
+        />
+        <Route
+          path={`/display/:location/:board/`}
           render={props => <DataDisplayNewTab {...props} />}
         />
         <Route

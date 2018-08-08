@@ -89,6 +89,7 @@ class EditDataDisplayed extends React.Component {
   }
 
   // removeDisplayFromBoard(e) {
+  // !!!no long has available displays on firebase
   //   e.preventDefault();
   //   const { clickedDisplay } = this.props;
   //   const { location, board } = this.props.match.params;
