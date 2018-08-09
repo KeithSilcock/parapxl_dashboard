@@ -47,6 +47,7 @@
 }
 
 .board-item {
+  user-select: none;
   font-size: 2em;
   color: white;
   cursor: pointer;
@@ -129,7 +130,7 @@
   /* overflow: auto; */
 }
 .no-board-selected {
-  height:60vh;
+  height: 60vh;
   display: flex;
   flex-flow: column;
   justify-content: center;

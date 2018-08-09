@@ -49,6 +49,7 @@
   border-top: 2px solid rgb(211, 211, 211);
   background-color: rgb(239, 253, 255);
   padding: 7px 0;
+  cursor: pointer;
 }
 .all-displays i {
   padding-right: 15px;
@@ -71,6 +72,7 @@
   flex-flow: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 .all-displays.item {
   border: 1px solid black;

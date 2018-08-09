@@ -1,6 +1,7 @@
 .add-new-item-container {
   width: 50%;
   position: relative;
+  user-select: none;
 }
 .add-new-item-button {
   width: 100%;

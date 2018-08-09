@@ -1,22 +1,17 @@
 import React from "react";
 
 class EscapeRoomList extends React.Component {
-  selectedEscapeRoom(e, data) {
-    this.props;
-
-    if (this.props.match) {
-      if (this.props.match.params.display_id) {
-        this.props.history.push(`/display/${data.display_id}`);
-        return;
-      }
-    }
+  moveToEscapeRoom(e, display_id) {
+    if (this.props.history) this.props.history.push(`/displays/${display_id}`);
   }
 
   render() {
     const {
       displayData,
-      displayData: { list_of_displays }
+      displayData: { list_of_displays },
+      miniBoard
     } = this.props;
+    const miniClass = miniBoard ? "-mini" : "";
 
     if (list_of_displays && list_of_displays !== "<template>") {
       var renderDisplays = list_of_displays.map((data, index) => {
@@ -25,8 +20,8 @@ class EscapeRoomList extends React.Component {
         };
         return (
           <li
-            onClick={e => this.selectedEscapeRoom(e, data)}
-            className="escape-room-list item"
+            onClick={e => this.moveToEscapeRoom(e, data.display_id)}
+            className={`escape-room-list item${miniClass}`}
             key={index}
           >
             <div className="container" style={bkgImgStyle}>

@@ -107,7 +107,12 @@ class BoardDisplay extends React.Component {
           toRender = <TextBoard displayData={currentDisplayData} />;
           break;
         case "escape-room-list":
-          toRender = <EscapeRoomList displayData={currentDisplayData} />;
+          toRender = (
+            <EscapeRoomList
+              displayData={currentDisplayData}
+              miniBoard={this.props.miniBoard}
+            />
+          );
           break;
         case "carousel":
           toRender = <EscapeRoomCarousel displayData={currentDisplayData} />;

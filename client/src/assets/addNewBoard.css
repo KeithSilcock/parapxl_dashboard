@@ -19,6 +19,7 @@
 
 .add-new-board-container {
   position: relative;
+  user-select: none;
 }
 .add-new-board-button {
   width: 100%;

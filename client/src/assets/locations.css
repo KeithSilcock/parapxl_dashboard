@@ -55,6 +55,7 @@
 }
 
 .location-item {
+  user-select: none;
   font-size: 2em;
   color: white;
   cursor: pointer;

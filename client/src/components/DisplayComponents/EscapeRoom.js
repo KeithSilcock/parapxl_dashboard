@@ -4,12 +4,27 @@ import ReactPlayer from "react-player";
 export default props => {
   const { displayData } = props;
 
-  var bkgImgStyle = {
+  const bkgImgStyle = {
     backgroundImage: `url(${displayData.background_img})`
   };
 
+  if (props.history)
+    var backButton =
+      props.history.length > 1 ? (
+        <button
+          className="back-button"
+          id="back-button"
+          onClick={e => {
+            props.history.goBack();
+          }}
+        >
+          <i class="fas fa-chevron-left" />
+        </button>
+      ) : null;
+
   return (
     <div className="board-preview escape-room container" style={bkgImgStyle}>
+      {backButton}
       <div className="escape-room text-content">
         <h2 className="escape-room title">{displayData.title}</h2>
         <h4 className="escape-room subtitle">{displayData.subtitle}</h4>

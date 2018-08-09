@@ -11,7 +11,9 @@ class RenderDisplayComponent extends React.Component {
     if (currentDisplayData)
       switch (currentDisplayData.type) {
         case "escape-room":
-          toRender = <EscapeRoom displayData={currentDisplayData} />;
+          toRender = (
+            <EscapeRoom {...this.props} displayData={currentDisplayData} />
+          );
           break;
         case "text-board":
           toRender = <TextBoard displayData={currentDisplayData} />;
