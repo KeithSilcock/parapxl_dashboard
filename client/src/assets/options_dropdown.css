@@ -1,0 +1,26 @@
+.options-drop-down {
+}
+.options-drop-down.container {
+  cursor: pointer;
+}
+.options-drop-down.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+.options-drop-down.item {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid grey;
+  width: auto;
+  white-space: nowrap;
+  font-size: 1.2em;
+  padding: 5px 5px;
+  z-index: 15;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: inherit;
+}

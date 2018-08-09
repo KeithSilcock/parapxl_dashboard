@@ -1,4 +1,5 @@
 .boards-container {
+  position: fixed;
   display: flex;
   flex-flow: column;
   justify-content: space-between;
@@ -120,13 +121,15 @@
 }
 
 .display-preview {
-  height: 70%;
+  /* height: 70%; */
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: flex-start; */
+  /* overflow: auto; */
 }
 .no-board-selected {
+  height:60vh;
   display: flex;
   flex-flow: column;
   justify-content: center;
