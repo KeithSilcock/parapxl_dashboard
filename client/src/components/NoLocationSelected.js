@@ -4,7 +4,7 @@ export default props => {
   const {} = props;
   return (
     <div>
-      <h1>Please select your store's location above!</h1>
+      <h1>Please select your store's location in the nav on the left!</h1>
     </div>
   );
 };
