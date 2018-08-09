@@ -1,10 +1,7 @@
 .edit-container {
-  height: 30%;
-  width: 99%;
-
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
+  /* height: 30%; */
+  width: 100%;
+  box-sizing: border-box;
 }
 .edit-header * {
   margin: 0;
@@ -107,8 +104,9 @@
   margin: 0;
   padding: 0 1%;
   border-radius: 10px;
+  box-sizing: border-box;
 
-  overflow-y: auto;
+  /* overflow-y: auto; */
 
   border: 1px solid rgb(207, 207, 207);
 
@@ -120,7 +118,7 @@
   width: 25%;
   display: flex;
   flex-flow: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .edit-data .edit-text:first-of-type {
   text-align: center;
@@ -133,6 +131,7 @@
   display: flex;
   flex-flow: column;
   width: 70%;
+  margin-right: 20px;
 }
 .edit-data.edit-list {
   width: 100%;
@@ -140,13 +139,14 @@
   padding: 0;
   display: flex;
   flex-flow: row wrap;
+
   margin: 0;
-  margin-bottom: 1%;
+  margin-bottom: 5%;
 }
 .edit-data.item {
   width: calc(50% - 20px);
   /* height: 50%; */
-  margin-left: 20px;
+  padding-left: 20px;
   display: flex;
   flex-flow: column;
 }
@@ -166,7 +166,11 @@ input.edit-data.interval {
 }
 .edit-data .buttons {
   display: flex;
+  flex-flow: column;
   justify-content: center;
+}
+.edit-data.new-window {
+  margin-top: 10px;
 }
 .edit-data button.update {
   border-radius: 5px;
@@ -211,7 +215,7 @@ input.edit-data.interval {
   list-style: none;
   background-color: white;
 }
-.escape-room-list-edit.item {
+.list > .escape-room-list-edit.item {
   margin: 1% 0;
   border-bottom: 1px solid rgb(207, 207, 207);
 }

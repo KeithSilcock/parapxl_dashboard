@@ -81,7 +81,7 @@ class Locations extends React.Component {
     let stopReduce = false;
     if (locations.length) {
       // set height manually due to logo and 50px margin on tab1
-      let start = tab1Open ? 9.75 : 5.125;
+      let start = tab1Open ? 12.5 : 7.125;
       if (board && !tab2Open) {
         start = start / 2;
       }
@@ -119,9 +119,13 @@ class Locations extends React.Component {
   }
 
   moveToBoardsRoute(location) {
-    this.props.setDisplayData({});
-    this.props.setBoardsForLocation(location);
-    this.props.history.push(`/admin/home/${location}`);
+    const { location: prevLocation } = this.props.match.params;
+
+    if (location !== prevLocation) {
+      this.props.setDisplayData({});
+      this.props.setBoardsForLocation(location);
+      this.props.history.push(`/admin/home/${location}`);
+    }
   }
 
   render() {

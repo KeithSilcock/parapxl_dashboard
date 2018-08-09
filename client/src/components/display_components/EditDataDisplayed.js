@@ -22,48 +22,50 @@ class EditDataDisplayed extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const { currentDisplayData: prevDisplayData } = this.props;
-    const { firstBreath, currentData, canSubmit } = nextState;
-    const { currentDisplayData } = nextProps;
-    const { location, board } = nextProps.match.params;
-    const prevBoard = this.props.match.params.board;
-
-    if (typeof currentDisplayData.alive === "undefined") {
-      if (firstBreath) {
-        this.setState({
-          ...this.state,
-          currentData: currentDisplayData,
-          firstBreath: false
-        });
-      }
-
-      if (
-        JSON.stringify(prevDisplayData) !== JSON.stringify(currentDisplayData)
-      ) {
-        this.setState({
-          ...this.state,
-          currentData: currentDisplayData
-        });
-      }
-    }
+    // const { currentDisplayData: prevDisplayData } = this.props;
+    // const { firstBreath, currentData, canSubmit } = nextState;
+    // const { currentDisplayData } = nextProps;
+    // const { location, board } = nextProps.match.params;
+    // const prevBoard = this.props.match.params.board;
+    // if (typeof currentDisplayData.alive === "undefined") {
+    //   if (firstBreath) {
+    //     this.setState({
+    //       ...this.state,
+    //       currentData: currentDisplayData,
+    //       firstBreath: false
+    //     });
+    //   }
+    //   if (
+    //     JSON.stringify(prevDisplayData) !== JSON.stringify(currentDisplayData)
+    //   ) {
+    //     this.setState({
+    //       ...this.state,
+    //       currentData: currentDisplayData
+    //     });
+    //   }
+    // }
   }
 
   onDisplayDataChange(e) {
-    const { currentData } = this.state;
+    const { currentData } = this.props;
     const { name, value } = e.currentTarget;
 
     const newData = { ...currentData, [name]: value };
 
-    this.setState({
-      ...this.state,
-      currentData: newData,
-      canSubmit: true
-    });
+    this.setState(
+      {
+        ...this.state,
+        canSubmit: true
+      },
+      () => {
+        this.props.setDisplayData(newData);
+      }
+    );
   }
 
   updateDisplays(e) {
     e.preventDefault();
-    const { currentData } = this.state;
+    const { currentData } = this.props;
     const { location, board } = this.props.match.params;
     const currentDisplay = this.props.dbData[location][board].current_display;
 
@@ -88,6 +90,11 @@ class EditDataDisplayed extends React.Component {
     }
   }
 
+  openInNewWindow() {
+    const { location, board } = this.props.match.params;
+    this.props.history.push(`/display/${location}/${board}/`);
+  }
+
   // removeDisplayFromBoard(e) {
   // !!!no long has available displays on firebase
   //   e.preventDefault();
@@ -100,85 +107,88 @@ class EditDataDisplayed extends React.Component {
   // }
 
   render() {
-    const { currentData, canSubmit } = this.state;
-    const { dbData } = this.props;
+    const { canSubmit } = this.state;
+    const { dbData, currentData } = this.props;
     const { location, board } = this.props.match.params;
     var displayItems = null;
 
-    if (Object.keys(dbData).length) {
-      const currentDisplay = dbData[location][board];
+    const currentDisplay = Object.keys(dbData).length
+      ? dbData[location][board]
+      : null;
 
-      if (currentData && currentDisplay !== "no data yet") {
-        var displayItems = Object.keys(currentData).map((dataKey, index) => {
-          const displayData = currentData[dataKey];
+    if (currentData && currentDisplay !== "no data yet") {
+      var displayItems = Object.keys(currentData).map((dataKey, index) => {
+        const displayData = currentData[dataKey];
 
-          var inputCont = null;
-          switch (dataKey) {
-            case "type":
-              break;
-            case "interval":
-              inputCont = (
-                <li className={`edit-data item ${dataKey}`} key={index}>
-                  <p>Timing Interval:</p>
-                  <div className="edit-data input-container">
-                    <input
-                      onKeyDown={this.submitOnEnter}
-                      className="edit-data interval"
-                      onChange={this.onDisplayDataChange}
-                      type="text"
-                      name={dataKey}
-                      value={displayData}
-                      placeholder="#"
-                    />
-                    <span> Seconds</span>
-                  </div>
-                </li>
-              );
-              break;
-            case "carousel_displays":
-            case "list_of_displays":
-              inputCont = (
-                <DisplayListOfDisplays
-                  key={index}
-                  currentData={currentData}
-                  displayData={displayData}
-                  currentDisplay={currentDisplay}
-                />
-              );
-              break;
-            case "content":
-              inputCont = (
-                <li key={index} className="edit-data item">
-                  <p>{dataKey}:</p>
-                  <textarea
-                    rows="7"
-                    onChange={this.onDisplayDataChange}
-                    type="text"
-                    name={dataKey}
-                    value={displayData}
-                  />
-                </li>
-              );
-              break;
-
-            default:
-              inputCont = (
-                <li key={index} className="edit-data item">
-                  <p>{dataKey}:</p>
+        var inputCont = null;
+        switch (dataKey) {
+          case "type":
+            break;
+          case "interval":
+            inputCont = (
+              <li className={`edit-data item ${dataKey}`} key={index}>
+                <p>Timing Interval:</p>
+                <div className="edit-data input-container">
                   <input
                     onKeyDown={this.submitOnEnter}
+                    className="edit-data interval"
                     onChange={this.onDisplayDataChange}
                     type="text"
                     name={dataKey}
                     value={displayData}
+                    placeholder="seconds"
                   />
-                </li>
-              );
-              break;
-          }
-          return inputCont;
-        });
-      }
+                  <span> Seconds</span>
+                </div>
+              </li>
+            );
+            break;
+          case "carousel_displays":
+          case "list_of_displays":
+            inputCont = (
+              <DisplayListOfDisplays
+                key={index}
+                currentData={currentData}
+                displayData={displayData}
+                currentDisplay={currentDisplay}
+              />
+            );
+            break;
+          case "content":
+            inputCont = (
+              <li key={index} className="edit-data item">
+                <p>Content:</p>
+                <textarea
+                  rows="7"
+                  onChange={this.onDisplayDataChange}
+                  type="text"
+                  name={dataKey}
+                  value={displayData}
+                />
+              </li>
+            );
+            break;
+
+          default:
+            dataKey =
+              dataKey === "background_img" ? "Backgound Image" : dataKey;
+
+            inputCont = (
+              <li key={index} className="edit-data item">
+                <p>{capitalizeFirstLetters(dataKey)}:</p>
+                <input
+                  onKeyDown={this.submitOnEnter}
+                  onChange={this.onDisplayDataChange}
+                  type="text"
+                  name={dataKey}
+                  value={displayData}
+                />
+              </li>
+            );
+            break;
+        }
+        return inputCont;
+      });
     }
 
     const update_data_form = currentData ? (
@@ -192,30 +202,30 @@ class EditDataDisplayed extends React.Component {
     if (location && board) {
       return (
         <div className={`edit-container `}>
-          <div className="edit-content">
-            <div className="edit-data container">
-              <div className="edit-data left-container">
-                <div>
-                  <p className="edit-text">
-                    Above is the current data for the{" "}
-                    <span className="edit-data bold">
-                      {capitalizeFirstLetters(location)}{" "}
-                    </span>
-                    location's{" "}
-                    <span className="edit-data bold">
-                      {capitalizeFirstLetters(board)}
-                    </span>{" "}
-                    display.
-                  </p>{" "}
-                  <p className="edit-text">
-                    Update the data as you see fit and save it by pressing "<span className="edit-data bold">
-                      Update Data
-                    </span>" below. If you'd like to create a new board or view
-                    other boards that have been made, press the "<span className="edit-data bold">
-                      More Options
-                    </span>" button.
-                  </p>
-                </div>
+          <div className="edit-data container">
+            <div className="edit-data left-container">
+              <div>
+                <p className="edit-text">
+                  Above is the current data for the{" "}
+                  <span className="edit-data bold">
+                    {capitalizeFirstLetters(location)}{" "}
+                  </span>
+                  location's{" "}
+                  <span className="edit-data bold">
+                    {capitalizeFirstLetters(board)}
+                  </span>{" "}
+                  display.
+                </p>{" "}
+                <p className="edit-text">
+                  Update the data as you see fit and save it by pressing "<span className="edit-data bold">
+                    Update Data
+                  </span>" below. If you'd like to create a new board or view
+                  other boards that have been made, press the "<span className="edit-data bold">
+                    More Options
+                  </span>" button.
+                </p>
+              </div>
+              <div className="buttons">
                 <div className="edit-data button-box">
                   <button
                     type="button"
@@ -244,11 +254,18 @@ class EditDataDisplayed extends React.Component {
           Remove
         </button> */}
                 </div>
-                <div className="spacer" />
+                <button
+                  onClick={e =>
+                    window.open(`/display/${location}/${board}/`, "_blank")
+                  }
+                  className="edit-data new-window standard-button"
+                >
+                  Open In New Window
+                </button>
               </div>
-
-              {update_data_form}
             </div>
+
+            {update_data_form}
           </div>
         </div>
       );
@@ -262,7 +279,7 @@ function mapStateToProps(state) {
   return {
     dbData: state.data.dbData,
     boards: state.data.boards,
-    currentDisplayData: state.data.currentDisplayData
+    currentData: state.data.currentDisplayData
   };
 }
 

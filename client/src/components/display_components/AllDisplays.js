@@ -1,7 +1,11 @@
 import React from "react";
 import db from "../../firebase";
 import BoardDisplay from "../board_components/BoardDisplay";
+
+import { connect } from "react-redux";
+import { setDisplayData } from "../../actions";
 import { capitalizeFirstLetters } from "../../helpers";
+import DisplayOptions from "./Display_Options";
 
 // import EditDisplayModal from "./EditDisplayModal";
 
@@ -54,14 +58,17 @@ class AllDisplays extends React.Component {
           });
         }, {});
 
-        const previousDisplays = {
-          previous: {
-            text: "Previously Displayed",
-            boards: localDisplay.available_displays,
-            count: Object.keys(localDisplay.available_displays).length,
-            isOpen: false
-          }
-        };
+        const previousDisplays =
+          localDisplay !== "no data yet"
+            ? {
+                previous: {
+                  text: "Previously Displayed",
+                  boards: localDisplay.available_displays,
+                  count: Object.keys(localDisplay.available_displays).length,
+                  isOpen: false
+                }
+              }
+            : {};
 
         const finalBoardTypes = Object.assign(boardTypes, previousDisplays);
 
@@ -104,7 +111,7 @@ class AllDisplays extends React.Component {
 
   goBackToPrevPage() {
     const { location, board } = this.props.match.params;
-    this.props.history.push(`/admin/${location}/${board}`);
+    this.props.history.push(`/admin/home/${location}/${board}`);
   }
 
   createNewDisplay(e) {
@@ -142,6 +149,36 @@ class AllDisplays extends React.Component {
       }, this.clickDelay);
     }
   }
+  doubleClickAffectAll(e, currentlyIsOpen) {
+    const { boardTypes } = this.state;
+
+    const newBoardTypes = Object.keys(boardTypes).reduce((prev, boardType) => {
+      const status = boardTypes[boardType];
+
+      if (boardType === "previous") {
+        return Object.assign(prev, {
+          [boardType]: {
+            text: status.text,
+            count: status.count,
+            isOpen: !currentlyIsOpen,
+            boards: status.boards
+          }
+        });
+      } else {
+        return Object.assign(prev, {
+          [boardType]: {
+            text: status.text,
+            count: status.count,
+            isOpen: !currentlyIsOpen
+          }
+        });
+      }
+    }, {});
+
+    this.setState({
+      boardTypes: newBoardTypes
+    });
+  }
 
   updateCurrentDisplay() {
     const { currentSelection, currentAvailDisplays } = this.state;
@@ -159,39 +196,29 @@ class AllDisplays extends React.Component {
       const availPath = `/boards/${location}/${board}/available_displays`; //push
       const currPath = `/boards/${location}/${board}/current_display`; //set
 
-      db.ref(availPath).update(setAsAvailableDisplay, () => {});
-
-      db.ref(currPath).set(setAsCurrentDisplay, () => {
-        this.setState({
-          displayOnTV: setAsCurrentDisplay
+      db.ref(availPath).update(setAsAvailableDisplay, () => {
+        db.ref(currPath).set(setAsCurrentDisplay, () => {
+          this.setState(
+            {
+              displayOnTV: setAsCurrentDisplay
+            },
+            () => {
+              this.props.setDisplayData(currentSelection.displayData);
+              this.goBackToPrevPage();
+            }
+          );
         });
       });
     }
   }
 
-  doubleClickAffectAll(e, currentlyIsOpen) {
-    const { boardTypes } = this.state;
-
-    const newBoardTypes = Object.keys(boardTypes).reduce((prev, boardType) => {
-      const status = boardTypes[boardType];
-
-      return Object.assign(prev, {
-        [boardType]: {
-          text: status.text,
-          count: status.count,
-          isOpen: !currentlyIsOpen
-        }
-      });
-    }, {});
-
-    this.setState({
-      boardTypes: newBoardTypes
-    });
-  }
-
   render() {
     const { displays, currentSelection, boardTypes, displayOnTV } = this.state;
+    const { dbData } = this.props;
     const { location, board } = this.props.match.params;
+    const currentDisplayInfo = Object.keys(dbData).length
+      ? dbData[location][board]
+      : null;
 
     const boardTypeLists = Object.keys(boardTypes).map((boardType, index1) => {
       const boardTypeText = boardTypes[boardType].text;
@@ -207,8 +234,8 @@ class AllDisplays extends React.Component {
               ? "selected-new-display"
               : "";
           const currentlyDisplayedOnTVObj =
-            displayOnTV.display_id === displayHash ? (
-              <span>Currently Displayed</span>
+            displayOnTV && displayOnTV.display_id === displayHash ? (
+              <p className="currently-displayed">Currently Displayed</p>
             ) : null;
 
           if (displayData.type === boardType) {
@@ -221,12 +248,14 @@ class AllDisplays extends React.Component {
                 <div className="all-displays item">
                   <div className="all-displays item-header">
                     {/* <div className="spacer" /> */}
-                    <span className="all-displays item-name">
-                      {displayData.name} {currentlyDisplayedOnTVObj}
-                    </span>
-                    <span className="all-displays item-options">
+                    <div className="all-displays item-name">
+                      <p>{displayData.name}</p>
+                      {currentlyDisplayedOnTVObj}
+                    </div>
+                    <DisplayOptions boardHash={displayHash}/>
+                    {/* <span onClick={e=> this.openOptions(displayHash)} className="all-displays item-options">
                       <i class="fas fa-ellipsis-v" />
-                    </span>
+                    </span> */}
                   </div>
                   <BoardDisplay miniBoard={true} displayData={displayData} />
                 </div>
@@ -235,42 +264,50 @@ class AllDisplays extends React.Component {
           }
         });
       } else {
-        boardDisplays = Object.keys(boardTypes[boardType].boards).map(
-          (randomHash, index) => {
-            const displayData = displays[randomHash];
+        // if(typeof boardTypes[boardType].boards ==="undefined"){
+        //   debugger
+        // }
+        if (boardTypes[boardType].boards) {
+          boardDisplays = Object.keys(boardTypes[boardType].boards).map(
+            (displayHash, index) => {
+              const displayData = displays[displayHash];
+              const selectedItemClass =
+                currentSelection.display_id === displayHash
+                  ? "selected-new-display"
+                  : "";
+              const currentlyDisplayedOnTVObj =
+                currentDisplayInfo.current_display.display_id ===
+                displayHash ? (
+                  <p className="currently-displayed">Currently Displayed</p>
+                ) : null;
 
-            const selectedItemClass =
-              currentSelection.display_id === randomHash
-                ? "selected-new-display"
-                : "";
-
-            return (
-              <li
-                key={index}
-                onClick={e =>
-                  this.selectItem(
-                    displayData,
-                    boardTypes[boardType].boards[randomHash].display_id
-                  )
-                }
-                className={`all-displays item-container ${selectedItemClass}`}
-              >
-                <div className="all-displays item">
-                  <div className="all-displays item-header">
-                    {/* <div className="spacer" /> */}
-                    <span className="all-displays item-name">
-                      {displayData.name}
-                    </span>
-                    <span className="all-displays item-options">
-                      <i class="fas fa-ellipsis-v" />
-                    </span>
+              return (
+                <li
+                  key={index}
+                  onClick={e => {
+                    this.selectItem(displayData, displayHash);
+                  }}
+                  className={`all-displays item-container ${selectedItemClass}`}
+                >
+                  <div className="all-displays item">
+                    <div className="all-displays item-header">
+                      {/* <div className="spacer" /> */}
+                      <div className="all-displays item-name">
+                        <p>{displayData.name}</p>
+                        {currentlyDisplayedOnTVObj}
+                      </div>
+                      <DisplayOptions boardHash={displayHash} />
+                      {/* <span onClick={e=> this.openOptions(displayHash)} className="all-displays item-options">
+                        <i class="fas fa-ellipsis-v" />
+                      </span> */}
+                    </div>
+                    <BoardDisplay miniBoard={true} displayData={displayData} />
                   </div>
-                  <BoardDisplay miniBoard={true} displayData={displayData} />
-                </div>
-              </li>
-            );
-          }
-        );
+                </li>
+              );
+            }
+          );
+        }
       }
 
       const listChevron = isOpen ? (
@@ -367,6 +404,7 @@ class AllDisplays extends React.Component {
         <div className="all-displays header">
           <button
             className="back-button"
+            id="back-button"
             onClick={e => {
               this.props.history.push(`/admin/home/${location}/${board}`);
             }}
@@ -417,4 +455,13 @@ class AllDisplays extends React.Component {
   }
 }
 
-export default AllDisplays;
+function mSTP(state) {
+  return {
+    dbData: state.data.dbData
+  };
+}
+
+export default connect(
+  mSTP,
+  { setDisplayData }
+)(AllDisplays);
