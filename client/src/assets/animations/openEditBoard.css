@@ -1,0 +1,71 @@
+/* Boards display */
+.board-slide-up-start {
+  position: relative;
+  z-index: -1 !important;
+  animation: slideUp 1s normal linear;
+  will-change: transform;
+}
+.board-slide-up-end {
+  position: relative;
+  z-index: -1;
+  /* opacity: 0; */
+  /* top: 0%; */
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.board-slide-down-start {
+  position: relative;
+  z-index: -1 !important;
+  /* opacity: 1; */
+  animation: slideUp 1s reverse linear;
+  will-change: transform;
+}
+.board-slide-down-end {
+  position: relative;
+  z-index: initial;
+  /* top: 0%; */
+}
+
+/* Edit displays page */
+.edit-slide-up-start {
+  position: relative;
+  z-index: initial;
+  /* opacity: 1 !important; */
+  animation: slideUp 1s normal linear;
+  will-change: transform;
+}
+.edit-slide-up-end {
+  position: relative;
+  z-index: -1;
+  /* top: 0%; */
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.edit-slide-down-start {
+  position: relative;
+  z-index: -1 !important;
+  animation: slideDown 1s normal linear;
+  will-change: transform;
+}
+.edit-slide-down-end {
+  position: relative;
+  /* opacity: 0; */
+  z-index: -1;
+  /* top: 0%; */
+}

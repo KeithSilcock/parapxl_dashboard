@@ -1,35 +1,24 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import "../assets/App.css";
-import DatabaseTest from "./DatabaseTest";
-import BoringRoute from "./boringComponent";
-import BoringRoute2 from "./anotherBoringComponent";
+import LandingPage from "./LandingPage";
 import Nav from "./Nav";
-import Locations from "./Locations";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
-import NewDisplayModal from "./NewDisplayModal";
+import AllDisplays from "./display_components/AllDisplays";
+import TemplatePage from "./template_components/TemplatePage";
+import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
+import TempAuth from "./TempAuth";
+import WarningModal from "./EasyModal";
+
+//TODO Finish adding animation for "EditDisplays"
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      openModal: false,
-      modalData: {},
       buttonState: false
     };
-
-    this.toggleModal = this.toggleModal.bind(this);
-  }
-
-  toggleModal(dataToDisplay) {
-    const { openModal } = this.state;
-
-    this.setState({
-      ...this.state,
-      openModal: !openModal,
-      modalData: dataToDisplay
-    });
   }
 
   clickButton() {
@@ -43,34 +32,47 @@ class App extends Component {
 
   render() {
     const { buttonState, openModal, modalData } = this.state;
-    const buttonText = buttonState ? "true" : "false";
-    const path = buttonState ? "/test" : "/test2";
 
-    const modal = openModal ? (
-      <Route
-        exact
-        path="/admin"
-        render={props => (
-          <NewDisplayModal
-            toggleModal={this.toggleModal}
-            modalData={modalData}
-          />
-        )}
-      />
-    ) : null;
+    // const modal = openModal ? (
+
+    // ) : null;
 
     return (
       <div className="App">
-        {modal}
-        <Route exact path="/admin" component={Nav} />
-        <Route
-          path="/admin"
-          render={props => <DatabaseTest toggleModal={this.toggleModal} />}
+        <link
+          href="https://fonts.googleapis.com/css?family=Karla"
+          rel="stylesheet"
         />
-        <Route path={path} component={BoringRoute} />
-        <Route path="/test2" component={BoringRoute2} />
-        <Route path="/display/*" component={DataDisplayNewTab} />
-        <button onClick={this.clickButton.bind(this)}>{buttonText}</button>
+        <link
+          rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+          crossorigin="anonymous"
+        />
+        <WarningModal />
+        <Route exact path="/" render={props => <TempAuth {...props} />} />
+        {/* <Route path="/admin/home/:location?/:board?" component={Nav} /> */}
+        <Route
+          path="/admin/home/:location?/:board?"
+          render={props => <LandingPage {...props} />}
+        />
+        <Route
+          exact
+          path={`/admin/:location/:board/create-new/:new_type`}
+          render={props => <TemplatePage {...props} />}
+        />
+        <Route
+          path={`/displays/:display_id?`}
+          render={props => <DataDisplayNewTab {...props} />}
+        />
+        <Route
+          path={`/display/:location/:board/`}
+          render={props => <DataDisplayNewTab {...props} />}
+        />
+        <Route
+          path={`/carousel`}
+          render={props => <EscapeRoomCarousel {...props} />}
+        />
       </div>
     );
   }

@@ -1,28 +1,108 @@
+body {
+  font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+  /* width: 100vw; */
+  /* height: 100vh; */
+  /* background-color: #e9e9e9; */
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
 .App {
-  text-align: center;
+  width: 100vw;
+  height: 100vh;
+
+  font-family: "Karla", sans-serif;
+  overflow: hidden;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.nav-bar-container {
+  height: 10%;
+  padding-right: 5%;
+  width: 90%;
+  margin: auto;
+}
+.landing-page-container {
+  height: 100%;
+  width: 94%;
+  overflow: auto;
+  margin: 0 0 0 6%;
+}
+.non-nav {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  overflow: auto;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
+.standard-button {
+  border-radius: 5px !important;
+  background-color: rgb(0, 193, 241) !important;
+  color: white !important;
+  font-size: 0.9em !important;
+  font-weight: bold !important;
+  min-height: 30px !important;
+  cursor: pointer !important;
+}
+.selectedDisplay {
+  box-sizing: border-box;
+  border: 2px solid rgb(133, 186, 255) !important;
+  /* box-shadow: inset 0 0 5 rgb(113, 175, 255); */
+  background-color: rgb(234, 243, 255) !important;
+}
+.delete-button {
+  border-radius: 5px;
+  background-color: rgb(255, 44, 44) !important;
+  color: white !important;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-height: 30px;
+  cursor: pointer;
+}
+.unavailable-button {
+  border-radius: 5px;
+  background-color: rgb(160, 160, 160) !important;
+  color: black !important;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-height: 30px;
+  cursor: initial;
+  pointer-events: none;
+}
+
+.back-button {
+  /* position: relative; */
+  box-sizing: border-box;
+  padding: 0;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 3px 3px #c9c9c9;
   color: white;
+  background-color: #c9c9c9;
+
+  display: flex;
+  justify-content: center;
+
+  font-size: 2.5em;
+  cursor: pointer;
+}
+.boards-container:hover .back-button {
+  background-color: black;
+  left: 11%;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
+.hover-cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-.App-intro {
-  font-size: large;
+  width: 100%;
+  height: 100%;
 }
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.hover-cover:hover {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  z-index: 5;
 }

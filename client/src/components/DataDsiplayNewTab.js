@@ -1,5 +1,9 @@
 import React from "react";
 import db from "../firebase";
+import RenderDisplayComponent from "./RenderDisplayComponent";
+import NoData from "./DisplayComponents/NoData";
+
+import "../assets/newTabDisplay.css";
 
 class DataDisplayNewTab extends React.Component {
   constructor(props) {
@@ -10,37 +14,64 @@ class DataDisplayNewTab extends React.Component {
     };
   }
 
-  componentWillMount() {
-    const display_id = this.props.match.params["0"];
-    const path = `/displays/${display_id}`;
-    const testDispRef = db.ref(path);
+  componentDidUpdate(newProps, newState) {
+    this.props;
+    this.state;
 
-    testDispRef.on("value", snapshot => {
-      const currentDisplayData = snapshot.val();
-      this.setState({
-        ...this.state,
-        currentDisplayData
+    if (
+      this.props.match.params.display_id !== newProps.match.params.display_id
+    ) {
+      this.componentWillMount();
+    }
+  }
+
+  componentWillMount() {
+    const { location, board, display_id } = this.props.match.params;
+
+    if (location && board) {
+      const path2 = `/boards/${location}/${board}`;
+      db.ref(path2).on("value", snapshot => {
+        const localDisplay = snapshot.val();
+
+        const path1 = `/displays/${localDisplay.current_display.display_id}`;
+        db.ref(path1).on("value", snapshot => {
+          const currentDisplay = snapshot.val();
+
+          this.setState({
+            ...this.state,
+            currentDisplayData: currentDisplay
+          });
+        });
       });
-    });
+      return;
+    } else {
+      const path1 = `/displays/${display_id}`;
+      db.ref(path1).on("value", snapshot => {
+        const currentDisplay = snapshot.val();
+
+        this.setState({
+          ...this.state,
+          currentDisplayData: currentDisplay
+        });
+      });
+    }
   }
 
   render() {
     const { currentDisplayData } = this.state;
 
-    const currentDisplayKeys = Object.keys(currentDisplayData);
-    const displayItems = currentDisplayKeys.map((key, index) => {
+    if (this.props.match.params.display_id !== "no-data") {
       return (
-        <li key={index}>
-          {key}: {currentDisplayData[key]}
-        </li>
+        <div className="new-tab">
+          <RenderDisplayComponent
+            {...this.props}
+            currentDisplayData={currentDisplayData}
+          />
+        </div>
       );
-    });
-    return (
-      <div>
-        <h4>Display Data: {currentDisplayData["type"] || null}</h4>
-        <ul>{displayItems}</ul>
-      </div>
-    );
+    } else {
+      return <NoData />;
+    }
   }
 }
 

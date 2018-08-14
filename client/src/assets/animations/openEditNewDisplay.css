@@ -1,0 +1,25 @@
+/* templates display */
+.template-slide-left-start {
+  animation: slideleft 1s normal linear;
+  will-change: transform;
+}
+.template-slide-left-end {
+  transform: translateX(-100%);
+}
+
+@keyframes slideleft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.template-slide-right-start {
+  animation: slideleft 1s reverse linear;
+  will-change: transform;
+}
+.template-slide-right-end {
+  transform: translateX(0);
+}
