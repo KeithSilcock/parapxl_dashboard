@@ -148,6 +148,7 @@ class EditDataDisplayed extends React.Component {
             inputCont = (
               <DisplayListOfDisplays
                 key={index}
+                {...this.props}
                 currentData={currentData}
                 displayData={displayData}
                 currentDisplay={currentDisplay}
@@ -217,12 +218,11 @@ class EditDataDisplayed extends React.Component {
                   display.
                 </p>{" "}
                 <p className="edit-text">
-                  Update the data as you see fit and save it by pressing "<span className="edit-data bold">
-                    Update Data
-                  </span>" below. If you'd like to create a new board or view
-                  other boards that have been made, press the "<span className="edit-data bold">
-                    More Options
-                  </span>" button.
+                  Update the data as you see fit and save it by pressing "
+                  <span className="edit-data bold">Update Data</span>" below. If
+                  you'd like to create a new board or view other boards that
+                  have been made, press the "
+                  <span className="edit-data bold">More Options</span>" button.
                 </p>
               </div>
               <div className="buttons">

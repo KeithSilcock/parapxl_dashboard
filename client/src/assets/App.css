@@ -106,3 +106,32 @@ body {
   background-color: rgba(0, 0, 0, 0.5) !important;
   z-index: 5;
 }
+
+.no-location.container {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  height: 99%;
+}
+.no-location.container div:last-of-type {
+  align-self: flex-end;
+}
+.no-location.main-text p {
+  margin: 0;
+  margin-bottom: 5px;
+}
+.no-location.links {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+.no-location.links a {
+  padding-right: 15px;
+  font-size: 1.3em;
+  color: black;
+  /* text-decoration: none; */
+}
+.fa-github-square {
+  font-size: 2.3em;
+}
