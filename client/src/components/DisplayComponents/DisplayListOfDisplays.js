@@ -152,12 +152,17 @@ class DisplayListOfDisplays extends React.Component {
       </button>
     ) : null;
 
+    const containerClass =
+      this.props.location.pathname.indexOf("create-new/display") > 0
+        ? "template-edit item escape-room-list-edit"
+        : "edit-data item escape-room-list-edit";
+
     return (
-      <li className="edit-data item escape-room-list-edit">
+      <div className={containerClass}>
         <p>Displayed Escape Rooms:</p>
         <ul className="escape-room-list-edit list">{carouselDisplays}</ul>
         {updateButton}
-      </li>
+      </div>
     );
   }
 }

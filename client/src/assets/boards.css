@@ -16,6 +16,7 @@
 }
 .boards-container:hover {
   width: 15%;
+  box-shadow: 9px 9px 8px -4px rgb(53, 53, 53);
 }
 .boards-container:hover .board-item {
   border-top: 2px solid white;

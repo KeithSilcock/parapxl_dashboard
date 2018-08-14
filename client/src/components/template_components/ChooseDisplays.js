@@ -1,6 +1,7 @@
 import React from "react";
 import db from "../../firebase";
 import BoardDisplay from "../board_components/BoardDisplay";
+import { capitalizeFirstLetters } from "../../helpers";
 
 import "../../assets/chooseDisplays.css";
 
@@ -87,7 +88,7 @@ class ChooseDisplays extends React.Component {
           currentSelection.indexOf(displayHash) >= 0 ? "selected-display" : "";
 
         return (
-          <div
+          <li
             className={`choose-display item ${selectedTemplateClass}`}
             onClick={e => {
               this.selectItems(newDisplay, displayHash);
@@ -95,12 +96,11 @@ class ChooseDisplays extends React.Component {
             }}
             key={index}
           >
-            <div className="display-type-preview">
-              <BoardDisplay
-                thisBoard={{ display_id: displayHash, type: newDisplay.type }}
-              />
+            <div className="choose-display display-type-preview">
+              <p>{capitalizeFirstLetters(newDisplay.name)}</p>
+              <BoardDisplay miniBoard={true} displayData={newDisplay} />
             </div>
-          </div>
+          </li>
         );
       } else {
         return null;
@@ -115,9 +115,11 @@ class ChooseDisplays extends React.Component {
       <div className="choose-display container">
         <div className="choose-display display">
           <div className="choose-display display-top">
-            <h3>Available Displays</h3>
+            <h3>Select Any Displays to Add Them</h3>
           </div>
-          <div className="choose-display display-bottom">{renderDisplays}</div>
+          <div className="choose-display display-bottom">
+            <ul className="choose-display list">{renderDisplays}</ul>
+          </div>
         </div>
         <div className="choose-display button-box">
           <button
