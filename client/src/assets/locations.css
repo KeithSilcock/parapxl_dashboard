@@ -24,6 +24,7 @@
 }
 .locations-container:hover + .boards-container {
   left: 11%;
+  box-shadow: 9px 9px 8px -4px rgb(53, 53, 53);
 }
 .locations-container:hover .location-item {
   border-top: 2px solid white;

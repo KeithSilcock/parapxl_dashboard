@@ -28,6 +28,15 @@ class Locations extends React.Component {
     this.getTabDistance(this.props);
   }
 
+  componentDidUpdate(nextProps, nextState) {
+    const { location: newLocation } = nextProps;
+    const { location: oldLocation } = this.props;
+
+    if (newLocation !== oldLocation) {
+      this.getTabDistance(nextProps);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const {
       tab1Open: tab1OpenNew,

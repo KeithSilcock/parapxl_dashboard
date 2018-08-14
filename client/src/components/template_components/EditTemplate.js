@@ -1,9 +1,15 @@
 import React from "react";
+import { connect } from "react-redux";
+import { getData, setDisplayData } from "../../actions";
 import RenderDisplayComponent from "../RenderDisplayComponent";
 import ChooseDisplays from "./ChooseDisplays";
 import db from "../../firebase";
 import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
-import { formatToMiliSeconds, formatFromMiliSeconds } from "../../helpers";
+import {
+  formatToMiliSeconds,
+  formatFromMiliSeconds,
+  capitalizeFirstLetters
+} from "../../helpers";
 
 class EditTemplate extends React.Component {
   constructor(props) {
@@ -14,6 +20,12 @@ class EditTemplate extends React.Component {
       escapeRoomsListOpen: false,
       prev_ids: []
     };
+  }
+
+  componentDidMount() {
+    if (!Object.keys(this.props.dbData).length) {
+      this.props.getData();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -99,17 +111,69 @@ class EditTemplate extends React.Component {
     }
   }
 
+  updateCurrentDisplay() {
+    const { currentSelection, currentAvailDisplays } = this.state;
+    const { location, board } = this.props.match.params;
+    if (Object.keys(currentSelection).length) {
+      const setAsAvailableDisplay = {
+        ...currentAvailDisplays,
+        [currentSelection.display_id]: true
+      };
+      const setAsCurrentDisplay = {
+        display_id: currentSelection.display_id,
+        name: currentSelection.displayData.name,
+        type: currentSelection.displayData.type
+      };
+      const availPath = `/boards/${location}/${board}/available_displays`; //push
+      const currPath = `/boards/${location}/${board}/current_display`; //set
+
+      db.ref(availPath).update(setAsAvailableDisplay, () => {
+        db.ref(currPath).set(setAsCurrentDisplay, () => {
+          this.setState(
+            {
+              displayOnTV: setAsCurrentDisplay
+            },
+            () => {
+              this.props.setDisplayData(currentSelection.displayData);
+              this.goBackToPrevPage();
+            }
+          );
+        });
+      });
+    }
+  }
+
   submitTemplate(e) {
     //add template to options
     //take you back to /admin/home/Reno/lobby/add-new/display
     //and make sure the new template is displayed
     const { template } = this.state;
-    const { location, board, new_type } = this.props.match.params;
+    const { dbData } = this.props;
+    const { location, board } = this.props.match.params;
 
-    db.ref(`/displays`).push(template, snapshot => {
-      this.props.history.push(
-        `/admin/home/${location}/${board}/add-new/${new_type}`
-      );
+    const currentAvailDisplays = dbData[location][board].available_displays;
+
+    const newDisplay = db.ref(`/displays`).push(template, snapshot => {
+      const display_id = newDisplay.getKey();
+
+      const setAsAvailableDisplay = {
+        ...currentAvailDisplays,
+        [display_id]: true
+      };
+      const setAsCurrentDisplay = {
+        display_id: display_id,
+        name: template.name,
+        type: template.type
+      };
+      const availPath = `/boards/${location}/${board}/available_displays`; //push
+      const currPath = `/boards/${location}/${board}/current_display`; //set
+
+      db.ref(availPath).update(setAsAvailableDisplay, () => {
+        db.ref(currPath).set(setAsCurrentDisplay, () => {
+          this.props.setDisplayData(template);
+          this.props.history.push(`/admin/home/${location}/${board}`);
+        });
+      });
     });
   }
 
@@ -121,6 +185,10 @@ class EditTemplate extends React.Component {
       var renderTemplateEdit = Object.keys(selectedTemplate).map(
         (item, index) => {
           const val = selectedTemplate[item];
+
+          const value = template[item] !== "<template>" ? template[item] : "";
+
+          const itemName = item === "background_img" ? "Backgound Image" : item;
 
           var inputCont = null;
           switch (item) {
@@ -139,7 +207,7 @@ class EditTemplate extends React.Component {
                       onChange={e => this.onInputChange(e)}
                       type="text"
                       name={item}
-                      value={template[item]}
+                      value={value}
                       placeholder="#"
                     />
                     <span> Seconds</span>
@@ -152,6 +220,7 @@ class EditTemplate extends React.Component {
               inputCont = (
                 <li key={index} className={`template-edit item ${item}`}>
                   <DisplayListOfDisplays
+                    {...this.props}
                     currentData={template}
                     currentDisplay={{}}
                     submitTemps={this.addDisplaysToTemplate.bind(this)}
@@ -169,15 +238,15 @@ class EditTemplate extends React.Component {
             case "content":
               inputCont = (
                 <li key={index} className={`template-edit item ${item}`}>
-                  <p>{item}:</p>
+                  <p>{capitalizeFirstLetters(item)}:</p>
                   <textarea
                     onFocus={e => this.emptyInputOnFocus(e)}
                     rows="7"
                     onChange={e => this.onInputChange(e)}
                     type="text"
                     name={item}
-                    placeholder="<template>"
-                    value={template[item]}
+                    placeholder="Your content here"
+                    value={value}
                   />
                 </li>
               );
@@ -186,14 +255,14 @@ class EditTemplate extends React.Component {
             default:
               inputCont = (
                 <li className={`template-edit item ${item}`} key={index}>
-                  <p>{item}:</p>
+                  <p>{capitalizeFirstLetters(itemName)}:</p>
                   <input
                     onFocus={e => this.emptyInputOnFocus(e)}
                     onChange={e => this.onInputChange(e)}
                     type="text"
                     name={item}
-                    value={template[item]}
-                    placeholder="<template>"
+                    value={value}
+                    placeholder="Your content here"
                   />
                 </li>
               );
@@ -216,12 +285,12 @@ class EditTemplate extends React.Component {
     return (
       <div className={`template-edit container ${aCLS || aCRS} ${positionEnd}`}>
         <div className="template-edit top">
-          <h1>Template Display</h1>
+          <h1>Create a New Board</h1>
         </div>
         <div className="template-edit bottom">
           <div className="template-edit list-box">
             <div className="template-edit header">
-              <h4>Please Update Your Content:</h4>
+              <h4>Please Add Your Content</h4>
             </div>
             <ul className="template-edit list">
               <li className={`template-edit item template-name`}>
@@ -258,7 +327,7 @@ class EditTemplate extends React.Component {
             </div>
           </div>
           <div className="template-edit live-display">
-            <h4 className="template-edit header">Live Preview:</h4>
+            <h4 className="template-edit header">Live Preview</h4>
             <RenderDisplayComponent currentDisplayData={template} />
           </div>
         </div>
@@ -267,4 +336,13 @@ class EditTemplate extends React.Component {
   }
 }
 
-export default EditTemplate;
+function mapStateToProps(state) {
+  return {
+    dbData: state.data.dbData
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  { getData, setDisplayData }
+)(EditTemplate);

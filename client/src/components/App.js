@@ -20,6 +20,9 @@ class App extends Component {
       buttonState: false
     };
   }
+  componentDidMount() {
+    document.title = "BrainyActz Dashboard";
+  }
 
   clickButton() {
     const { buttonState } = this.state;
@@ -47,7 +50,7 @@ class App extends Component {
           rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
           integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         />
         <WarningModal />
         <Route exact path="/" render={props => <TempAuth {...props} />} />
