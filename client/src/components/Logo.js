@@ -1,11 +1,14 @@
 import React from "react";
 
 export default props => {
-  const {} = props;
+  function navToHome(e) {
+    props.history.push("/admin/home");
+  }
+
   return (
     <svg
       onClick={e => {
-        this.navToHome(e);
+        navToHome(e);
       }}
       id="brainy-actz-logo"
       data-name="Layer 1"

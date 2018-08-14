@@ -190,7 +190,7 @@ class Locations extends React.Component {
         onMouseLeave={e => toggleTab1()}
         className={`locations-container`}
       >
-        <Logo />
+        <Logo {...this.props} />
         <ul className="locations-list">{listOfLocations}</ul>
         <AddNewLocation
           addNewItem={this.createNewLocation.bind(this)}
