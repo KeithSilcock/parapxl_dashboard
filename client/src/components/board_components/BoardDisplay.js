@@ -18,27 +18,6 @@ class BoardDisplay extends React.Component {
       currentDisplayData: {}
     };
   }
-  componentWillMount() {
-    const { currentLocation, boardLocation } = this.props;
-    if (boardLocation) {
-      // var path1 = `/boards/${currentLocation}/${boardLocation}`;
-      // db.ref(path1).on("value", snapshot => {
-      //   const displayData = snapshot.val();
-      //   if (displayData && displayData !== "no data yet") {
-      //     var path2 = `/displays/${displayData.current_display.display_id}`;
-      //     db.ref(path2).on("value", snapshot => {
-      //       const activeDisplay = snapshot.val();
-      //       this.setState({
-      //         ...this.state,
-      //         displayData,
-      //         activeDisplay
-      //       });
-      //     });
-      //   }
-      // });
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     if (!this.props.miniBoard) {
       const { location, board } = nextProps.match.params;
@@ -94,7 +73,7 @@ class BoardDisplay extends React.Component {
     if (!this.props.miniBoard) {
       var { currentDisplayData } = this.props;
     } else {
-      var { displayData: currentDisplayData } = this.props;
+      currentDisplayData = this.props.displayData;
     }
 
     var toRender = null;

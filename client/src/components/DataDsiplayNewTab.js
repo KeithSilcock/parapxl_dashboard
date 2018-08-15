@@ -14,10 +14,7 @@ class DataDisplayNewTab extends React.Component {
     };
   }
 
-  componentDidUpdate(newProps, newState) {
-    this.props;
-    this.state;
-
+  componentDidUpdate(newProps) {
     if (
       this.props.match.params.display_id !== newProps.match.params.display_id
     ) {

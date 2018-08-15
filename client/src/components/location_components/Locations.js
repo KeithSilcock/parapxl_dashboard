@@ -13,7 +13,6 @@ import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 import Logo from "../Logo";
 
 import "../../assets/locations.css";
-import AddNewBoard from "../board_components/AddNewBoard";
 
 class Locations extends React.Component {
   constructor(props) {
@@ -28,7 +27,7 @@ class Locations extends React.Component {
     this.getTabDistance(this.props);
   }
 
-  componentDidUpdate(nextProps, nextState) {
+  componentDidUpdate(nextProps) {
     const { location: newLocation } = nextProps;
     const { location: oldLocation } = this.props;
 
@@ -138,7 +137,7 @@ class Locations extends React.Component {
   }
 
   render() {
-    const { tab1Open, tab2Open, toggleTab1, locations } = this.props;
+    const { tab1Open, toggleTab1, locations } = this.props;
     const { location } = this.props.match.params;
 
     if (locations.length) {

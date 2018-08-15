@@ -2,7 +2,6 @@ import React from "react";
 import ReactPlayer from "react-player";
 
 export default props => {
-  const {} = props;
   return (
     <div className="no-location container">
       <div className="top">
@@ -14,7 +13,11 @@ export default props => {
         <div className="no-location main-text">
           <p>
             This application was designed as a CMS Dashboard for{" "}
-            <a target="_blank" href="https://brainyactzsocal.com/">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://brainyactzsocal.com/"
+            >
               escape-room companies
             </a>{" "}
             to create and view their info-board displays.
@@ -32,16 +35,28 @@ export default props => {
         </div>
         <p> Thank you for visting!</p>
         <p>Keith Silcock</p>
-        <ReactPlayer url="https://www.youtube.com/watch?v=wKkfEik21RY" />
+        <ReactPlayer
+          url="https://www.youtube.com/watch?v=wKkfEik21RY"
+          config={{
+            youtube: {
+              playerVars: { origin: "https://cbdashboard.keithsilcock.com" }
+            }
+          }}
+        />
       </div>
       <div className="no-location links">
         <a
           href="https://github.com/KeithSilcock/parapxl_dashboard"
           target="_blank"
+          rel="noopener noreferrer"
         >
-          <i class="fab fa-github-square" />
+          <i className="fab fa-github-square" />
         </a>
-        <a href="https://keithsilcock.com" target="_blank">
+        <a
+          href="https://keithsilcock.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           My porfolio
         </a>
       </div>

@@ -11,7 +11,8 @@ class EscapeRoomCarousel extends React.Component {
     super(props);
 
     this.state = {
-      displays: {}
+      displays: {},
+      canRotate: true
     };
   }
 
@@ -27,11 +28,17 @@ class EscapeRoomCarousel extends React.Component {
     });
   }
 
+  didPlayVideo() {
+    const { canRotate } = this.state;
+    this.setState({
+      ...this.state,
+      canRotate: !canRotate
+    });
+  }
+
   render() {
-    const {
-      displayData,
-      displayData: { list_of_displays }
-    } = this.props;
+    const { canRotate } = this.state;
+    const { displayData } = this.props;
 
     const interval = displayData.interval ? displayData.interval : 2;
 
@@ -42,10 +49,13 @@ class EscapeRoomCarousel extends React.Component {
           if (Object.keys(displays).indexOf(display.display_id) >= 0) {
             return (
               <RenderDisplayComponent
+                didPlayVideo={this.didPlayVideo.bind(this)}
                 key={index}
                 currentDisplayData={display}
               />
             );
+          } else {
+            return null;
           }
         }
       );
@@ -58,6 +68,7 @@ class EscapeRoomCarousel extends React.Component {
         showThumbs={false}
         showArrows={false}
         showStatus={false}
+        // autoPlay={canRotate}
         autoPlay={true}
         interval={formatToMiliSeconds(interval)}
         transitionTime={350}

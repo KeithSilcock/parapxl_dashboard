@@ -2,15 +2,11 @@ import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import "../assets/App.css";
 import LandingPage from "./LandingPage";
-import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
-import AllDisplays from "./display_components/AllDisplays";
 import TemplatePage from "./template_components/TemplatePage";
 import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
 import TempAuth from "./TempAuth";
 import WarningModal from "./EasyModal";
-
-//TODO Finish adding animation for "EditDisplays"
 
 class App extends Component {
   constructor(props) {
@@ -34,12 +30,6 @@ class App extends Component {
   }
 
   render() {
-    const { buttonState, openModal, modalData } = this.state;
-
-    // const modal = openModal ? (
-
-    // ) : null;
-
     return (
       <div className="App">
         <link
@@ -54,7 +44,6 @@ class App extends Component {
         />
         <WarningModal />
         <Route exact path="/" render={props => <TempAuth {...props} />} />
-        {/* <Route path="/admin/home/:location?/:board?" component={Nav} /> */}
         <Route
           path="/admin/home/:location?/:board?"
           render={props => <LandingPage {...props} />}
