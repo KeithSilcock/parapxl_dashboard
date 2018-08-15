@@ -7,7 +7,7 @@ export default props => {
       <div className="top">
         <h1>
           To start using the BrainyActz dashboard, please select a location on
-          the right!
+          the left!
         </h1>
         <h3>Or if you're pressed for time, please watch my overview below.</h3>
         <div className="no-location main-text">
