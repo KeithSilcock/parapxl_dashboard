@@ -3,7 +3,6 @@
   margin: 0;
   width: 100%;
   text-align: center;
-  background-color: white;
 }
 .text-board.container {
   width: 100%;
@@ -14,20 +13,27 @@
 
   background-repeat: no-repeat;
   background-size: cover;
-  font-size: 110%;
+  font-size: 120%;
+  line-height: 25px;
+}
+.text-board.text-content {
+  width: 60%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  /* background-color: rgb(0, 0, 0); */
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  /* color: white; */
 }
 .text-board.title {
-  width: 60%;
 }
 .text-board.subtitle {
-  width: 60%;
 }
 .text-board img {
   max-width: 100%;
   height: auto;
 }
 .text-board.text-box {
-  width: 60%;
   word-wrap: break-word;
 }
 
@@ -47,13 +53,18 @@
 
   background-repeat: no-repeat;
   background-size: cover;
-  font-size: 120%;
+  font-size: 110%;
+  line-height: 25px;
   color: white;
 }
 .escape-room.text-content {
   display: flex;
   flex-flow: column;
   align-items: center;
+  width: 60%;
+
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .escape-room .back-button {
   position: absolute;
@@ -62,15 +73,12 @@
 }
 .escape-room.title {
   text-shadow: 2px 2px rgb(0, 0, 0);
-  width: 60%;
 }
 .escape-room.subtitle {
   text-shadow: 2px 2px rgb(0, 0, 0);
-  width: 60%;
 }
 .escape-room.text-box {
   text-shadow: 2px 2px rgb(0, 0, 0);
-  width: 60%;
 }
 .escape-room.video-box {
   display: flex;
