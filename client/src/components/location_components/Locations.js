@@ -13,7 +13,6 @@ import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 import Logo from "../Logo";
 
 import "../../assets/locations.css";
-import AddNewBoard from "../board_components/AddNewBoard";
 
 class Locations extends React.Component {
   constructor(props) {
@@ -28,7 +27,7 @@ class Locations extends React.Component {
     this.getTabDistance(this.props);
   }
 
-  componentDidUpdate(nextProps, nextState) {
+  componentDidUpdate(nextProps) {
     const { location: newLocation } = nextProps;
     const { location: oldLocation } = this.props;
 
@@ -90,20 +89,23 @@ class Locations extends React.Component {
     let stopReduce = false;
     if (locations.length) {
       // set height manually due to logo and 50px margin on tab1
-      let start = tab1Open ? 12.5 : 7.125;
-      if (board && !tab2Open) {
-        start = start / 2;
-      }
+      let start = tab1Open ? locations.indexOf(location) : 1;
+      start = tab2Open ? start + (locations.indexOf(location) + 1) : start / 2;
+      // if (board && !tab2Open) {
+      //   start = start / 2;
+      // } else if (tab2Open) {
+      //   start = start;
+      // }
       const distanceDownNav = locations.reduce((acc, item, index) => {
         var locAbbrev = getFirstLetters(capitalizeFirstLetters(item, true));
 
         if (location === item && index === 0 && tab1Open) {
           stopReduce = true;
-          return acc + locAbbrev.length - 1;
+          return acc + item.length - 1;
         }
         if (location === item) {
           stopReduce = true;
-          return acc + locAbbrev.length + 1;
+          return acc + item.length;
         }
         if (stopReduce) {
           return acc;
@@ -138,7 +140,7 @@ class Locations extends React.Component {
   }
 
   render() {
-    const { tab1Open, tab2Open, toggleTab1, locations } = this.props;
+    const { tab1Open, toggleTab1, locations } = this.props;
     const { location } = this.props.match.params;
 
     if (locations.length) {
@@ -190,7 +192,7 @@ class Locations extends React.Component {
         onMouseLeave={e => toggleTab1()}
         className={`locations-container`}
       >
-        <Logo />
+        <Logo {...this.props} />
         <ul className="locations-list">{listOfLocations}</ul>
         <AddNewLocation
           addNewItem={this.createNewLocation.bind(this)}

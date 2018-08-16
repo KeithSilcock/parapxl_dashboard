@@ -5,11 +5,7 @@ import RenderDisplayComponent from "../RenderDisplayComponent";
 import ChooseDisplays from "./ChooseDisplays";
 import db from "../../firebase";
 import DisplayListOfDisplays from "../DisplayComponents/DisplayListOfDisplays";
-import {
-  formatToMiliSeconds,
-  formatFromMiliSeconds,
-  capitalizeFirstLetters
-} from "../../helpers";
+import { formatToMiliSeconds, capitalizeFirstLetters } from "../../helpers";
 
 class EditTemplate extends React.Component {
   constructor(props) {
@@ -59,7 +55,7 @@ class EditTemplate extends React.Component {
 
   emptyInputOnFocus(e) {
     const { template } = this.state;
-    const { name, value } = e.target;
+    const { name } = e.target;
     if (
       template[name] === "<template>" ||
       template[name] === "My New Template"
@@ -88,7 +84,7 @@ class EditTemplate extends React.Component {
 
   addDisplaysToTemplate(list_of_displays, list_of_ids) {
     if (!list_of_ids) {
-      var list_of_ids = this.state.prev_ids;
+      list_of_ids = this.state.prev_ids;
     }
 
     if (this.state.template.type === "escape-room-list") {
@@ -179,13 +175,11 @@ class EditTemplate extends React.Component {
 
   render() {
     const { template, escapeRoomsListOpen, prev_ids } = this.state;
-    const { aCLS, aCRS, positionEnd, slideAnim, selectedTemplate } = this.props;
+    const { aCLS, aCRS, positionEnd, selectedTemplate } = this.props;
 
     if (Object.keys(selectedTemplate).length) {
       var renderTemplateEdit = Object.keys(selectedTemplate).map(
         (item, index) => {
-          const val = selectedTemplate[item];
-
           const value = template[item] !== "<template>" ? template[item] : "";
 
           const itemName = item === "background_img" ? "Backgound Image" : item;

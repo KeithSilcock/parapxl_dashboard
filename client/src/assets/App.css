@@ -68,13 +68,14 @@ body {
   font-weight: bold;
   min-height: 30px;
   cursor: initial;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .back-button {
   /* position: relative; */
   box-sizing: border-box;
   padding: 0;
+  margin-left: 1%;
   height: 50px;
   width: 50px;
   border-radius: 50%;

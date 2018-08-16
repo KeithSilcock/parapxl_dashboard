@@ -2,18 +2,17 @@ import React from "react";
 import db from "../../firebase";
 import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
-import BoardDisplay from "./BoardDisplay";
 import { toggleTab2, setBoardsForLocation, getData } from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 
 import "../../assets/boards.css";
 
 class Boards extends React.Component {
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     const { locations, boards, dbData } = nextProps;
-    const { locations: prevLocs, boards: prevBoards } = this.props;
+    const { locations: prevLocs } = this.props;
     const { location, board } = this.props.match.params;
-    const { location: newLocation, board: newBoard } = nextProps.match.params;
+    const { location: newLocation } = nextProps.match.params;
 
     if (locations.length) {
       //if new location:
@@ -139,27 +138,11 @@ class Boards extends React.Component {
         );
       });
     } else {
-      var listOfBoards = null;
+      listOfBoards = null;
     }
 
     //push second nav down towards current location selection
     const pushDownNavStyle = { marginTop: `${activeTabDistance}em` };
-
-    // const backButton =
-    //   this.props.location.pathname ===
-    //   `/admin/home/${location}/${board}/add-new/display` ? (
-    //     <div
-    //       className="back-button-container"
-    //       onClick={e => {
-    //         this.props.history.push(`/admin/home/${location}/${board}`);
-    //       }}
-    //     >
-    //       <button className="back-button">
-    //         <div className="text">&lt;</div>
-    //       </button>
-    //       <div className="hider" />
-    //     </div>
-    //   ) : null;
 
     return (
       <div

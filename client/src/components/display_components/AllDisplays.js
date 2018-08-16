@@ -5,7 +5,7 @@ import BoardDisplay from "../board_components/BoardDisplay";
 import { connect } from "react-redux";
 import { setDisplayData } from "../../actions";
 import { capitalizeFirstLetters } from "../../helpers";
-import DisplayOptions from "./Display_Options";
+import DisplayOptions from "./DisplayOptions";
 
 // import EditDisplayModal from "./EditDisplayModal";
 
@@ -254,13 +254,15 @@ class AllDisplays extends React.Component {
                     </div>
                     <DisplayOptions boardHash={displayHash} />
                     {/* <span onClick={e=> this.openOptions(displayHash)} className="all-displays item-options">
-                      <i class="fas fa-ellipsis-v" />
+                      <i className="fas fa-ellipsis-v" />
                     </span> */}
                   </div>
                   <BoardDisplay miniBoard={true} displayData={displayData} />
                 </div>
               </li>
             );
+          } else {
+            return null;
           }
         });
       } else {
@@ -323,7 +325,7 @@ class AllDisplays extends React.Component {
         : { maxHeight: "0" };
 
       return (
-        <div className="all-displays list-container">
+        <div key={index1} className="all-displays list-container">
           <div
             className="all-displays list-header"
             onClick={e => {
@@ -411,7 +413,7 @@ class AllDisplays extends React.Component {
               this.props.history.push(`/admin/home/${location}/${board}`);
             }}
           >
-            <i class="fas fa-chevron-left" />
+            <i className="fas fa-chevron-left" />
           </button>
           <div className="all-displays header-text">
             <h2> All BrainyActz Displays</h2>

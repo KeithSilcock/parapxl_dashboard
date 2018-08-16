@@ -42,7 +42,7 @@ class OptionsDropDown extends React.Component {
 
     return (
       <div className="options-drop-down container">
-        <i onClick={e => this.toggleOpen(e)} class="fas fa-ellipsis-v" />
+        <i onClick={e => this.toggleOpen(e)} className="fas fa-ellipsis-v" />
         {menu}
       </div>
     );

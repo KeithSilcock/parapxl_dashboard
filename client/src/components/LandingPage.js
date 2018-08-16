@@ -23,19 +23,7 @@ class DatabaseTest extends React.Component {
     };
   }
 
-  // TODO
-  // make sure to clear appropriate state components when changing location/boards/displays
-  // double click to edit anything
-  // remove currentDisplayType from state
-
   componentWillMount() {
-    // const path = "/location_list";
-    // db.ref(path).on("value", snapshot => {
-    //   const listOfLocations = Object.keys(snapshot.val());
-    //   this.props.setLocations(listOfLocations);
-    //   return;
-    // });
-
     this.props.getData();
   }
 
@@ -58,15 +46,6 @@ class DatabaseTest extends React.Component {
   }
 
   render() {
-    const { locations } = this.state;
-    const { location, board } = this.props.match.params;
-
-    // const setHeight =
-    //   this.props.location.pathname !==
-    //   `/admin/home/${location}/${board}/add-new/display`
-    //     ? { top: "0", transition: "all 1s" }
-    //     : { top: "-100%", transition: "all 1s" };
-
     return (
       <div className="landing-page-container">
         <Route path={`/admin/home/:location?/:board?`} component={Locations} />

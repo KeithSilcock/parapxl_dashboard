@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions";
 import "../../assets/addNewLocation.css";
-import WarningModal from "../EasyModal";
 import EasyForm from "../EasyForm";
 
 class AddNewDBItem extends React.Component {

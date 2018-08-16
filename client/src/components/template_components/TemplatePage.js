@@ -13,10 +13,6 @@ class TemplatePage extends React.Component {
     };
   }
 
-  //   componentWillUpdate(one, two, three) {
-  //     debugger;
-  //   }
-
   timedAnimation() {
     const slidingLeft = !this.state.templatesHidden;
     this.setState({
@@ -62,7 +58,7 @@ class TemplatePage extends React.Component {
           ? "template-slide-left-end"
           : "";
     } else {
-      var positionEnd =
+      positionEnd =
         !templatesAreTransitioning.left && !templatesAreTransitioning.right
           ? "template-slide-right-end"
           : "";

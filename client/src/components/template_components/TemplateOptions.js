@@ -26,7 +26,7 @@ class TemplateOptions extends React.Component {
         <img
           className="template-display image"
           src="https://www.potterybarn.com/pbimgs/rk/images/dp/wcm/201824/0424/faux-potted-orchid-c.jpg"
-          alt="template image"
+          alt="template"
         />
       </div>
     ) : null;
@@ -160,6 +160,11 @@ class TemplateOptions extends React.Component {
 
     const video = displayData.video ? (
       <ReactPlayer
+        config={{
+          youtube: {
+            playerVars: { origin: "https://cbdashboard.keithsilcock.com" }
+          }
+        }}
         className="template_display video"
         width="100"
         height="100"

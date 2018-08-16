@@ -24,7 +24,7 @@ export default function(state = DEFAULT_STATE, action) {
       if (action.payload && state.dbData[action.payload] !== "no data yet") {
         var boards = Object.keys(state.dbData[action.payload]);
       } else {
-        var boards = [];
+        boards = [];
       }
       return {
         ...state,

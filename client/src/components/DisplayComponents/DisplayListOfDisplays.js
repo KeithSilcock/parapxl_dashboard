@@ -17,7 +17,7 @@ class DisplayListOfDisplays extends React.Component {
     if (currentData.type === "carousel") {
       var list_of_displays = currentData.carousel_displays;
     } else if (currentData.type === "escape-room-list") {
-      var list_of_displays = currentData.list_of_displays;
+      list_of_displays = currentData.list_of_displays;
     }
 
     if (list_of_displays === "<template>") {
@@ -36,7 +36,7 @@ class DisplayListOfDisplays extends React.Component {
       if (currentData.type === "carousel") {
         var name = "carousel_displays";
       } else if (currentData.type === "escape-room-list") {
-        var name = "list_of_displays";
+        name = "list_of_displays";
       }
 
       if (
@@ -60,7 +60,7 @@ class DisplayListOfDisplays extends React.Component {
 
   toggleEscapeRoom(e, display, arrayIndex) {
     const { excludedDisplays, localData } = this.state;
-    const { checked, value } = e.target;
+    const { checked } = e.target;
 
     const newLocalData = localData.map((item, index) => {
       if (index === arrayIndex) {
@@ -73,7 +73,7 @@ class DisplayListOfDisplays extends React.Component {
     if (checked) {
       const displayIndex = excludedDisplays.indexOf(arrayIndex);
       const copy = [...excludedDisplays];
-      const removedDisplay = copy.splice(displayIndex, 1);
+      copy.splice(displayIndex, 1);
 
       this.setState({
         ...this.state,
@@ -96,7 +96,7 @@ class DisplayListOfDisplays extends React.Component {
     if (currentData.type === "carousel") {
       var name = "carousel_displays";
     } else if (currentData.type === "escape-room-list") {
-      var name = "list_of_displays";
+      name = "list_of_displays";
     }
 
     //remove targeted displays
@@ -135,7 +135,7 @@ class DisplayListOfDisplays extends React.Component {
             id={`checkbox${index2}${display.display_id}`}
             defaultChecked
           />
-          <label for={`checkbox${index2}${display.display_id}`}>
+          <label htmlFor={`checkbox${index2}${display.display_id}`}>
             {display.title}
           </label>
         </li>

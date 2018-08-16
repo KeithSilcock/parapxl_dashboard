@@ -117,7 +117,7 @@ class EditDataDisplayed extends React.Component {
       : null;
 
     if (currentData && currentDisplay !== "no data yet") {
-      var displayItems = Object.keys(currentData).map((dataKey, index) => {
+      displayItems = Object.keys(currentData).map((dataKey, index) => {
         const displayData = currentData[dataKey];
 
         var inputCont = null;

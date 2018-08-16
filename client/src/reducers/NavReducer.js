@@ -1,5 +1,4 @@
 import types from "../actions/types";
-import { startTab1 } from "../actions";
 
 const DEFAULT_STATE = {
   tab1Open: false,
