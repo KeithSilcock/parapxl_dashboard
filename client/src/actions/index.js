@@ -40,30 +40,22 @@ export function setTabDistanceDownNav(distance) {
     payload: distance
   };
 }
+export function handleFormChange(event) {
+  const { value } = event.currentTarget;
 
-// export function setCurrentLocation(location) {
-//   return {
-//     type: types.SET_CURRENT_LOCATION,
-//     payload: location
-//   };
-// }
-// export function setLocations(locations) {
-//   return {
-//     type: types.SET_LOCATIONS,
-//     payload: locations
-//   };
-// }
-
-// export function setBoardLocation(loc) {
-//   return {
-//     type: types.SET_BOARD_LOCATION,
-//     payload: loc
-//   };
-// }
-
+  return {
+    type: types.UPDATE_MODAL_INPUT,
+    payload: value
+  };
+}
 export function toggleModal(modalData) {
   return {
     type: types.TOGGLE_MODAL,
     payload: modalData
+  };
+}
+export function clearModalInput() {
+  return {
+    type: types.CLEAR_MODAL_INPUT
   };
 }

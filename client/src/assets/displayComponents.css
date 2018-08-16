@@ -39,8 +39,6 @@
 
 /* Escape Room */
 .escape-room {
-  margin: 0;
-  /* width: 15rem; */
   text-align: center;
 }
 .escape-room.container {
@@ -61,7 +59,7 @@
   display: flex;
   flex-flow: column;
   align-items: center;
-  width: 60%;
+  width: 80%;
 
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.5);
@@ -72,12 +70,17 @@
   top: 10px;
 }
 .escape-room.title {
+  line-height: 55px;
   text-shadow: 2px 2px rgb(0, 0, 0);
+  margin: 0;
 }
 .escape-room.subtitle {
+  line-height: 45px;
+  margin: 0;
   text-shadow: 2px 2px rgb(0, 0, 0);
 }
 .escape-room.text-box {
+  margin: 0;
   text-shadow: 2px 2px rgb(0, 0, 0);
 }
 .escape-room.video-box {
