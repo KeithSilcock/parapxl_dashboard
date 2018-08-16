@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { toggleModal } from "../../actions";
+import { toggleModal, clearModalInput } from "../../actions";
 import EasyForm from "../EasyForm";
 
 import "../../assets/addNewBoard.css";
@@ -22,8 +22,14 @@ class AddNewBoard extends React.Component {
           autoFocus={true}
         />
       ),
-      confirm: addNewItem,
-      cancel: toggleModal
+      confirm: () => {
+        addNewItem();
+        toggleModal();
+      },
+      cancel: e => {
+        toggleModal();
+        clearModalInput();
+      }
     };
 
     return (
@@ -46,5 +52,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { toggleModal }
+  { toggleModal, clearModalInput }
 )(AddNewBoard);

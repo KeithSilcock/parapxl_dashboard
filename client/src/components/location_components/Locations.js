@@ -7,7 +7,8 @@ import {
   setTabDistanceDownNav,
   getData,
   setDisplayData,
-  setBoardsForLocation
+  setBoardsForLocation,
+  clearModalInput
 } from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 import Logo from "../Logo";
@@ -117,14 +118,16 @@ class Locations extends React.Component {
     }
   }
 
-  createNewLocation(e, newLocationName) {
+  createNewLocation(e) {
     if (e) e.preventDefault();
+    const { newLocationName } = this.props;
 
     if (newLocationName !== "") {
       db.ref(`boards/${newLocationName}`).set("no data yet", () => {
         this.props.history.push(`/admin/home/${newLocationName}`);
         this.props.setDisplayData({});
         this.props.getData();
+        this.props.clearModalInput();
       });
     }
   }
@@ -208,7 +211,8 @@ function mapStateToProps(state) {
     locations: state.data.locations,
     boards: state.data.boards,
     tab1Open: state.navData.tab1Open,
-    tab2Open: state.navData.tab2Open
+    tab2Open: state.navData.tab2Open,
+    newLocationName: state.data.modalInputValue
   };
 }
 
@@ -219,6 +223,7 @@ export default connect(
     setTabDistanceDownNav,
     getData,
     setBoardsForLocation,
-    setDisplayData
+    setDisplayData,
+    clearModalInput
   }
 )(Locations);

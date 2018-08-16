@@ -1,33 +1,39 @@
 import React from "react";
 import { connect } from "react-redux";
-import { toggleModal } from "../actions";
+import { toggleModal, handleFormChange } from "../actions";
 
 class EasyInput extends React.Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
 
-    this.state = {
-      inputData: ""
-    };
-  }
+  //   this.state = {
+  //     inputData: ""
+  //   };
+  // }
 
-  handleInputChange(event) {
-    const { name, value } = event.currentTarget;
+  // handleInputChange(event) {
+  //   const { name, value } = event.currentTarget;
 
-    this.setState({
-      ...this.state,
-      [name]: value
-    });
-  }
+  //   this.setState({
+  //     ...this.state,
+  //     [name]: value
+  //   });
+  // }
 
   render() {
-    const { inputData } = this.state;
-    const { placeholder, autoFocus, onSub, toggleModal } = this.props;
+    // const { inputData } = this.state;
+    const {
+      placeholder,
+      autoFocus,
+      onSub,
+      toggleModal,
+      inputValue
+    } = this.props;
 
     return (
       <form
         onSubmit={e => {
-          onSub(e, inputData);
+          onSub(e);
           toggleModal();
         }}
       >
@@ -36,8 +42,8 @@ class EasyInput extends React.Component {
           autoFocus={autoFocus}
           type="text"
           name="inputData"
-          onChange={this.handleInputChange.bind(this)}
-          value={inputData}
+          onChange={e => this.props.handleFormChange(e)}
+          value={inputValue}
         />
       </form>
     );
@@ -45,9 +51,11 @@ class EasyInput extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return state;
+  return {
+    inputValue: state.data.modalInputValue
+  };
 }
 export default connect(
   mapStateToProps,
-  { toggleModal }
+  { toggleModal, handleFormChange }
 )(EasyInput);

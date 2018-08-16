@@ -2,7 +2,12 @@ import React from "react";
 import db from "../../firebase";
 import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
-import { toggleTab2, setBoardsForLocation, getData } from "../../actions/";
+import {
+  toggleTab2,
+  setBoardsForLocation,
+  getData,
+  clearModalInput
+} from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 
 import "../../assets/boards.css";
@@ -46,8 +51,9 @@ class Boards extends React.Component {
     }
   }
 
-  createNewBoard(e, newBoardName) {
-    e.preventDefault();
+  createNewBoard(e) {
+    if (e) e.preventDefault();
+    const { newBoardName } = this.props;
 
     const { location } = this.props.match.params;
     db.ref(`boards/${location}/${newBoardName}`).set(
@@ -56,6 +62,7 @@ class Boards extends React.Component {
         this.props.getData();
         this.props.setBoardsForLocation(location);
         this.props.history.push(`/admin/home/${location}/${newBoardName}`);
+        this.props.clearModalInput();
       }
     );
   }
@@ -173,11 +180,12 @@ function mapStateToProps(state) {
     locations: state.data.locations,
     boards: state.data.boards,
     tab2Open: state.navData.tab2Open,
-    activeTabDistance: state.navData.activeTabDistance
+    activeTabDistance: state.navData.activeTabDistance,
+    newBoardName: state.data.modalInputValue
   };
 }
 
 export default connect(
   mapStateToProps,
-  { toggleTab2, setBoardsForLocation, getData }
+  { toggleTab2, setBoardsForLocation, getData, clearModalInput }
 )(Boards);

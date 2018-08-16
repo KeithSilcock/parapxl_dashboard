@@ -7,7 +7,8 @@ const DEFAULT_STATE = {
   displayInfo: {},
   currentDisplayData: {},
   modalDisplayed: false,
-  modalData: {}
+  modalData: {},
+  modalInputValue: null
 };
 
 export default function(state = DEFAULT_STATE, action) {
@@ -47,6 +48,17 @@ export default function(state = DEFAULT_STATE, action) {
         ...state,
         modalDisplayed: !state.modalDisplayed,
         modalData: payload
+      };
+
+    case types.UPDATE_MODAL_INPUT:
+      return {
+        ...state,
+        modalInputValue: action.payload
+      };
+    case types.CLEAR_MODAL_INPUT:
+      return {
+        ...state,
+        modalInputValue: null
       };
 
     default:
