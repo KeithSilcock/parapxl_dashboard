@@ -1,8 +1,6 @@
 .new-tab {
   height: 100vh;
   width: 100vw;
-  margin: auto;
-  overflow-x: hidden;
 }
 .new-tab::-webkit-scrollbar {
   display: none;
@@ -18,19 +16,19 @@
   align-items: center;
 }
 .new-tab .title {
+  line-height: 55px;
   font-size: 2.8em;
 }
 
 .new-tab .subtitle {
   /* margin: 2% 0 0 0; */
   font-size: 1.8em;
+  line-height: 40px;
 }
 
 .new-tab .text-box {
-  margin: 2% 0 0 0;
   font-size: 1.3em;
-  overflow-y: auto;
-  width: 60%;
+  line-height: 30px;
 }
 .new-tab .text-board.image {
   margin: 2% 0 0 0;
@@ -38,7 +36,6 @@
 
 /* Escape Room */
 .new-tab .escape-room {
-  width: auto;
 }
 .new-tab .escape-room.container {
   /* display: flex; */
@@ -49,7 +46,7 @@
 .new-tab .escape-room.subtitle {
 }
 .new-tab .escape-room.video-box {
-  width: 47%;
+  width: auto;
   align-self: center;
 }
 .new-tab .escape-room.video {
@@ -57,7 +54,9 @@
   height: 50vh;
 }
 .new-tab .escape-room.video div {
-  height: 100%;
+  /* height: 100%; */
+  height: 540px;
+  width: 960px;
 }
 
 .new-tab .escape-room-list.item {
