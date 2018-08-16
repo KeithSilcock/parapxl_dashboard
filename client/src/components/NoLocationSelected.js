@@ -36,7 +36,8 @@ export default props => {
         <p> Thank you for visting!</p>
         <p>Keith Silcock</p>
         <ReactPlayer
-          url="https://www.youtube.com/watch?v=wKkfEik21RY"
+          url="https://youtu.be/8NYX6F4ny1U"
+          controls={true}
           config={{
             youtube: {
               playerVars: { origin: "https://cbdashboard.keithsilcock.com" }
