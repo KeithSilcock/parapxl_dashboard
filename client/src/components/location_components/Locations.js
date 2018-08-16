@@ -89,20 +89,23 @@ class Locations extends React.Component {
     let stopReduce = false;
     if (locations.length) {
       // set height manually due to logo and 50px margin on tab1
-      let start = tab1Open ? 15.5 : 7.125;
-      if (board && !tab2Open) {
-        start = start / 2;
-      }
+      let start = tab1Open ? locations.indexOf(location) : 1;
+      start = tab2Open ? start + (locations.indexOf(location) + 1) : start / 2;
+      // if (board && !tab2Open) {
+      //   start = start / 2;
+      // } else if (tab2Open) {
+      //   start = start;
+      // }
       const distanceDownNav = locations.reduce((acc, item, index) => {
         var locAbbrev = getFirstLetters(capitalizeFirstLetters(item, true));
 
         if (location === item && index === 0 && tab1Open) {
           stopReduce = true;
-          return acc + locAbbrev.length - 1;
+          return acc + item.length - 1;
         }
         if (location === item) {
           stopReduce = true;
-          return acc + locAbbrev.length + 1;
+          return acc + item.length;
         }
         if (stopReduce) {
           return acc;
