@@ -68,7 +68,7 @@ body {
   font-weight: bold;
   min-height: 30px;
   cursor: initial;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .back-button {

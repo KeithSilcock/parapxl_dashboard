@@ -117,6 +117,7 @@
 }
 
 #brainy-actz-logo {
-  padding-top: 10%;
-  padding-left: 3%;
+  max-height: 100px;
+  /* padding-top: 10%;
+  padding-left: 3%; */
 }
