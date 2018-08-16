@@ -89,7 +89,7 @@ class Locations extends React.Component {
     let stopReduce = false;
     if (locations.length) {
       // set height manually due to logo and 50px margin on tab1
-      let start = tab1Open ? 12.5 : 7.125;
+      let start = tab1Open ? 15.5 : 7.125;
       if (board && !tab2Open) {
         start = start / 2;
       }
