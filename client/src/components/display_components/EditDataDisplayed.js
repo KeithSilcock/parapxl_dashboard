@@ -12,7 +12,7 @@ class EditDataDisplayed extends React.Component {
     super(props);
 
     this.state = {
-      currentData: {},
+      tempData: {},
       canSubmit: false,
       firstBreath: true
     };
@@ -47,18 +47,20 @@ class EditDataDisplayed extends React.Component {
   }
 
   onDisplayDataChange(e) {
-    const { currentData } = this.props;
+    // const { currentData } = this.props;
+    const { tempData } = this.state;
     const { name, value } = e.currentTarget;
 
-    const newData = { ...currentData, [name]: value };
+    const newData = { ...tempData, [name]: value };
 
     this.setState(
       {
         ...this.state,
+        tempData: newData,
         canSubmit: true
       },
       () => {
-        this.props.setDisplayData(newData);
+        // this.props.setDisplayData(newData);
       }
     );
   }
@@ -66,11 +68,14 @@ class EditDataDisplayed extends React.Component {
   updateDisplays(e) {
     e.preventDefault();
     const { currentData } = this.props;
+    const { tempData } = this.state;
     const { location, board } = this.props.match.params;
     const currentDisplay = this.props.dbData[location][board].current_display;
 
+    const finalData = Object.assign({ ...currentData }, { ...tempData });
+
     const path = `/displays/${currentDisplay.display_id}/`;
-    db.ref(path).set({ ...currentData }, () => {
+    db.ref(path).set(finalData, () => {
       this.setState({
         ...this.state,
         canSubmit: false
@@ -107,14 +112,16 @@ class EditDataDisplayed extends React.Component {
   // }
 
   render() {
-    const { canSubmit } = this.state;
-    const { dbData, currentData } = this.props;
+    const { canSubmit, tempData } = this.state;
+    const { dbData, currentData: startingData } = this.props;
     const { location, board } = this.props.match.params;
     var displayItems = null;
 
     const currentDisplay = Object.keys(dbData).length
       ? dbData[location][board]
       : null;
+
+    const currentData = Object.assign({ ...startingData }, { ...tempData });
 
     if (currentData && currentDisplay !== "no data yet") {
       displayItems = Object.keys(currentData).map((dataKey, index) => {
