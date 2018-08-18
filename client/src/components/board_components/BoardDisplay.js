@@ -23,25 +23,27 @@ class BoardDisplay extends React.Component {
       const { location, board } = nextProps.match.params;
       const { dbData, currentDisplayData } = nextProps;
       const prevBoard = this.props.match.params.board;
-      const currentDisplay = dbData[location][board];
 
-      if (!board) {
-        this.setState({
-          ...this.state,
-          displayData: {}
-        });
-        return;
-      }
-      if (prevBoard !== board) {
-        this.getDisplayData(currentDisplay);
-      }
+      if (Object.keys(dbData).length) {
+        const currentDisplay = dbData[location][board];
+        if (!board) {
+          this.setState({
+            ...this.state,
+            displayData: {}
+          });
+          return;
+        }
+        if (prevBoard !== board) {
+          this.getDisplayData(currentDisplay);
+        }
 
-      if (
-        !Object.keys(currentDisplayData).length &&
-        Object.keys(currentDisplay).length
-      ) {
-        this.props.setDisplayData({ alive: true });
-        this.getDisplayData(currentDisplay);
+        if (
+          !Object.keys(currentDisplayData).length &&
+          Object.keys(currentDisplay).length
+        ) {
+          this.props.setDisplayData({ alive: true });
+          this.getDisplayData(currentDisplay);
+        }
       }
     }
   }

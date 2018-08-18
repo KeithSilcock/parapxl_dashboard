@@ -3,7 +3,9 @@ import types from "../actions/types";
 const DEFAULT_STATE = {
   tab1Open: false,
   tab2Open: false,
-  activeTabDistance: 0
+  activeTabDistance: 0,
+  mobileNavOpen: false,
+  isMobile: false
 };
 
 export default function(state = DEFAULT_STATE, action) {
@@ -25,7 +27,16 @@ export default function(state = DEFAULT_STATE, action) {
         ...state,
         activeTabDistance: action.payload
       };
-
+    case types.TOGGLE_MOBILE_NAV:
+      return {
+        ...state,
+        mobileNavOpen: !state.mobileNavOpen
+      };
+    case types.IS_MOBILE:
+      return {
+        ...state,
+        isMobile: true
+      };
     default:
       return state;
   }

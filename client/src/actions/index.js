@@ -59,3 +59,15 @@ export function clearModalInput() {
     type: types.CLEAR_MODAL_INPUT
   };
 }
+
+export function setMobileView() {
+  return {
+    type: types.IS_MOBILE
+  };
+}
+
+export function toggleMobileNav() {
+  return {
+    type: types.TOGGLE_MOBILE_NAV
+  };
+}

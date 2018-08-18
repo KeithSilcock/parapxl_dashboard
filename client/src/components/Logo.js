@@ -1,12 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
+import {} from "../actions";
 
-export default props => {
-  return (
-    <a
-      href="https://brainyactzsocal.com/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+class Logo extends React.Component {
+  render() {
+    const { isMobile } = this.props;
+    const svgLogo = (
       <svg
         id="brainy-actz-logo"
         data-name="Layer 1"
@@ -38,6 +37,30 @@ export default props => {
           </g>
         </g>
       </svg>
-    </a>
-  );
-};
+    );
+
+    if (!isMobile) {
+      return (
+        <a
+          href="https://brainyactzsocal.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {svgLogo}
+        </a>
+      );
+    } else {
+      return <div className="mobile-nav-logo">{svgLogo}</div>;
+    }
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    isMobile: state.navData.isMobile
+  };
+}
+export default connect(
+  mapStateToProps,
+  {}
+)(Logo);

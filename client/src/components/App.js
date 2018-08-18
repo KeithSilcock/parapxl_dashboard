@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
+import { connect } from "react-redux";
+import { setMobileView } from "../actions";
 import "../assets/App.css";
 import LandingPage from "./LandingPage";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
@@ -7,6 +9,8 @@ import TemplatePage from "./template_components/TemplatePage";
 import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
 import TempAuth from "./TempAuth";
 import WarningModal from "./EasyModal";
+
+import "../assets/mediaQueries.css";
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +22,11 @@ class App extends Component {
   }
   componentDidMount() {
     document.title = "BrainyActz Dashboard";
+    const mq = window.matchMedia("(max-width: 500px)");
+    if (mq.matches) {
+      //is phone or smaller
+      this.props.setMobileView();
+    }
   }
 
   clickButton() {
@@ -70,4 +79,10 @@ class App extends Component {
   }
 }
 
-export default App;
+function mSTP(state) {
+  return state;
+}
+export default connect(
+  mSTP,
+  { setMobileView }
+)(App);
