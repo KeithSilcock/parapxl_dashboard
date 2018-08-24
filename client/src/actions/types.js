@@ -8,5 +8,7 @@ export default {
   SET_DISTANCE_DOWN_NAV: "set_distance_down_nav",
   TOGGLE_MODAL: "toggle_modal",
   UPDATE_MODAL_INPUT: "update_modal_input",
-  CLEAR_MODAL_INPUT: "clear_modal_input"
+  CLEAR_MODAL_INPUT: "clear_modal_input",
+  IS_MOBILE: "is_mobile",
+  TOGGLE_MOBILE_NAV: "toggle_mobile_nav"
 };

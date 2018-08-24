@@ -1,0 +1,38 @@
+@media screen and (max-width: 400px) {
+  .locations-container {
+    width: 100vw;
+    height: 5%;
+  }
+
+  .locations-container:active {
+    height: 100%;
+    width: 40%;
+  }
+  .locations-container:active + .boards-container {
+    left: 40%;
+    width: 40%;
+  }
+  .add-new-item-button {
+    font-size: 2em;
+  }
+  .mobile-nav-logo {
+    height: 40px;
+    width: 15%;
+  }
+  #brainy-actz-logo {
+    max-height: 100%;
+  }
+
+  /* .boards-container {
+      left: 7%;
+      width: 7%;
+    } */
+
+  /* .boards-container:hover,
+  .boards-container:active {
+    width: 40%;
+  } */
+  .add-new-board-button {
+    font-size: 2em;
+  }
+}

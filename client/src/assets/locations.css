@@ -19,7 +19,8 @@
   overflow: hidden;
   transition: all 0.5s;
 }
-.locations-container:hover {
+.locations-container:hover
+/* .locations-container:active  */ {
   width: 11%;
 }
 .locations-container:hover + .boards-container {
