@@ -2,17 +2,23 @@
 }
 .choose-display.container {
   position: absolute;
-  width: 50%;
-  height: 70%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90%;
+
+  min-height: 400px;
+  min-width: 720px;
 
   display: flex;
   flex-flow: column;
   align-items: center;
 
-  border-radius: 0 10px 10px 10px;
+  /* border-radius: 0 10px 10px 10px; */
   background-color: rgb(233, 233, 233);
-  border: 3px solid rgb(190, 190, 190);
+  /* border: 1px solid rgb(190, 190, 190); */
 
+  overflow: auto;
   z-index: 1;
 }
 .choose-display.display {
@@ -26,38 +32,69 @@
   justify-content: center;
   align-items: center;
   border-bottom: 2px solid rgb(184, 184, 184);
-  background-color: rgb(180, 180, 180);
+  background-color: #a3f9fc;
 }
 .choose-display.display-top h3 {
   margin: 0;
 }
 .choose-display.display-bottom {
   height: 90%;
-  padding: 2%;
-  overflow-y: auto;
+  padding: 0 1%;
+  /* overflow-y: auto; */
   box-sizing: border-box;
+}
+.choose-display.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-flow: row wrap;
 }
 .choose-display.item {
-  width: 100%;
-  /* height: 100%; */
-  padding: 2%;
-  margin: 1% 0;
+  width: 32%;
+  height: calc(32vw * 0.618);
+  /* padding: 1%; */
+  margin: 1% auto 0 auto;
   border-radius: 10px;
-  border: 1px solid rgb(207, 207, 207);
+  border: 1px solid rgb(180, 180, 180);
+  box-shadow: 3px 3px 5px 1px grey;
   box-sizing: border-box;
   cursor: pointer;
+  overflow: hidden;
+}
+.choose-display.item .escape-room.video > div {
+  height: 59.5%;
+  width: 100%;
+  /* height: calc(360px / 3); */
+  /* width: calc(640px / 3); */
+}
+.choose-display.item .display-preview {
+  height: 100%;
+}
+.choose-display.display-type-preview {
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.choose-display.display-type-preview p {
+  margin-top: 0;
 }
 .choose-display.button-box {
-  height: 100%;
+  height: 10%;
   width: 100%;
+
+  position: fixed;
+  bottom: 0;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #c7fdff;
 }
 
 .choose-display.selected-display {
   box-sizing: border-box;
-  border: 2px solid rgb(141, 190, 255);
+  border: 3px solid rgb(118, 178, 255);
   background-color: rgb(234, 243, 255);
 }

@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
+import { connect } from "react-redux";
+import { setMobileView } from "../actions";
 import "../assets/App.css";
 import LandingPage from "./LandingPage";
-import Nav from "./Nav";
 import DataDisplayNewTab from "./DataDsiplayNewTab";
-import AllDisplays from "./display_components/AllDisplays";
 import TemplatePage from "./template_components/TemplatePage";
 import EscapeRoomCarousel from "./DisplayComponents/EscapeRoomCarousel";
 import TempAuth from "./TempAuth";
 import WarningModal from "./EasyModal";
 
-//TODO Finish adding animation for "EditDisplays"
+import "../assets/mediaQueries.css";
 
 class App extends Component {
   constructor(props) {
@@ -19,6 +19,14 @@ class App extends Component {
     this.state = {
       buttonState: false
     };
+  }
+  componentDidMount() {
+    document.title = "BrainyActz Dashboard";
+    const mq = window.matchMedia("(max-width: 500px)");
+    if (mq.matches) {
+      //is phone or smaller
+      this.props.setMobileView();
+    }
   }
 
   clickButton() {
@@ -31,12 +39,6 @@ class App extends Component {
   }
 
   render() {
-    const { buttonState, openModal, modalData } = this.state;
-
-    // const modal = openModal ? (
-
-    // ) : null;
-
     return (
       <div className="App">
         <link
@@ -47,11 +49,10 @@ class App extends Component {
           rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
           integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         />
         <WarningModal />
         <Route exact path="/" render={props => <TempAuth {...props} />} />
-        {/* <Route path="/admin/home/:location?/:board?" component={Nav} /> */}
         <Route
           path="/admin/home/:location?/:board?"
           render={props => <LandingPage {...props} />}
@@ -78,4 +79,10 @@ class App extends Component {
   }
 }
 
-export default App;
+function mSTP(state) {
+  return state;
+}
+export default connect(
+  mSTP,
+  { setMobileView }
+)(App);

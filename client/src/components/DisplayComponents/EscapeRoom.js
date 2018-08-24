@@ -37,7 +37,21 @@ export default props => {
       </div>
       <div className="escape-room video-box">
         <div className="escape-room video">
-          <ReactPlayer width="100" height="100" url={displayData.video} />
+          <ReactPlayer
+            onPlay={() => {
+              debugger;
+              props.didPlayVideo();
+            }}
+            onPause={() => props.didPlayVideo()}
+            width="100"
+            height="100"
+            url={displayData.video}
+            config={{
+              youtube: {
+                playerVars: { origin: "https://cbdashboard.keithsilcock.com" }
+              }
+            }}
+          />
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ class EditDataDisplayed extends React.Component {
     super(props);
 
     this.state = {
-      currentData: {},
+      tempData: {},
       canSubmit: false,
       firstBreath: true
     };
@@ -47,18 +47,20 @@ class EditDataDisplayed extends React.Component {
   }
 
   onDisplayDataChange(e) {
-    const { currentData } = this.props;
+    // const { currentData } = this.props;
+    const { tempData } = this.state;
     const { name, value } = e.currentTarget;
 
-    const newData = { ...currentData, [name]: value };
+    const newData = { ...tempData, [name]: value };
 
     this.setState(
       {
         ...this.state,
+        tempData: newData,
         canSubmit: true
       },
       () => {
-        this.props.setDisplayData(newData);
+        // this.props.setDisplayData(newData);
       }
     );
   }
@@ -66,11 +68,14 @@ class EditDataDisplayed extends React.Component {
   updateDisplays(e) {
     e.preventDefault();
     const { currentData } = this.props;
+    const { tempData } = this.state;
     const { location, board } = this.props.match.params;
     const currentDisplay = this.props.dbData[location][board].current_display;
 
+    const finalData = Object.assign({ ...currentData }, { ...tempData });
+
     const path = `/displays/${currentDisplay.display_id}/`;
-    db.ref(path).set({ ...currentData }, () => {
+    db.ref(path).set(finalData, () => {
       this.setState({
         ...this.state,
         canSubmit: false
@@ -80,7 +85,6 @@ class EditDataDisplayed extends React.Component {
 
   showAllDisplays() {
     const { location, board } = this.props.match.params;
-
     this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
   }
 
@@ -107,8 +111,8 @@ class EditDataDisplayed extends React.Component {
   // }
 
   render() {
-    const { canSubmit } = this.state;
-    const { dbData, currentData } = this.props;
+    const { canSubmit, tempData } = this.state;
+    const { dbData, currentData: startingData } = this.props;
     const { location, board } = this.props.match.params;
     var displayItems = null;
 
@@ -116,8 +120,10 @@ class EditDataDisplayed extends React.Component {
       ? dbData[location][board]
       : null;
 
+    const currentData = Object.assign({ ...startingData }, { ...tempData });
+
     if (currentData && currentDisplay !== "no data yet") {
-      var displayItems = Object.keys(currentData).map((dataKey, index) => {
+      displayItems = Object.keys(currentData).map((dataKey, index) => {
         const displayData = currentData[dataKey];
 
         var inputCont = null;
@@ -148,6 +154,7 @@ class EditDataDisplayed extends React.Component {
             inputCont = (
               <DisplayListOfDisplays
                 key={index}
+                {...this.props}
                 currentData={currentData}
                 displayData={displayData}
                 currentDisplay={currentDisplay}
@@ -217,12 +224,11 @@ class EditDataDisplayed extends React.Component {
                   display.
                 </p>{" "}
                 <p className="edit-text">
-                  Update the data as you see fit and save it by pressing "<span className="edit-data bold">
-                    Update Data
-                  </span>" below. If you'd like to create a new board or view
-                  other boards that have been made, press the "<span className="edit-data bold">
-                    More Options
-                  </span>" button.
+                  Update the data as you see fit and save it by pressing "
+                  <span className="edit-data bold">Update Data</span>" below. If
+                  you'd like to create a new board or view other boards that
+                  have been made, press the "
+                  <span className="edit-data bold">More Options</span>" button.
                 </p>
               </div>
               <div className="buttons">

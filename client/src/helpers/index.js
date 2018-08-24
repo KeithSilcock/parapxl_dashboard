@@ -8,7 +8,7 @@ export function capitalizeFirstLetters(text, everyWord = false) {
         var newWord = `${word[0].toUpperCase()}${word.slice(1)}`;
       } catch (e) {
         if (e instanceof TypeError) {
-          var newWord = "";
+          newWord = "";
         } else {
           throw e;
         }

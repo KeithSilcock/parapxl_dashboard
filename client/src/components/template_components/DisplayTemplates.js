@@ -52,17 +52,24 @@ class DisplayTemplates extends React.Component {
           const selectedClass =
             selectedTemplate.type === templateType ? "selected-template" : "";
 
+          const key = {
+            "escape-room": "Escape Room",
+            "text-board": "Text Board",
+            carousel: "Carousel",
+            "escape-room-list": "Escape Room List"
+          };
+
           return (
             <li
               key={index}
               className={`add-from-template item ${selectedClass}`}
               onClick={e => this.selectTemplate(e, templateData[templateType])}
             >
-              <div className="add-from-template type-box">
-                <div className="add-from-template rotated">
-                  <p className="add-from-template item-name">{templateType}</p>
-                </div>
-              </div>
+              {/* <div className="add-from-template type-box"> */}
+              {/* <div className="add-from-template rotated"> */}
+              <p className="add-from-template item-name">{key[templateType]}</p>
+              {/* </div> */}
+              {/* </div> */}
               <TemplateOptions displayData={templateData[templateType]} />
             </li>
           );

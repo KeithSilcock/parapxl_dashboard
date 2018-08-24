@@ -2,18 +2,22 @@ import React from "react";
 import db from "../../firebase";
 import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
-import BoardDisplay from "./BoardDisplay";
-import { toggleTab2, setBoardsForLocation, getData } from "../../actions/";
+import {
+  toggleTab2,
+  setBoardsForLocation,
+  getData,
+  clearModalInput
+} from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 
 import "../../assets/boards.css";
 
 class Boards extends React.Component {
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     const { locations, boards, dbData } = nextProps;
-    const { locations: prevLocs, boards: prevBoards } = this.props;
+    const { locations: prevLocs } = this.props;
     const { location, board } = this.props.match.params;
-    const { location: newLocation, board: newBoard } = nextProps.match.params;
+    const { location: newLocation } = nextProps.match.params;
 
     if (locations.length) {
       //if new location:
@@ -47,8 +51,9 @@ class Boards extends React.Component {
     }
   }
 
-  createNewBoard(e, newBoardName) {
-    e.preventDefault();
+  createNewBoard(e) {
+    if (e) e.preventDefault();
+    const { newBoardName } = this.props;
 
     const { location } = this.props.match.params;
     db.ref(`boards/${location}/${newBoardName}`).set(
@@ -57,6 +62,7 @@ class Boards extends React.Component {
         this.props.getData();
         this.props.setBoardsForLocation(location);
         this.props.history.push(`/admin/home/${location}/${newBoardName}`);
+        this.props.clearModalInput();
       }
     );
   }
@@ -91,7 +97,9 @@ class Boards extends React.Component {
       tab2Open,
       activeTabDistance,
       boards,
-      dbData
+      dbData,
+      mobileNavOpen,
+      isMobile
     } = this.props;
     const { location, board } = this.props.match.params;
 
@@ -139,48 +147,51 @@ class Boards extends React.Component {
         );
       });
     } else {
-      var listOfBoards = null;
+      listOfBoards = null;
     }
 
     //push second nav down towards current location selection
     const pushDownNavStyle = { marginTop: `${activeTabDistance}em` };
 
-    // const backButton =
-    //   this.props.location.pathname ===
-    //   `/admin/home/${location}/${board}/add-new/display` ? (
-    //     <div
-    //       className="back-button-container"
-    //       onClick={e => {
-    //         this.props.history.push(`/admin/home/${location}/${board}`);
-    //       }}
-    //     >
-    //       <button className="back-button">
-    //         <div className="text">&lt;</div>
-    //       </button>
-    //       <div className="hider" />
-    //     </div>
-    //   ) : null;
-
-    return (
-      <div
-        onMouseEnter={e => {
-          toggleTab2();
-        }}
-        onMouseLeave={e => {
-          toggleTab2();
-        }}
-        className={`boards-container`}
-      >
-        {/* {backButton} */}
-        <ul style={pushDownNavStyle} className="boards-list">
-          {listOfBoards}
-        </ul>
-        <AddNewBoard
-          addNewItem={this.createNewBoard.bind(this)}
-          newText={"Board"}
-        />
-      </div>
-    );
+    if (!isMobile) {
+      return (
+        <div
+          onMouseEnter={e => {
+            toggleTab2();
+          }}
+          onMouseLeave={e => {
+            toggleTab2();
+          }}
+          className={`boards-container`}
+        >
+          {/* {backButton} */}
+          <ul style={pushDownNavStyle} className="boards-list">
+            {listOfBoards}
+          </ul>
+          <AddNewBoard
+            addNewItem={this.createNewBoard.bind(this)}
+            newText={"Board"}
+          />
+        </div>
+      );
+    } else {
+      if (!mobileNavOpen) {
+        return null;
+      } else {
+        return (
+          <div className={`boards-container`}>
+            {/* {backButton} */}
+            <ul style={pushDownNavStyle} className="boards-list">
+              {listOfBoards}
+            </ul>
+            <AddNewBoard
+              addNewItem={this.createNewBoard.bind(this)}
+              newText={"Board"}
+            />
+          </div>
+        );
+      }
+    }
   }
 }
 
@@ -190,11 +201,14 @@ function mapStateToProps(state) {
     locations: state.data.locations,
     boards: state.data.boards,
     tab2Open: state.navData.tab2Open,
-    activeTabDistance: state.navData.activeTabDistance
+    activeTabDistance: state.navData.activeTabDistance,
+    newBoardName: state.data.modalInputValue,
+    mobileNavOpen: state.navData.mobileNavOpen,
+    isMobile: state.navData.isMobile
   };
 }
 
 export default connect(
   mapStateToProps,
-  { toggleTab2, setBoardsForLocation, getData }
+  { toggleTab2, setBoardsForLocation, getData, clearModalInput }
 )(Boards);

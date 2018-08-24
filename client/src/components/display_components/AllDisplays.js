@@ -5,7 +5,7 @@ import BoardDisplay from "../board_components/BoardDisplay";
 import { connect } from "react-redux";
 import { setDisplayData } from "../../actions";
 import { capitalizeFirstLetters } from "../../helpers";
-import DisplayOptions from "./Display_Options";
+import DisplayOptions from "./DisplayOptions";
 
 // import EditDisplayModal from "./EditDisplayModal";
 
@@ -252,15 +252,17 @@ class AllDisplays extends React.Component {
                       <p>{displayData.name}</p>
                       {currentlyDisplayedOnTVObj}
                     </div>
-                    <DisplayOptions boardHash={displayHash}/>
+                    <DisplayOptions boardHash={displayHash} />
                     {/* <span onClick={e=> this.openOptions(displayHash)} className="all-displays item-options">
-                      <i class="fas fa-ellipsis-v" />
+                      <i className="fas fa-ellipsis-v" />
                     </span> */}
                   </div>
                   <BoardDisplay miniBoard={true} displayData={displayData} />
                 </div>
               </li>
             );
+          } else {
+            return null;
           }
         });
       } else {
@@ -275,9 +277,11 @@ class AllDisplays extends React.Component {
                 currentSelection.display_id === displayHash
                   ? "selected-new-display"
                   : "";
+
               const currentlyDisplayedOnTVObj =
+                currentDisplayInfo.current_display &&
                 currentDisplayInfo.current_display.display_id ===
-                displayHash ? (
+                  displayHash ? (
                   <p className="currently-displayed">Currently Displayed</p>
                 ) : null;
 
@@ -321,7 +325,7 @@ class AllDisplays extends React.Component {
         : { maxHeight: "0" };
 
       return (
-        <div className="all-displays list-container">
+        <div key={index1} className="all-displays list-container">
           <div
             className="all-displays list-header"
             onClick={e => {
@@ -409,17 +413,12 @@ class AllDisplays extends React.Component {
               this.props.history.push(`/admin/home/${location}/${board}`);
             }}
           >
-            <i class="fas fa-chevron-left" />
+            <i className="fas fa-chevron-left" />
           </button>
           <div className="all-displays header-text">
             <h2> All BrainyActz Displays</h2>
           </div>
-          <button
-            className="standard-button"
-            onClick={e => this.createNewDisplay(e)}
-          >
-            Create New Display
-          </button>
+          <div className="spacer" />
         </div>
 
         <div className="all-displays content">
@@ -429,8 +428,11 @@ class AllDisplays extends React.Component {
               {`${location} ${board}'s`} display.{" "}
             </p>
             <p>
-              Once you've selected your display, press "Set{" "}
-              {`${board} to ${currentSelectionName}`}" below.
+              Once you've selected your display, press
+              <span className="bold">
+                Set {`${board} to ${currentSelectionName}`}
+              </span>
+              below.
             </p>
 
             <button
@@ -438,6 +440,16 @@ class AllDisplays extends React.Component {
               onClick={e => this.updateCurrentDisplay()}
             >
               Set {`${board} to ${currentSelectionName}`}
+            </button>
+            <p>
+              If you'd like to create a new board from a template, press{" "}
+              <span className="bold">Create New Display</span> below
+            </p>
+            <button
+              className="standard-button"
+              onClick={e => this.createNewDisplay(e)}
+            >
+              Create New Display
             </button>
           </div>
           <div className="all-displays right">
