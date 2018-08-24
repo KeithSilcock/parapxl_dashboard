@@ -85,7 +85,6 @@ class EditDataDisplayed extends React.Component {
 
   showAllDisplays() {
     const { location, board } = this.props.match.params;
-
     this.props.history.push(`/admin/home/${location}/${board}/add-new/display`);
   }
 
