@@ -8,7 +8,8 @@ import {
   getData,
   setDisplayData,
   setBoardsForLocation,
-  clearModalInput
+  clearModalInput,
+  toggleMobileNav
 } from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 import Logo from "../Logo";
@@ -143,7 +144,13 @@ class Locations extends React.Component {
   }
 
   render() {
-    const { tab1Open, toggleTab1, locations } = this.props;
+    const {
+      tab1Open,
+      toggleTab1,
+      locations,
+      mobileNavOpen,
+      isMobile
+    } = this.props;
     const { location } = this.props.match.params;
 
     if (locations.length) {
@@ -189,30 +196,58 @@ class Locations extends React.Component {
       });
     }
 
-    return (
-      <div
-        onMouseEnter={e => toggleTab1()}
-        onMouseLeave={e => toggleTab1()}
-        className={`locations-container`}
-      >
-        <Logo {...this.props} />
-        <ul className="locations-list">{listOfLocations}</ul>
-        <AddNewLocation
-          addNewItem={this.createNewLocation.bind(this)}
-          newText={"Location"}
-        />
-      </div>
-    );
+    if (!isMobile) {
+      return (
+        <div
+          onMouseEnter={e => toggleTab1()}
+          onMouseLeave={e => toggleTab1()}
+          className={`locations-container`}
+        >
+          <Logo {...this.props} />
+          <ul className="locations-list">{listOfLocations}</ul>
+          <AddNewLocation
+            addNewItem={this.createNewLocation.bind(this)}
+            newText={"Location"}
+          />
+        </div>
+      );
+    } else {
+      if (!mobileNavOpen) {
+        return (
+          <div
+            onClick={e => this.props.toggleMobileNav()}
+            className={`locations-container`}
+          >
+            <Logo {...this.props} />
+          </div>
+        );
+      } else {
+        return (
+          <div
+            className={`locations-container`}
+            onClick={e => this.props.toggleMobileNav()}
+          >
+            <Logo {...this.props} />
+            <ul className="locations-list">{listOfLocations}</ul>
+            <AddNewLocation
+              addNewItem={this.createNewLocation.bind(this)}
+              newText={"Location"}
+            />
+          </div>
+        );
+      }
+    }
   }
 }
-
 function mapStateToProps(state) {
   return {
     locations: state.data.locations,
     boards: state.data.boards,
     tab1Open: state.navData.tab1Open,
     tab2Open: state.navData.tab2Open,
-    newLocationName: state.data.modalInputValue
+    newLocationName: state.data.modalInputValue,
+    mobileNavOpen: state.navData.mobileNavOpen,
+    isMobile: state.navData.isMobile
   };
 }
 
@@ -224,6 +259,7 @@ export default connect(
     getData,
     setBoardsForLocation,
     setDisplayData,
-    clearModalInput
+    clearModalInput,
+    toggleMobileNav
   }
 )(Locations);
