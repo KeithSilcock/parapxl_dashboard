@@ -158,7 +158,7 @@ class DisplayListOfDisplays extends React.Component {
         : "edit-data item escape-room-list-edit";
 
     return (
-      <div className={containerClass}>
+      <div style={this.props.style} className={containerClass}>
         <p>Displayed Escape Rooms:</p>
         <ul className="escape-room-list-edit list">{carouselDisplays}</ul>
         {updateButton}

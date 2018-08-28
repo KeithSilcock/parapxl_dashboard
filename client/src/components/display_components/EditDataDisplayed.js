@@ -115,7 +115,8 @@ class EditDataDisplayed extends React.Component {
     const { canSubmit, tempData } = this.state;
     const { dbData, currentData: startingData } = this.props;
     const { location, board } = this.props.match.params;
-    var displayItems = null;
+    let displayItems = null;
+    let gridDisplay = { rows: 1, columns: 1 };
 
     const currentDisplay = Object.keys(dbData).length
       ? dbData[location][board]
@@ -127,20 +128,36 @@ class EditDataDisplayed extends React.Component {
       displayItems = Object.keys(currentData).map((dataKey, index) => {
         const displayData = currentData[dataKey];
 
-        var inputCont = null;
+        if (gridDisplay.rows >= 4) {
+          gridDisplay.rows = 1;
+          gridDisplay.columns += 1;
+        }
+
+        let inputCont = null;
+        let rowSpan = 0;
         switch (dataKey) {
           case "type":
             break;
           case "interval":
+            rowSpan = 1;
             inputCont = (
-              <li className={`edit-data item ${dataKey}`} key={index}>
+              <li
+                style={{
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
+                }}
+                className={`edit-data item ${dataKey}`}
+                key={index}
+              >
                 <p>Timing Interval:</p>
                 <div className="edit-data input-container">
                   <input
                     onKeyDown={this.submitOnEnter}
                     className="edit-data interval"
                     onChange={this.onDisplayDataChange}
-                    type="text"
+                    type="number"
                     name={dataKey}
                     value={displayData}
                     placeholder="seconds"
@@ -149,11 +166,19 @@ class EditDataDisplayed extends React.Component {
                 </div>
               </li>
             );
+            gridDisplay.rows += rowSpan;
             break;
           case "carousel_displays":
           case "list_of_displays":
+            rowSpan = 3;
             inputCont = (
               <DisplayListOfDisplays
+                style={{
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
+                }}
                 key={index}
                 {...this.props}
                 currentData={currentData}
@@ -161,28 +186,61 @@ class EditDataDisplayed extends React.Component {
                 currentDisplay={currentDisplay}
               />
             );
+            gridDisplay.rows += rowSpan;
             break;
           case "content":
+            rowSpan = 2;
             inputCont = (
-              <li key={index} className="edit-data item">
+              <li
+                style={{
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
+                }}
+                key={index}
+                className="edit-data item"
+              >
                 <p>Content:</p>
-                <textarea
-                  rows="7"
-                  onChange={this.onDisplayDataChange}
-                  type="text"
-                  name={dataKey}
-                  value={displayData}
-                />
+                <div className="text-area-wrap">
+                  <div className="text-area-pull-tab" />
+                  <textarea
+                    rows="7"
+                    cols="40"
+                    onChange={this.onDisplayDataChange}
+                    type="text"
+                    name={dataKey}
+                    value={displayData}
+                  />
+                </div>
               </li>
             );
+            gridDisplay.rows += rowSpan;
             break;
 
           default:
+            rowSpan = 1;
+            const spellcheck =
+              dataKey === "background_img" ||
+              dataKey === "video" ||
+              dataKey === "image"
+                ? false
+                : true;
             dataKey =
-              dataKey === "background_img" ? "Backgound Image" : dataKey;
+              dataKey === "background_img" ? "Background Image" : dataKey;
 
             inputCont = (
-              <li key={index} className="edit-data item">
+              <li
+                spellCheck={spellcheck}
+                style={{
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
+                }}
+                key={index}
+                className="edit-data item"
+              >
                 <p>{capitalizeFirstLetters(dataKey)}:</p>
                 <input
                   onKeyDown={this.submitOnEnter}
@@ -193,6 +251,7 @@ class EditDataDisplayed extends React.Component {
                 />
               </li>
             );
+            gridDisplay.rows += rowSpan;
             break;
         }
         return inputCont;
@@ -201,7 +260,15 @@ class EditDataDisplayed extends React.Component {
 
     const update_data_form = currentData ? (
       <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
-        <ul className="edit-data edit-list">{displayItems}</ul>
+        <ul
+          style={{
+            "grid-template-columns": `${gridDisplay.columns}`,
+            "grid-template-rows": `${gridDisplay.rows}`
+          }}
+          className="edit-data edit-list"
+        >
+          {displayItems}
+        </ul>
       </form>
     ) : null;
 
