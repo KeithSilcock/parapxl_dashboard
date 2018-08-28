@@ -201,8 +201,8 @@
 .selected-template {
   border-radius: 15px;
   box-sizing: border-box;
-  border: 2px solid rgb(141, 190, 255) !important;
-  background-color: rgb(234, 243, 255);
+  border: 2px solid rgb(160, 236, 255) !important;
+  background-color: rgb(212, 246, 255) !important;
 }
 
 /* EDIT template */

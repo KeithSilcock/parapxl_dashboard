@@ -47,9 +47,9 @@ body {
 }
 .selectedDisplay {
   box-sizing: border-box;
-  border: 2px solid rgb(133, 186, 255) !important;
+  border: 2px solid rgb(160, 236, 255) !important;
   /* box-shadow: inset 0 0 5 rgb(113, 175, 255); */
-  background-color: rgb(234, 243, 255) !important;
+  background-color: rgb(212, 246, 255) !important;
 }
 .delete-button {
   border-radius: 5px;
@@ -68,7 +68,8 @@ body {
   font-weight: bold;
   min-height: 30px;
   cursor: initial;
-  /* pointer-events: none; */
+  pointer-events: none;
+  user-select: none;
 }
 
 .back-button {
@@ -137,4 +138,63 @@ body {
 }
 .fa-github-square {
   font-size: 2.3em;
+}
+
+input[type="text"],
+textarea {
+  color: rgb(104, 104, 104);
+  border: none;
+  border-radius: 3px;
+  padding: 10px 0 6px 5px;
+  box-shadow: 0px 4px 7px -3px grey, 0px 0px 5px 1px rgb(212, 212, 212);
+}
+input[type="text"]::selection,
+textarea::selection {
+  background: rgb(0, 193, 241);
+  color: white;
+}
+textarea {
+  font-size: 1.4em;
+  width: 100%;
+  position: relative;
+  line-height: 1.3em;
+}
+textarea:focus,
+input:focus {
+  outline: none;
+  box-shadow: 0px 4px 7px -3px grey, 0px 0px 3px 1px rgb(0, 193, 241);
+}
+.text-area-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.text-area-pull-tab {
+  height: 0px;
+  width: 0px;
+  border-top: 10px solid cyan;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  -webkit-transform: rotate(-45deg);
+  position: absolute;
+  bottom: -2px;
+  right: -0.5em;
+  pointer-events: none;
+  z-index: 2;
+}
+
+textarea::-webkit-scrollbar {
+  width: 0.5em;
+  height: 10px;
+}
+textarea::-webkit-scrollbar-thumb {
+  background: rgb(189, 189, 189);
+}
+textarea::-webkit-scrollbar-track {
+  background: rgb(218, 218, 218);
+}
+textarea::-webkit-resizer {
+  display: none;
+}
+textarea::-webkit-scrollbar-corner {
+  background: rgb(218, 218, 218);
 }
