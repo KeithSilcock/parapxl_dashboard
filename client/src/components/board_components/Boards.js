@@ -97,7 +97,9 @@ class Boards extends React.Component {
       tab2Open,
       activeTabDistance,
       boards,
-      dbData
+      dbData,
+      mobileNavOpen,
+      isMobile
     } = this.props;
     const { location, board } = this.props.match.params;
 
@@ -151,26 +153,45 @@ class Boards extends React.Component {
     //push second nav down towards current location selection
     const pushDownNavStyle = { marginTop: `${activeTabDistance}em` };
 
-    return (
-      <div
-        onMouseEnter={e => {
-          toggleTab2();
-        }}
-        onMouseLeave={e => {
-          toggleTab2();
-        }}
-        className={`boards-container`}
-      >
-        {/* {backButton} */}
-        <ul style={pushDownNavStyle} className="boards-list">
-          {listOfBoards}
-        </ul>
-        <AddNewBoard
-          addNewItem={this.createNewBoard.bind(this)}
-          newText={"Board"}
-        />
-      </div>
-    );
+    if (!isMobile) {
+      return (
+        <div
+          onMouseEnter={e => {
+            toggleTab2();
+          }}
+          onMouseLeave={e => {
+            toggleTab2();
+          }}
+          className={`boards-container`}
+        >
+          {/* {backButton} */}
+          <ul style={pushDownNavStyle} className="boards-list">
+            {listOfBoards}
+          </ul>
+          <AddNewBoard
+            addNewItem={this.createNewBoard.bind(this)}
+            newText={"Board"}
+          />
+        </div>
+      );
+    } else {
+      if (!mobileNavOpen) {
+        return null;
+      } else {
+        return (
+          <div className={`boards-container`}>
+            {/* {backButton} */}
+            <ul style={pushDownNavStyle} className="boards-list">
+              {listOfBoards}
+            </ul>
+            <AddNewBoard
+              addNewItem={this.createNewBoard.bind(this)}
+              newText={"Board"}
+            />
+          </div>
+        );
+      }
+    }
   }
 }
 
@@ -181,7 +202,9 @@ function mapStateToProps(state) {
     boards: state.data.boards,
     tab2Open: state.navData.tab2Open,
     activeTabDistance: state.navData.activeTabDistance,
-    newBoardName: state.data.modalInputValue
+    newBoardName: state.data.modalInputValue,
+    mobileNavOpen: state.navData.mobileNavOpen,
+    isMobile: state.navData.isMobile
   };
 }
 

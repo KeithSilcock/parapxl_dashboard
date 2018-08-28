@@ -2,7 +2,11 @@
   /* height: 30%; */
   width: 100%;
   box-sizing: border-box;
+
   color: rgb(77, 77, 77);
+
+  font-size: 120%;
+
 }
 .edit-header * {
   margin: 0;
