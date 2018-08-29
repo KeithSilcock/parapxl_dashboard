@@ -6,6 +6,7 @@
   flex-flow: row;
   overflow: hidden;
   position: relative;
+  color: rgb(77, 77, 77);
 }
 
 .add-from-template {
@@ -23,6 +24,7 @@
 
   text-align: center;
   padding: 1%;
+  font-size: 120%;
 }
 .add-from-template.right-container {
   width: 75%;
@@ -62,6 +64,7 @@
   border: 1px solid rgb(180, 180, 180);
   border-radius: 15px;
   overflow: hidden;
+  background: rgb(206, 252, 255);
 
   display: flex;
   flex-flow: column;
@@ -201,8 +204,11 @@
 .selected-template {
   border-radius: 15px;
   box-sizing: border-box;
-  border: 2px solid rgb(141, 190, 255) !important;
-  background-color: rgb(234, 243, 255);
+  border: 2px solid rgb(160, 236, 255) !important;
+  background-color: rgb(0, 193, 241) !important;
+}
+.selected-template > p {
+  color: white;
 }
 
 /* EDIT template */
@@ -252,17 +258,24 @@
 }
 .template-edit.list {
   height: 85%;
-  width: 85%;
-  padding: 0;
+  width: 100%;
   overflow-y: auto;
-  padding: 0 5%;
+  overflow-x: hidden;
+  padding: 2% 1% 5% 0;
+  font-size: 1.4em;
 }
 .template-edit.item {
   display: flex;
   flex-flow: column;
+  width: 90%;
+  margin: auto;
 }
 .template-edit.item p {
   margin: 7.5% 0 0 0;
+  color: rgb(0, 173, 216);
+}
+.template-edit.item input[type="text"] {
+  font-size: 1.1em;
 }
 .template-edit.input-container {
   display: flex;

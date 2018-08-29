@@ -21,7 +21,8 @@ class AllDisplays extends React.Component {
       currentSelection: {},
       waitingForSecondClick: false,
       currentAvailDisplays: {},
-      displayOnTV: {}
+      displayOnTV: {},
+      tabsOpenList: []
     };
     this.clickTimer = null;
     this.clickDelay = 200;
@@ -120,7 +121,7 @@ class AllDisplays extends React.Component {
   }
 
   openList(e, boardType, currentlyIsOpen) {
-    const { boardTypes, waitingForSecondClick } = this.state;
+    const { boardTypes, waitingForSecondClick, tabsOpenList } = this.state;
 
     if (waitingForSecondClick) {
       clearTimeout(this.clickTimer);
@@ -130,13 +131,27 @@ class AllDisplays extends React.Component {
       });
       this.doubleClickAffectAll(e, currentlyIsOpen);
       return;
-    }
-
-    if (!waitingForSecondClick) {
-      this.setState({
-        ...this.state,
-        waitingForSecondClick: true
-      });
+    } else {
+      if (!currentlyIsOpen) {
+        this.setState(
+          {
+            ...this.state,
+            tabsOpenList: [...tabsOpenList, boardType],
+            waitingForSecondClick: true
+          },
+          () => {
+            this.state;
+          }
+        );
+      } else {
+        const temp = [...tabsOpenList];
+        temp.splice(temp.indexOf(boardType), 1);
+        this.setState({
+          ...this.state,
+          tabsOpenList: temp,
+          waitingForSecondClick: true
+        });
+      }
       this.clickTimer = setTimeout(() => {
         //after click delay, run code
         const inner = { ...boardTypes[boardType], isOpen: !currentlyIsOpen };
@@ -213,7 +228,13 @@ class AllDisplays extends React.Component {
   }
 
   render() {
-    const { displays, currentSelection, boardTypes, displayOnTV } = this.state;
+    const {
+      displays,
+      currentSelection,
+      boardTypes,
+      displayOnTV,
+      tabsOpenList
+    } = this.state;
     const { dbData } = this.props;
     const { location, board } = this.props.match.params;
     const currentDisplayInfo = Object.keys(dbData).length
@@ -289,6 +310,9 @@ class AllDisplays extends React.Component {
                 <li
                   key={index}
                   onClick={e => {
+                    if (e.target.className.includes("ignore-parent-clicks")) {
+                      return;
+                    }
                     this.selectItem(displayData, displayHash);
                   }}
                   className={`all-displays item-container ${selectedItemClass}`}
@@ -321,19 +345,23 @@ class AllDisplays extends React.Component {
       );
 
       const setHeight = isOpen
-        ? { maxHeight: `${90 * boardTypeCount}vh` }
+        ? { maxHeight: `${115 * boardTypeCount}vh` }
         : { maxHeight: "0" };
+
+      const selectedTabsClass =
+        tabsOpenList.indexOf(boardType) >= 0 ? "tab-currently-open" : "";
 
       return (
         <div key={index1} className="all-displays list-container">
           <div
-            className="all-displays list-header"
+            className={`all-displays list-header ${selectedTabsClass}`}
             onClick={e => {
               this.openList(e, boardType, isOpen);
             }}
             // onDoubleClick={e => this.doubleClickAffectAll(e, isOpen)}
           >
-            <div className="spacer" />
+            <div className="right-side">{listChevron}</div>
+
             <div className="all-displays center-piece">
               <div className="center-piece-decoration left">
                 <div className="list-design short" />
@@ -349,7 +377,7 @@ class AllDisplays extends React.Component {
                 <div className="list-design short" />
               </div>
             </div>
-            <div className="right-side">{listChevron}</div>
+            <div className="spacer" />
           </div>
           <div style={setHeight} className="all-displays list-shell">
             <ul key={index1} className="all-displays list">

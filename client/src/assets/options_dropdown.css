@@ -2,6 +2,7 @@
 }
 .options-drop-down.container {
   cursor: pointer;
+  width: 20px;
 }
 .options-drop-down.list {
   margin: 0;
@@ -11,8 +12,8 @@
 }
 .options-drop-down.item {
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 5px;
+  right: -1px;
   background-color: white;
   border: 1px solid grey;
   width: auto;
@@ -23,4 +24,8 @@
   cursor: pointer;
   color: inherit;
   text-decoration: inherit;
+  user-select: none;
+}
+.options-drop-down.item:hover {
+  background-color: rgb(160, 236, 255);
 }
