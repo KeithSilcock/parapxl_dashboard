@@ -233,20 +233,35 @@ class EditTemplate extends React.Component {
               inputCont = (
                 <li key={index} className={`template-edit item ${item}`}>
                   <p>{capitalizeFirstLetters(item)}:</p>
-                  <textarea
-                    onFocus={e => this.emptyInputOnFocus(e)}
-                    rows="7"
-                    onChange={e => this.onInputChange(e)}
-                    type="text"
-                    name={item}
-                    placeholder="Your content here"
-                    value={value}
-                  />
+
+                  <div className="text-area-wrap">
+                    <div className="text-area-pull-tab" />
+                    <textarea
+                      onFocus={e => this.emptyInputOnFocus(e)}
+                      rows="7"
+                      cols="40"
+                      onChange={e => this.onInputChange(e)}
+                      type="text"
+                      name={item}
+                      placeholder="Describe the Escape Room"
+                      value={value}
+                    />
+                  </div>
                 </li>
               );
               break;
 
             default:
+              const placeholderKey = {
+                background_img: "Image URL",
+                image: "Image URL",
+                video: "Video URL"
+              };
+
+              const placeHolder = placeholderKey[item]
+                ? placeholderKey[item]
+                : `${capitalizeFirstLetters(itemName)}`;
+
               inputCont = (
                 <li className={`template-edit item ${item}`} key={index}>
                   <p>{capitalizeFirstLetters(itemName)}:</p>
@@ -256,7 +271,7 @@ class EditTemplate extends React.Component {
                     type="text"
                     name={item}
                     value={value}
-                    placeholder="Your content here"
+                    placeholder={`${placeHolder}`}
                   />
                 </li>
               );

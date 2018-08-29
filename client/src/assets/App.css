@@ -171,13 +171,13 @@ input:focus {
 .text-area-pull-tab {
   height: 0px;
   width: 0px;
-  border-top: 10px solid cyan;
+  border-top: 10px solid rgb(0, 193, 241);
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   -webkit-transform: rotate(-45deg);
   position: absolute;
   bottom: -2px;
-  right: -0.5em;
+  right: -6px;
   pointer-events: none;
   z-index: 2;
 }

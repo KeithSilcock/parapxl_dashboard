@@ -6,7 +6,6 @@
   color: rgb(77, 77, 77);
 
   font-size: 120%;
-
 }
 .edit-header * {
   margin: 0;
@@ -124,6 +123,7 @@
   display: flex;
   flex-flow: column;
   justify-content: flex-start;
+  font-size: 110%;
 }
 .edit-data .edit-text:first-of-type {
   text-align: center;
