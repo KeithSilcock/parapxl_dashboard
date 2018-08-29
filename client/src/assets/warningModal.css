@@ -32,6 +32,9 @@
   justify-content: space-between;
   padding: 0 1%;
 }
+.warning-modal.header .spacer {
+  width: 20px;
+}
 .warning-modal.header .close {
   width: 20px;
   height: 50%;

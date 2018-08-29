@@ -8,6 +8,7 @@
   flex-flow: column;
   /* padding-right: 10px; */
   overflow-y: auto;
+  color: rgb(77, 77, 77);
 }
 .all-displays.header {
   height: 10%;
@@ -28,14 +29,24 @@
   flex-flow: column;
   justify-content: flex-start;
   align-items: center;
+  font-size: 120%;
 }
 .all-displays.right {
   width: 70%;
   height: fit-content;
   display: flex;
   flex-flow: column;
-  border-left: 1px solid rgb(200, 200, 200);
+  border: 1px solid rgb(200, 200, 200);
+  border-top: none;
+  border-radius: 10px;
+  overflow: hidden;
+
   box-sizing: border-box;
+  margin: 0 2% 50px 1%;
+}
+.all-displays.list-container:last-of-type {
+  border-radius: 0 0 5px 5px;
+  overflow: hidden;
 }
 .all-displays.list-container p {
   margin: 0;
@@ -52,7 +63,7 @@
   cursor: pointer;
 }
 .right-side i {
-  padding-right: 15px;
+  padding-left: 15px;
 }
 .all-displays.list-shell {
   overflow: hidden;
@@ -72,13 +83,12 @@
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 }
 .all-displays.item {
-  border: 1px solid black;
+  border: 1px solid rgb(77, 77, 77);
   border-radius: 10px;
   overflow: hidden;
-  width: 90%;
+  width: 97%;
   margin: 10px 0 0 0;
 }
 .all-displays.item:last-of-type {
@@ -102,8 +112,8 @@
 }
 .selected-new-display {
   box-sizing: border-box;
-  border: 3px solid rgb(121, 179, 255) !important; /* box-shadow: inset 0 0 5 rgb(113, 175, 255); */
-  background-color: rgb(225, 238, 255);
+  border: 2px solid rgb(160, 236, 255) !important;
+  background-color: rgb(212, 246, 255) !important;
 }
 .locations-container:hover ~ .all-displays .back-button {
   transform: translateX(8vw);
@@ -144,4 +154,7 @@
 }
 .list-design.long {
   width: 50px;
+}
+.tab-currently-open {
+  background-color: rgb(160, 236, 255) !important;
 }
