@@ -29,6 +29,7 @@
   flex-flow: column;
   justify-content: flex-start;
   align-items: center;
+  font-size: 120%;
 }
 .all-displays.right {
   width: 70%;
