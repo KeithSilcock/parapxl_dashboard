@@ -58,7 +58,7 @@ export default props => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          My porfolio
+          My portfolio
         </a>
       </div>
     </div>
