@@ -142,10 +142,10 @@ class EditDataDisplayed extends React.Component {
             inputCont = (
               <li
                 style={{
-                  gridRowStart: `${gridDisplay.rows}`,
-                  gridColumnStart: `${gridDisplay.columns}`,
-                  gridRowEnd: `span ${rowSpan}`,
-                  gridColumnEnd: "span 1"
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
                 }}
                 className={`edit-data item ${dataKey}`}
                 key={index}
@@ -173,10 +173,10 @@ class EditDataDisplayed extends React.Component {
             inputCont = (
               <DisplayListOfDisplays
                 style={{
-                  gridRowStart: `${gridDisplay.rows}`,
-                  gridColumnStart: `${gridDisplay.columns}`,
-                  gridRowEnd: `span ${rowSpan}`,
-                  gridColumnEnd: "span 1"
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
                 }}
                 key={index}
                 {...this.props}
@@ -192,10 +192,10 @@ class EditDataDisplayed extends React.Component {
             inputCont = (
               <li
                 style={{
-                  gridRowStart: `${gridDisplay.rows}`,
-                  gridColumnStart: `${gridDisplay.columns}`,
-                  gridRowEnd: `span ${rowSpan}`,
-                  gridColumnEnd: "span 1"
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
                 }}
                 key={index}
                 className="edit-data item"
@@ -232,10 +232,10 @@ class EditDataDisplayed extends React.Component {
               <li
                 spellCheck={spellcheck}
                 style={{
-                  gridRowStart: `${gridDisplay.rows}`,
-                  gridColumnStart: `${gridDisplay.columns}`,
-                  gridRowEnd: `span ${rowSpan}`,
-                  gridColumnEnd: "span 1"
+                  "grid-row-start": `${gridDisplay.rows}`,
+                  "grid-column-start": `${gridDisplay.columns}`,
+                  "grid-row-end": `span ${rowSpan}`,
+                  "grid-column-end": "span 1"
                 }}
                 key={index}
                 className="edit-data item"
@@ -261,8 +261,8 @@ class EditDataDisplayed extends React.Component {
       <form className="edit-data form" onSubmit={e => this.updateDisplays(e)}>
         <ul
           style={{
-            gridTemplateColumns: `${gridDisplay.columns}`,
-            gridTemplateRows: `${gridDisplay.rows}`
+            "grid-template-columns": `${gridDisplay.columns}`,
+            "grid-template-rows": `${gridDisplay.rows}`
           }}
           className="edit-data edit-list"
         >

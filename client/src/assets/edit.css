@@ -160,7 +160,7 @@
   font-size: 120%;
 }
 .edit-data.item input[type="text"] {
-  width: calc(100% - 10px);
+  width: 100%;
 }
 .edit-data.input-container {
   display: flex;

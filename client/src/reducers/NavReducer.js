@@ -5,8 +5,7 @@ const DEFAULT_STATE = {
   tab2Open: false,
   activeTabDistance: 0,
   mobileNavOpen: false,
-  isMobile: false,
-  currentLocation: ""
+  isMobile: false
 };
 
 export default function(state = DEFAULT_STATE, action) {
@@ -37,11 +36,6 @@ export default function(state = DEFAULT_STATE, action) {
       return {
         ...state,
         isMobile: true
-      };
-    case types.CHANGE_LOCATION:
-      return {
-        ...state,
-        currentLocation: action.payload
       };
     default:
       return state;
