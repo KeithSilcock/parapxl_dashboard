@@ -52,7 +52,7 @@ class App extends Component {
           crossOrigin="anonymous"
         />
         <WarningModal />
-        <Route exact path="/" render={props => <TempAuth {...props} />} />
+        <Route path="/" render={props => <TempAuth {...props} />} />
         <Route
           path="/admin/home/:location?/:board?"
           render={props => <LandingPage {...props} />}
