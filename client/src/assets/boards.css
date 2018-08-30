@@ -71,7 +71,7 @@
 
   transform: rotateZ(-90deg);
   z-index: 10;
-  transition: all 0.3s;
+  transition: transform 0.3s;
   text-align: center;
 }
 .board.grow-container {
@@ -90,15 +90,17 @@
 
   transition: all 0.2s;
 }
+.board-item:hover {
+  background-color: white;
+  color: rgb(75, 75, 75);
+  transition: background-color 0s, color 0s !important;
+}
 
 .selectedBoard {
-  /* color: black; */
-  border-right: 5px solid white;
-  /* border-top: 2px solid black; */
-  /* border-bottom: 2px solid black; */
+  border-right: 7px solid white;
 }
-.selectedBoard + .board-item {
-  /* border-top: none; */
+.selectedBoard:hover {
+  border-right: 7px solid rgb(212, 212, 212);
 }
 
 .board-type {

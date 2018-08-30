@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import { setMobileView } from "../actions";
 import "../assets/App.css";
 import LandingPage from "./LandingPage";
@@ -52,7 +53,7 @@ class App extends Component {
           crossOrigin="anonymous"
         />
         <WarningModal />
-        <Route path="/" render={props => <TempAuth {...props} />} />
+        <Route exact path="/" render={props => <TempAuth {...props} />} />
         <Route
           path="/admin/home/:location?/:board?"
           render={props => <LandingPage {...props} />}
@@ -67,6 +68,7 @@ class App extends Component {
           render={props => <DataDisplayNewTab {...props} />}
         />
         <Route
+          exact
           path={`/display/:location/:board/`}
           render={props => <DataDisplayNewTab {...props} />}
         />
@@ -82,7 +84,9 @@ class App extends Component {
 function mSTP(state) {
   return state;
 }
-export default connect(
-  mSTP,
-  { setMobileView }
-)(App);
+export default withRouter(
+  connect(
+    mSTP,
+    { setMobileView }
+  )(App)
+);

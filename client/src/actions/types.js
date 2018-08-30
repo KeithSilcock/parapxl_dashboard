@@ -10,5 +10,6 @@ export default {
   UPDATE_MODAL_INPUT: "update_modal_input",
   CLEAR_MODAL_INPUT: "clear_modal_input",
   IS_MOBILE: "is_mobile",
-  TOGGLE_MOBILE_NAV: "toggle_mobile_nav"
+  TOGGLE_MOBILE_NAV: "toggle_mobile_nav",
+  CHANGE_LOCATION: "change_location"
 };

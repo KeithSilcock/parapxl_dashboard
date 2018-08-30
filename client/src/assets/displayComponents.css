@@ -88,6 +88,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  margin: 5% 0;
 }
 .escape-room.video {
   align-self: flex-end;
