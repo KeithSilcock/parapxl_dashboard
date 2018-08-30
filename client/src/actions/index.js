@@ -71,3 +71,10 @@ export function toggleMobileNav() {
     type: types.TOGGLE_MOBILE_NAV
   };
 }
+
+export function changLocation(newUrl) {
+  return {
+    type: types.TOGGLE_MODAL,
+    payload: newUrl
+  };
+}
