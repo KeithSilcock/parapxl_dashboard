@@ -1,3 +1,28 @@
+@media screen and (max-width: 1200px) {
+  .landing-page-container {
+    width: calc(100% - 100px);
+    margin: 0 0 0 100px;
+  }
+
+  .locations-container {
+    width: 50px;
+  }
+  .locations-container:hover {
+    width: 200px;
+  }
+  .locations-container:hover + .boards-container {
+    left: 200px;
+  }
+
+  .boards-container {
+    left: 50px;
+    width: 50px;
+  }
+  .boards-container:hover {
+    width: 200px;
+  }
+}
+
 @media screen and (max-width: 400px) {
   .locations-container {
     width: 100vw;
