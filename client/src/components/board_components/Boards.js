@@ -4,9 +4,11 @@ import { connect } from "react-redux";
 import AddNewBoard from "./AddNewBoard";
 import {
   toggleTab2,
+  toggleTab1,
   setBoardsForLocation,
   getData,
-  clearModalInput
+  clearModalInput,
+  toggleMobileNav
 } from "../../actions/";
 import { capitalizeFirstLetters, getFirstLetters } from "../../helpers";
 
@@ -94,12 +96,14 @@ class Boards extends React.Component {
   render() {
     const {
       toggleTab2,
+      toggleTab1,
       tab2Open,
       activeTabDistance,
       boards,
       dbData,
       mobileNavOpen,
-      isMobile
+      isMobile,
+      toggleMobileNav
     } = this.props;
     const { location, board } = this.props.match.params;
 
@@ -122,9 +126,14 @@ class Boards extends React.Component {
             : "";
         }
 
-        const boardHeight = {
-          height: `${boardAbbrev.length / 2 + 1}em`
-        };
+        const boardHeight = !isMobile
+          ? {
+              height: `${boardAbbrev.length / 2 + 1}em`
+            }
+          : {
+              height: `${(boardAbbrev.length / 2 + 1) / 2}em`
+              // top: `${boardAbbrev.length / 2 + 1}em`
+            };
         if (tab2Open) {
           var tab2ItemHeight = { height: `${item.split(" ").length + 0.5}em` };
         }
@@ -134,7 +143,10 @@ class Boards extends React.Component {
             style={itemStyle}
             key={index}
             className={`${selectedClassName} board-item`}
-            onClick={e => this.boardSelected(boards[item], item)}
+            onClick={e => {
+              this.boardSelected(boards[item], item);
+              if (isMobile) toggleMobileNav();
+            }}
           >
             <div className={`board-item-container`}>
               <div className="board grow-container">
@@ -151,47 +163,44 @@ class Boards extends React.Component {
     }
 
     //push second nav down towards current location selection
-    const pushDownNavStyle = { marginTop: `${activeTabDistance}em` };
+    const pushDownNavStyle = !isMobile
+      ? { marginTop: `${activeTabDistance}em` }
+      : null;
+    const mobileNavClass = isMobile
+      ? "board-mobile-nav"
+      : "board-non-mobile-nav";
+    const mobileNavOpenClass = mobileNavOpen ? "open" : "";
 
-    if (!isMobile) {
-      return (
-        <div
-          onMouseEnter={e => {
-            toggleTab2();
-          }}
-          onMouseLeave={e => {
-            toggleTab2();
-          }}
-          className={`boards-container`}
-        >
-          {/* {backButton} */}
-          <ul style={pushDownNavStyle} className="boards-list">
-            {listOfBoards}
-          </ul>
-          <AddNewBoard
-            addNewItem={this.createNewBoard.bind(this)}
-            newText={"Board"}
-          />
-        </div>
-      );
-    } else {
-      if (!mobileNavOpen) {
-        return null;
-      } else {
-        return (
-          <div className={`boards-container`}>
-            {/* {backButton} */}
-            <ul style={pushDownNavStyle} className="boards-list">
-              {listOfBoards}
-            </ul>
-            <AddNewBoard
-              addNewItem={this.createNewBoard.bind(this)}
-              newText={"Board"}
-            />
-          </div>
-        );
-      }
-    }
+    const mobileCloseNavButton = isMobile ? (
+      <span
+        onClick={e => {
+          toggleMobileNav();
+        }}
+      >
+        <i class={`fas fa-arrow-right ${mobileNavOpenClass}`} />
+      </span>
+    ) : null;
+
+    return (
+      <div
+        onMouseEnter={e => {
+          if (!isMobile) toggleTab2();
+        }}
+        onMouseLeave={e => {
+          if (!isMobile) toggleTab2();
+        }}
+        className={`boards-container ${mobileNavClass} ${mobileNavOpenClass}`}
+      >
+        <div className="close-mobile-nav">{mobileCloseNavButton}</div>
+        <ul style={pushDownNavStyle} className="boards-list">
+          {listOfBoards}
+        </ul>
+        <AddNewBoard
+          addNewItem={this.createNewBoard.bind(this)}
+          newText={"Board"}
+        />
+      </div>
+    );
   }
 }
 
@@ -210,5 +219,12 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { toggleTab2, setBoardsForLocation, getData, clearModalInput }
+  {
+    toggleTab2,
+    toggleTab1,
+    setBoardsForLocation,
+    getData,
+    clearModalInput,
+    toggleMobileNav
+  }
 )(Boards);

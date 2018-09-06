@@ -196,47 +196,30 @@ class Locations extends React.Component {
       });
     }
 
-    if (!isMobile) {
-      return (
-        <div
-          onMouseEnter={e => toggleTab1()}
-          onMouseLeave={e => toggleTab1()}
-          className={`locations-container`}
-        >
-          <Logo {...this.props} />
-          <ul className="locations-list">{listOfLocations}</ul>
-          <AddNewLocation
-            addNewItem={this.createNewLocation.bind(this)}
-            newText={"Location"}
-          />
-        </div>
-      );
-    } else {
-      if (!mobileNavOpen) {
-        return (
-          <div
-            onClick={e => this.props.toggleMobileNav()}
-            className={`locations-container`}
-          >
-            <Logo {...this.props} />
-          </div>
-        );
-      } else {
-        return (
-          <div
-            className={`locations-container`}
-            onClick={e => this.props.toggleMobileNav()}
-          >
-            <Logo {...this.props} />
-            <ul className="locations-list">{listOfLocations}</ul>
-            <AddNewLocation
-              addNewItem={this.createNewLocation.bind(this)}
-              newText={"Location"}
-            />
-          </div>
-        );
-      }
-    }
+    const mobileNavClass = isMobile
+      ? "location-mobile-nav"
+      : "loc-non-mobile-nav";
+
+    const mobileNavOpenClass = mobileNavOpen ? "open" : "";
+
+    return (
+      <div
+        onMouseEnter={e => {
+          if (!isMobile) toggleTab1();
+        }}
+        onMouseLeave={e => {
+          if (!isMobile) toggleTab1();
+        }}
+        className={`locations-container ${mobileNavClass} ${mobileNavOpenClass}`}
+      >
+        <Logo {...this.props} />
+        <ul className="locations-list">{listOfLocations}</ul>
+        <AddNewLocation
+          addNewItem={this.createNewLocation.bind(this)}
+          newText={"Location"}
+        />
+      </div>
+    );
   }
 }
 function mapStateToProps(state) {

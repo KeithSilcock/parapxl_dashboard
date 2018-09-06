@@ -14,23 +14,23 @@
   z-index: 10;
   transition: all 0.5s;
 }
-.boards-container:hover {
+.board-non-mobile-nav:hover {
   width: 15%;
   box-shadow: 9px 9px 8px -4px rgb(53, 53, 53);
 }
-.boards-container:hover .board-item {
+.board-non-mobile-nav:hover .board-item {
   border-top: 2px solid white;
 }
-.boards-container:hover .board-item:last-of-type {
+.board-non-mobile-nav:hover .board-item:last-of-type {
   border-bottom: 2px solid rgb(255, 255, 255);
 }
-.boards-container:hover .board-item-container {
+.board-non-mobile-nav:hover .board-item-container {
   transform: rotateZ(0deg);
 }
-.boards-container:hover .selected-container {
+.board-non-mobile-nav:hover .selected-container {
   white-space: pre-wrap !important;
 }
-.boards-container:hover .grow-item {
+.board-non-mobile-nav:hover .grow-item {
   width: 100%;
   height: 100%;
   overflow: hidden;

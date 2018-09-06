@@ -40,7 +40,7 @@ body {
   border-radius: 5px !important;
   background-color: rgb(0, 193, 241) !important;
   color: white !important;
-  font-size: 0.9em !important;
+  font-size: 0.9em;
   font-weight: bold !important;
   min-height: 30px !important;
   cursor: pointer !important;

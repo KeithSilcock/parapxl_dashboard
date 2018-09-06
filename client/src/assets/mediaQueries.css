@@ -4,39 +4,158 @@
     margin: 0 0 0 100px;
   }
 
-  .locations-container {
+  .loc-non-mobile-nav {
     width: 50px;
   }
-  .locations-container:hover {
+  .loc-non-mobile-nav:hover {
     width: 200px;
   }
-  .locations-container:hover + .boards-container {
+  .loc-non-mobile-nav:hover + .board-non-mobile-nav {
     left: 200px;
   }
 
-  .boards-container {
+  .board-non-mobile-nav {
     left: 50px;
     width: 50px;
   }
-  .boards-container:hover {
+  .board-non-mobile-nav:hover {
     width: 200px;
   }
 }
 
 @media screen and (max-width: 400px) {
-  .locations-container {
-    width: 100vw;
-    height: 5%;
+  .landing-page-container {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+  }
+  .location-mobile-nav {
+    top: 0;
+    left: -101%;
+    width: 50% !important;
+  }
+  .board-mobile-nav {
+    left: -51%;
+    width: 51% !important;
   }
 
-  .locations-container:active {
+  .location-mobile-nav.open {
+    left: 0%;
+  }
+  .board-mobile-nav.open {
+    left: 49% !important;
+  }
+  .location-mobile-nav.open .location-item {
+    border-top: 2px solid white;
+  }
+  .location-mobile-nav.open .location-item:last-of-type {
+    border-bottom: 2px solid rgb(255, 255, 255);
+  }
+  .location-mobile-nav.open .location-item-container {
+    transform: rotateZ(0deg);
+  }
+  .location-mobile-nav.open .selected-container {
+    white-space: normal;
+  }
+  .location-mobile-nav.open .grow-item {
+    width: 100%;
     height: 100%;
-    width: 40%;
+    overflow: hidden;
   }
-  .locations-container:active + .boards-container {
-    left: 40%;
-    width: 40%;
+  .location-mobile-nav.open .location-item:active {
+    background-color: white;
+    color: rgb(59, 59, 59);
+    transition: background-color 0s, color 0s !important;
   }
+  .board-mobile-nav.open .board-item {
+    border-top: 2px solid white;
+  }
+  .board-mobile-nav.open .board-item:last-of-type {
+    border-bottom: 2px solid rgb(255, 255, 255);
+  }
+  .board-mobile-nav.open .board-item-container {
+    transform: rotateZ(0deg);
+  }
+  .board-mobile-nav.open .selected-container {
+    white-space: pre-wrap !important;
+  }
+  .board-mobile-nav.open .grow-item {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .board-mobile-nav.open .boards-list {
+    justify-content: center;
+  }
+
+  .mobile-nav-logo {
+    margin-top: 10px;
+  }
+
+  .cant-click-through {
+    z-index: 15;
+  }
+  .warning-modal.container {
+    width: 80%;
+    height: 25%;
+  }
+  .warning-modal input {
+    font-size: 1.4em;
+  }
+  .warning-modal.footer {
+    width: 100%;
+  }
+  .warning-modal button {
+    height: 50px;
+    width: 100px;
+    font-size: 1.1em;
+  }
+
+  .display-preview {
+    position: relative;
+    top: 5%;
+  }
+
+  .edit-data.container {
+    flex-flow: column;
+    justify-content: flex-start;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+  }
+  .edit-data.left-container {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+  }
+  .edit-data.form {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+  }
+  .edit-data.edit-list {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+  }
+  .edit-data.item {
+    margin-top: 10px;
+  }
+
+  .carousel .slide iframe {
+    width: 100%;
+    margin: 0;
+  }
+  .escape-room.video div,
+  .escape-room.video div div {
+    width: 100vw !important;
+  }
+  .escape-room-list-edit.list {
+    text-align: left;
+  }
+
+  /*
   .add-new-item-button {
     font-size: 2em;
   }
@@ -46,7 +165,7 @@
   }
   #brainy-actz-logo {
     max-height: 100%;
-  }
+  } */
 
   /* .boards-container {
       left: 7%;
@@ -57,7 +176,7 @@
   .boards-container:active {
     width: 40%;
   } */
-  .add-new-board-button {
+  /* .add-new-board-button {
     font-size: 2em;
-  }
+  } */
 }

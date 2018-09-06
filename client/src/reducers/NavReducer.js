@@ -31,7 +31,9 @@ export default function(state = DEFAULT_STATE, action) {
     case types.TOGGLE_MOBILE_NAV:
       return {
         ...state,
-        mobileNavOpen: !state.mobileNavOpen
+        mobileNavOpen: !state.mobileNavOpen,
+        tab1Open: !state.tab1Open,
+        tab2Open: !state.tab2Open
       };
     case types.IS_MOBILE:
       return {
