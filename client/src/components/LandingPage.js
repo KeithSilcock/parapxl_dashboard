@@ -75,7 +75,11 @@ class DatabaseTest extends React.Component {
           path={`/admin/home/:location`}
           component={NoBoardSelected}
         />
-        <Route exact path={`/admin/home/`} component={NoLocationSelected} />
+        <Route
+          exact
+          path={`/admin/home/`}
+          render={() => <NoLocationSelected isMobile={this.props.isMobile} />}
+        />
       </div>
     );
   }

@@ -20,8 +20,10 @@ class MobileNav extends React.Component {
         >
           <i class={`fas fa-arrow-right ${rotateArrowClass}`} />
         </div>
-        <div className="mobile-nav center-text">Brainy-actz</div>
-        <div className="mobile-nav right-spacer" />
+        <div className="mobile-nav center-text">Brainy Actz</div>
+        <div className="mobile-nav right-spacer">
+          <i class={`fas fa-arrow-right`} />
+        </div>
       </div>
     );
   }
