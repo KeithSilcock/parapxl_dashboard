@@ -7,9 +7,7 @@
   flex-flow: column;
   justify-content: space-between;
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 3%;
+
   height: 100vh;
   /* background: linear-gradient(#baa3fc, #6d1cf8); */
   background: linear-gradient(#a3f9fc, #1cd7f8);
@@ -19,32 +17,37 @@
   overflow: hidden;
   transition: all 0.5s;
 }
-.locations-container:hover
+.loc-non-mobile-nav {
+  left: 0;
+  top: 0;
+  width: 3%;
+}
+.loc-non-mobile-nav:hover
 /* .locations-container:active  */ {
   width: 11%;
 }
-.locations-container:hover + .boards-container {
+.loc-non-mobile-nav:hover + .boards-container {
   left: 11%;
   box-shadow: 9px 9px 8px -4px rgb(53, 53, 53);
 }
-.locations-container:hover .location-item {
+.loc-non-mobile-nav:hover .location-item {
   border-top: 2px solid white;
 }
-.locations-container:hover .location-item:last-of-type {
+.loc-non-mobile-nav:hover .location-item:last-of-type {
   border-bottom: 2px solid rgb(255, 255, 255);
 }
-.locations-container:hover .location-item-container {
+.loc-non-mobile-nav:hover .location-item-container {
   transform: rotateZ(0deg);
 }
-.locations-container:hover .selected-container {
+.loc-non-mobile-nav:hover .selected-container {
   white-space: normal;
 }
-.locations-container:hover .grow-item {
+.loc-non-mobile-nav:hover .grow-item {
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
-.locations-container .location-item:hover {
+.loc-non-mobile-nav .location-item:hover {
   background-color: white;
   color: rgb(59, 59, 59);
   transition: background-color 0s, color 0s !important;

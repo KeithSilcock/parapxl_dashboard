@@ -39,12 +39,13 @@ export default props => {
         <div className="escape-room video">
           <ReactPlayer
             onPlay={() => {
-              debugger;
-              props.didPlayVideo();
+              // debugger;
+              // props.didPlayVideo();
             }}
-            onPause={() => props.didPlayVideo()}
+            // onPause={() => props.didPlayVideo()}
             width="100"
             height="100"
+            controls={true}
             url={displayData.video}
             config={{
               youtube: {
