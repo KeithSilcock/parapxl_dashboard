@@ -120,6 +120,10 @@
     top: 5%;
   }
 
+  .edit-container {
+    top: 5%;
+    position: relative;
+  }
   .edit-data.container {
     flex-flow: column;
     justify-content: flex-start;
