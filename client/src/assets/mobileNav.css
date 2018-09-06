@@ -16,9 +16,14 @@
   padding-left: 5px;
 }
 .mobile-nav.center-text {
+  color: white;
+  font-size: 1.4em;
 }
 .mobile-nav.right-spacer {
   padding-right: 5px;
+}
+.mobile-nav.right-spacer i {
+  color: transparent;
 }
 
 .fas.fa-arrow-right {

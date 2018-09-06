@@ -2,13 +2,22 @@ import React from "react";
 import ReactPlayer from "react-player";
 
 export default props => {
+  const header = props.isMobile ? (
+    <h2>
+      To start using the BrainyActz dashboard, please open the navigation tab
+      above (the arrow) and select a location and a board!
+    </h2>
+  ) : (
+    <h1>
+      To start using the BrainyActz dashboard, please select a location on the
+      left!
+    </h1>
+  );
+
   return (
     <div className="no-location container">
       <div className="top">
-        <h1>
-          To start using the BrainyActz dashboard, please select a location on
-          the left!
-        </h1>
+        {header}
         <h3>Or if you're pressed for time, please watch my overview below.</h3>
         <div className="no-location main-text">
           <p>
@@ -34,10 +43,11 @@ export default props => {
           </p>
         </div>
         <p> Thank you for visting!</p>
-        <p>Keith Silcock</p>
+        <p style={{ color: "black" }}>Keith Silcock</p>
         <ReactPlayer
           url="https://youtu.be/8NYX6F4ny1U"
           controls={true}
+          id="home-page-video"
           config={{
             youtube: {
               playerVars: { origin: "https://cbdashboard.keithsilcock.com" }
