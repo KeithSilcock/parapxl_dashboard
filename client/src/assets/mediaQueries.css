@@ -24,6 +24,9 @@
 }
 
 @media screen and (max-width: 400px) {
+  .no-location.container {
+    margin-top: 5%;
+  }
   .landing-page-container {
     width: 100%;
     margin: 0;
@@ -148,9 +151,13 @@
     margin: 0;
   }
   .escape-room.video div,
-  .escape-room.video div div {
+  .escape-room.video div div,
+  #home-page-video,
+  #home-page-video div {
     width: 100vw !important;
+    height: 60vw !important;
   }
+
   .escape-room-list-edit.list {
     text-align: left;
   }
