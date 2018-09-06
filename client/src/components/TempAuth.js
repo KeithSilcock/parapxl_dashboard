@@ -4,7 +4,7 @@ class Auth extends React.Component {
   //component not complete
   //just used for redirection now
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.history.push("/admin/home");
   }
 
