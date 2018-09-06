@@ -1,0 +1,37 @@
+.mobile-nav {
+}
+.mobile-nav.container {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+
+  background: linear-gradient(#a3f9fc, #1cd7f8);
+  height: 5%;
+  width: 100%;
+  z-index: 10;
+}
+.mobile-nav.pull-out {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+.mobile-nav.center-text {
+}
+.mobile-nav.right-spacer {
+  padding-right: 5px;
+}
+
+.fas.fa-arrow-right {
+  color: white;
+  font-size: 2em;
+  transition: all 0.5s;
+}
+.fas.fa-arrow-right.open {
+  transform: rotateZ(180deg);
+}
+
+.close-mobile-nav {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px 5px 0 0;
+}

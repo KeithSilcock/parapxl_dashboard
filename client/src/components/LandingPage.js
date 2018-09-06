@@ -7,6 +7,7 @@ import Locations from "./location_components/Locations";
 import Boards from "./board_components/Boards";
 import EditDataDisplayed from "./display_components/EditDataDisplayed";
 import AllDisplays from "./display_components/AllDisplays";
+import MobileNav from "./mobileNav";
 
 import NoLocationSelected from "./NoLocationSelected";
 import NoBoardSelected from "./NoBoardSelected";
@@ -46,8 +47,11 @@ class DatabaseTest extends React.Component {
   }
 
   render() {
+    const mobileNav = this.props.isMobile ? <MobileNav /> : null;
+
     return (
       <div className="landing-page-container">
+        {mobileNav}
         <Route path={`/admin/home/:location?/:board?`} component={Locations} />
         <Route path={`/admin/home/:location/:board?`} component={Boards} />
         <Route
@@ -78,10 +82,14 @@ class DatabaseTest extends React.Component {
 }
 
 function mSTP(state) {
-  return state;
+  return {
+    isMobile: state.navData.isMobile
+  };
 }
 
 export default connect(
   mSTP,
-  { getData }
+  {
+    getData
+  }
 )(DatabaseTest);

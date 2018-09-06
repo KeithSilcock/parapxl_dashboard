@@ -45,6 +45,16 @@
   text-align: center;
   padding: 5%;
 }
+.warning-modal.content input {
+  text-align: center;
+  font-size: 1.4em;
+}
 .warning-modal.footer {
+  width: 60%;
   padding: 5%;
+  display: flex;
+  justify-content: space-around;
+}
+.warning-modal button {
+  font-size: 1.2em;
 }
